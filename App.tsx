@@ -21,6 +21,15 @@ import { Icon } from './components/Icon';
 import { peerService } from './services/peerService';
 
 const STORAGE_KEY = 'boomsync_state';
+const PREFS_STORAGE_KEY = 'boomsync_prefs';
+
+// Local preferences (not synced)
+interface LocalPreferences {
+  isSoundOn: boolean;
+  selectedSound: string;
+  autoFullscreen: boolean;
+  volume: number; // 0.0 to 1.0, defaults to 1.0
+}
 
 const App: React.FC = () => {
   // --- State Initialization ---
@@ -32,6 +41,9 @@ const App: React.FC = () => {
       if (!parsed.usedTimerIds) {
         parsed.usedTimerIds = [];
       }
+      // Remove old isSoundOn and selectedSound if present (migration)
+      delete parsed.isSoundOn;
+      delete parsed.selectedSound;
       return parsed;
     }
     
@@ -45,9 +57,26 @@ const App: React.FC = () => {
       roomA: [],
       roomB: [],
       roundCount: 3,
+      usedTimerIds: []
+    };
+  });
+
+  // Local preferences (NOT synced - individual per user)
+  const [localPrefs, setLocalPrefs] = useState<LocalPreferences>(() => {
+    const saved = localStorage.getItem(PREFS_STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // Ensure volume exists for backward compatibility
+      if (parsed.volume === undefined) {
+        parsed.volume = 1.0;
+      }
+      return parsed;
+    }
+    return {
       isSoundOn: true,
       selectedSound: ALARM_SOUNDS[0].url,
-      usedTimerIds: []
+      autoFullscreen: true,
+      volume: 1.0
     };
   });
 
@@ -55,27 +84,48 @@ const App: React.FC = () => {
   const [showSyncModal, setShowSyncModal] = useState(false);
   const [showConfigModal, setShowConfigModal] = useState(false);
   const [initialRoomCode, setInitialRoomCode] = useState<string>('');
-  const [isHost, setIsHost] = useState(true); // Track if this peer is the host
+  const [isHost, setIsHost] = useState(true);
   const [roomCode, setRoomCode] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [connectionCount, setConnectionCount] = useState(0);
   
-  // New Feature States
-  const [autoFullscreen, setAutoFullscreen] = useState(true);
+  // Fullscreen state
   const [fullscreenTimerId, setFullscreenTimerId] = useState<string | null>(null);
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const beepAudioRef = useRef<HTMLAudioElement | null>(null);
+  const gameStateRef = useRef<GameState>(gameState);
+
+  // Keep ref updated for use in callbacks
+  useEffect(() => {
+    gameStateRef.current = gameState;
+  }, [gameState]);
 
   // --- Persistence ---
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(gameState));
   }, [gameState]);
 
+  // Persist local preferences
+  useEffect(() => {
+    localStorage.setItem(PREFS_STORAGE_KEY, JSON.stringify(localPrefs));
+  }, [localPrefs]);
+
   // --- Audio Init ---
   useEffect(() => {
     beepAudioRef.current = new Audio(COUNTDOWN_SOUND_URL);
-    beepAudioRef.current.volume = 1.0;
+    beepAudioRef.current.volume = localPrefs.volume;
   }, []);
+
+  // Update audio volumes when volume preference changes
+  useEffect(() => {
+    if (beepAudioRef.current) {
+      beepAudioRef.current.volume = localPrefs.volume;
+    }
+    if (audioRef.current) {
+      audioRef.current.volume = localPrefs.volume;
+    }
+  }, [localPrefs.volume]);
 
   // --- Deep Link Detection ---
   useEffect(() => {
@@ -99,31 +149,53 @@ const App: React.FC = () => {
       const code = peerService.getRoomCode();
       setRoomCode(code);
       setIsConnected(code !== null);
+      setConnectionCount(peerService.getConnectionCount());
     };
     
-    // Update connection state periodically and on connection events
-    const interval = setInterval(updateConnectionState, 100);
     peerService.onConnected(updateConnectionState);
+    peerService.onDisconnected(updateConnectionState);
+    peerService.onConnectionCountChange((count) => {
+      setConnectionCount(count);
+    });
+    
+    // Handle room deletion (host left)
+    peerService.onRoomDeleted(() => {
+      setIsConnected(false);
+      setRoomCode(null);
+      setIsHost(true);
+      // Clear URL parameter
+      const url = new URL(window.location.href);
+      url.searchParams.delete('room');
+      window.history.replaceState({}, '', url.toString());
+    });
     
     // Initial check
     updateConnectionState();
     
+    // Periodic check for connection count
+    const interval = setInterval(updateConnectionState, 1000);
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
-    peerService.onMessage((msg: SyncMessage) => {
+    const unsubscribe = peerService.onMessage((msg: SyncMessage) => {
       if (msg.type === 'SYNC_STATE') {
         setGameState(msg.state);
       }
-      // CONNECTION_COUNT messages are handled by SyncModal directly via peerService
-      // No action needed here, but we acknowledge the message type exists
+      
+      // Handle REQUEST_STATE - send current state to newly connected joiner
+      if (msg.type === 'REQUEST_STATE' && peerService.getIsHost()) {
+        // Send current state to the requester
+        peerService.send({ type: 'SYNC_STATE', state: gameStateRef.current });
+      }
     });
+    
+    return unsubscribe;
   }, []);
 
   // --- Countdown Beep Logic ---
   useEffect(() => {
-    if (!gameState.isSoundOn) return;
+    if (!localPrefs.isSoundOn) return;
 
     const shouldBeep = gameState.timers.some(t => {
       if (t.status === TimerStatus.RUNNING) {
@@ -136,11 +208,11 @@ const App: React.FC = () => {
 
     if (shouldBeep && beepAudioRef.current) {
       beepAudioRef.current.currentTime = 0;
-      beepAudioRef.current.play().catch(e => {
+      beepAudioRef.current.play().catch(() => {
         // Ignore play errors
       });
     }
-  }, [gameState.timers, gameState.isSoundOn]);
+  }, [gameState.timers, localPrefs.isSoundOn]);
 
   // --- Timer Logic ---
   // Only run timer interval on the host to prevent multiple timers running simultaneously
@@ -157,8 +229,10 @@ const App: React.FC = () => {
           if (t.status === TimerStatus.RUNNING) {
             const nextRemaining = Math.max(0, t.remainingSeconds - 1);
             if (nextRemaining === 0) {
-              if (prev.isSoundOn && audioRef.current) {
-                audioRef.current.src = prev.selectedSound;
+              // Play alarm sound locally based on local preference
+              if (localPrefs.isSoundOn && audioRef.current) {
+                audioRef.current.src = localPrefs.selectedSound;
+                audioRef.current.volume = localPrefs.volume;
                 audioRef.current.play().catch(e => console.error("Audio playback blocked", e));
               }
               return { ...t, remainingSeconds: 0, status: TimerStatus.ALARMING };
@@ -191,12 +265,28 @@ const App: React.FC = () => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [broadcastState, isHost]);
+  }, [broadcastState, isHost, localPrefs.isSoundOn, localPrefs.selectedSound]);
+
+  // Play alarm sound when timer enters ALARMING state (for non-hosts)
+  useEffect(() => {
+    if (!localPrefs.isSoundOn) return;
+    
+    const alarmingTimer = gameState.timers.find(t => t.status === TimerStatus.ALARMING);
+    if (alarmingTimer && audioRef.current) {
+      // Only play if not already playing
+      if (audioRef.current.paused) {
+        audioRef.current.src = localPrefs.selectedSound;
+        audioRef.current.volume = localPrefs.volume;
+        audioRef.current.play().catch(() => {});
+      }
+    }
+  }, [gameState.timers, localPrefs.isSoundOn, localPrefs.selectedSound]);
 
   const toggleTimer = (id: string) => {
     setGameState(prev => {
       const timer = prev.timers.find(t => t.id === id);
       let nextUsedTimerIds = prev.usedTimerIds;
+      const wasAlarming = timer?.status === TimerStatus.ALARMING;
       
       // When resuming a timer (IDLE -> RUNNING), remove it from darkened state
       if (timer?.status === TimerStatus.IDLE) {
@@ -215,16 +305,22 @@ const App: React.FC = () => {
         return t;
       });
       const newState = { ...prev, timers: nextTimers, usedTimerIds: nextUsedTimerIds };
-      broadcastState(newState);
+      
+      // Don't broadcast when resetting an alarming timer - each user handles locally
+      if (!wasAlarming) {
+        broadcastState(newState);
+      }
       return newState;
     });
   };
 
   const resetTimer = (id: string) => {
     setGameState(prev => {
-      // If alarming, stop audio
       const timer = prev.timers.find(t => t.id === id);
-      if (timer?.status === TimerStatus.ALARMING) {
+      const wasAlarming = timer?.status === TimerStatus.ALARMING;
+      
+      // If alarming, stop audio
+      if (wasAlarming) {
         if (audioRef.current) audioRef.current.pause();
       }
 
@@ -239,7 +335,11 @@ const App: React.FC = () => {
       const nextUsedTimerIds = prev.usedTimerIds.filter(timerId => timerId !== id);
       
       const newState = { ...prev, timers: nextTimers, usedTimerIds: nextUsedTimerIds };
-      broadcastState(newState);
+      
+      // Don't broadcast when resetting an alarming timer - each user handles locally
+      if (!wasAlarming) {
+        broadcastState(newState);
+      }
       return newState;
     });
   };
@@ -280,7 +380,7 @@ const App: React.FC = () => {
   // Wrapper for timer click to handle fullscreen logic
   const handleTimerClick = (id: string) => {
     const timer = gameState.timers.find(t => t.id === id);
-    if (timer && timer.status === TimerStatus.IDLE && autoFullscreen) {
+    if (timer && timer.status === TimerStatus.IDLE && localPrefs.autoFullscreen) {
       setFullscreenTimerId(id);
     }
     // Exit fullscreen if clicking an expired timer that's currently in fullscreen
@@ -357,6 +457,41 @@ const App: React.FC = () => {
     });
   };
 
+  // Toggle sound on/off (local only, not synced)
+  const toggleSound = () => {
+    setLocalPrefs(prev => ({ ...prev, isSoundOn: !prev.isSoundOn }));
+  };
+
+  // Set volume (local only, not synced)
+  // When volume is 0, sound is off; when > 0, sound is on
+  const setVolume = (volume: number) => {
+    setLocalPrefs(prev => {
+      const newVolume = Math.max(0, Math.min(1, volume)); // Clamp between 0 and 1
+      let newIsSoundOn = prev.isSoundOn;
+      
+      // If volume is set to 0, turn sound off
+      if (newVolume === 0) {
+        newIsSoundOn = false;
+      } 
+      // If volume is changed from 0 to > 0, or changed while sound is off, turn sound on
+      else if (prev.volume === 0 || !prev.isSoundOn) {
+        newIsSoundOn = true;
+      }
+      
+      return { ...prev, volume: newVolume, isSoundOn: newIsSoundOn };
+    });
+  };
+
+  // Change selected alarm sound (local only, not synced)
+  const selectSound = (url: string) => {
+    setLocalPrefs(prev => ({ ...prev, selectedSound: url }));
+  };
+
+  // Toggle auto fullscreen (local only)
+  const toggleAutoFullscreen = () => {
+    setLocalPrefs(prev => ({ ...prev, autoFullscreen: !prev.autoFullscreen }));
+  };
+
   // Find active fullscreen timer
   const activeFullscreenTimer = fullscreenTimerId 
     ? gameState.timers.find(t => t.id === fullscreenTimerId) 
@@ -366,17 +501,22 @@ const App: React.FC = () => {
   const handleShare = async () => {
     // If already connected or hosting, disconnect instead
     if (isConnected) {
-      peerService.disconnect();
+      if (isHost) {
+        // Host: delete room (notify all joiners)
+        peerService.deleteRoom();
+      } else {
+        // Joiner: just disconnect
+        peerService.disconnect();
+      }
       setIsConnected(false);
       setRoomCode(null);
       setIsHost(true);
+      setConnectionCount(0);
       
-      // If host, clear room code from URL to prevent auto-reconnect
-      if (isHost) {
-        const url = new URL(window.location.href);
-        url.searchParams.delete('room');
-        window.history.replaceState({}, '', url.toString());
-      }
+      // Clear room code from URL
+      const url = new URL(window.location.href);
+      url.searchParams.delete('room');
+      window.history.replaceState({}, '', url.toString());
       return;
     }
     
@@ -391,13 +531,12 @@ const App: React.FC = () => {
       setRoomCode(id);
       setIsConnected(true);
       setIsHost(true);
+      setConnectionCount(1);
       
       // Copy link to clipboard
       const url = new URL(window.location.href);
       url.searchParams.set('room', id);
       await navigator.clipboard.writeText(url.toString());
-      
-      // Optional: Show a brief notification (you could add a toast here)
     } catch (e) {
       console.error("Failed to create room:", e);
     }
@@ -419,8 +558,8 @@ const App: React.FC = () => {
           isConnected={isConnected}
           onShare={handleShare}
           isUsed={gameState.usedTimerIds.includes(activeFullscreenTimer.id)}
-          isSoundOn={gameState.isSoundOn}
-          onToggleSound={() => setGameState(p => ({...p, isSoundOn: !p.isSoundOn}))}
+          isSoundOn={localPrefs.isSoundOn}
+          onToggleSound={toggleSound}
         />
       )}
       
@@ -434,14 +573,14 @@ const App: React.FC = () => {
             <Icon name="settings" size={20} />
           </button>
           <button 
-            onClick={() => setGameState(p => ({...p, isSoundOn: !p.isSoundOn}))}
-            className={`p-2 rounded-xl bg-zinc-800 active:bg-zinc-700 ${gameState.isSoundOn ? 'text-cyan-400' : 'text-zinc-400'}`}
+            onClick={toggleSound}
+            className={`p-2 rounded-xl bg-zinc-800 active:bg-zinc-700 ${localPrefs.isSoundOn ? 'text-cyan-400' : 'text-zinc-400'}`}
           >
-            <Icon name={gameState.isSoundOn ? "volumeOn" : "volumeOff"} size={20} />
+            <Icon name={localPrefs.isSoundOn ? "volumeOn" : "volumeOff"} size={20} />
           </button>
           <button 
-            onClick={() => setAutoFullscreen(!autoFullscreen)}
-            className={`p-2 rounded-xl bg-zinc-800 active:bg-zinc-700 ${autoFullscreen ? 'text-purple-400' : 'text-zinc-400'}`}
+            onClick={toggleAutoFullscreen}
+            className={`p-2 rounded-xl bg-zinc-800 active:bg-zinc-700 ${localPrefs.autoFullscreen ? 'text-purple-400' : 'text-zinc-400'}`}
           >
             <Icon name="proportions" size={20} />
           </button>
@@ -457,9 +596,14 @@ const App: React.FC = () => {
 
         <button 
           onClick={() => setShowSyncModal(true)}
-          className={`p-2 rounded-xl bg-zinc-800 active:bg-zinc-700 transition-colors ${isConnected ? 'text-green-400' : 'text-zinc-400'}`}
+          className={`p-2 rounded-xl bg-zinc-800 active:bg-zinc-700 transition-colors relative ${isConnected ? 'text-green-400' : 'text-zinc-400'}`}
         >
           <Icon name="share" size={20} />
+          {isConnected && connectionCount > 1 && (
+            <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center">
+              {connectionCount}
+            </span>
+          )}
         </button>
       </header>
 
@@ -507,12 +651,14 @@ const App: React.FC = () => {
       {/* Modals */}
       {showConfigModal && (
         <ConfigModal
-          isSoundOn={gameState.isSoundOn}
-          toggleSound={() => setGameState(p => ({...p, isSoundOn: !p.isSoundOn}))}
-          autoFullscreen={autoFullscreen}
-          toggleAutoFullscreen={() => setAutoFullscreen(!autoFullscreen)}
-          selectedSound={gameState.selectedSound}
-          onSelectSound={(url) => setGameState(p => ({...p, selectedSound: url}))}
+          isSoundOn={localPrefs.isSoundOn}
+          toggleSound={toggleSound}
+          autoFullscreen={localPrefs.autoFullscreen}
+          toggleAutoFullscreen={toggleAutoFullscreen}
+          selectedSound={localPrefs.selectedSound}
+          onSelectSound={selectSound}
+          volume={localPrefs.volume}
+          onVolumeChange={setVolume}
           onClose={() => setShowConfigModal(false)}
         />
       )}

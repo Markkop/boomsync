@@ -23,12 +23,12 @@ export interface GameState {
   roomA: string[];
   roomB: string[];
   roundCount: number;
-  isSoundOn: boolean;
-  selectedSound: string;
   usedTimerIds: string[];
 }
 
 export type SyncMessage = 
   | { type: 'SYNC_STATE'; state: GameState }
-  | { type: 'HEARTBEAT' }
-  | { type: 'CONNECTION_COUNT'; count: number };
+  | { type: 'HEARTBEAT'; peerId: string }
+  | { type: 'CONNECTION_COUNT'; count: number }
+  | { type: 'ROOM_DELETED' }
+  | { type: 'REQUEST_STATE' };

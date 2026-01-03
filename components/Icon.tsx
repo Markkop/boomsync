@@ -22,7 +22,9 @@ import {
   Check,
   LogOut,
   Github,
-  Proportions
+  Proportions,
+  Circle,
+  CheckCircle2
 } from 'lucide-react';
 
 const icons = {
@@ -48,7 +50,9 @@ const icons = {
   check: Check,
   logout: LogOut,
   github: Github,
-  proportions: Proportions
+  proportions: Proportions,
+  circle: Circle,
+  circleCheck: CheckCircle2
 };
 
 interface IconProps {

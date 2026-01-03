@@ -26,7 +26,14 @@ const App: React.FC = () => {
   // --- State Initialization ---
   const [gameState, setGameState] = useState<GameState>(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) return JSON.parse(saved);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // Ensure usedTimerIds exists for backward compatibility
+      if (!parsed.usedTimerIds) {
+        parsed.usedTimerIds = [];
+      }
+      return parsed;
+    }
     
     return {
       timers: [
@@ -39,7 +46,8 @@ const App: React.FC = () => {
       roomB: [],
       roundCount: 3,
       isSoundOn: true,
-      selectedSound: ALARM_SOUNDS[0].url
+      selectedSound: ALARM_SOUNDS[0].url,
+      usedTimerIds: []
     };
   });
 
@@ -160,7 +168,23 @@ const App: React.FC = () => {
           return t;
         });
 
-        const newState = { ...prev, timers: nextTimers };
+        // Handle usedTimerIds when timer reaches ALARMING
+        let nextUsedTimerIds = [...prev.usedTimerIds];
+        const alarmingTimer = nextTimers.find(t => t.status === TimerStatus.ALARMING && prev.timers.find(pt => pt.id === t.id)?.status !== TimerStatus.ALARMING);
+        
+        if (alarmingTimer) {
+          // If 1:00 timer (id === '1'), clear all used timers
+          if (alarmingTimer.id === '1') {
+            nextUsedTimerIds = [];
+          } else {
+            // Otherwise, add to used timers if not already present
+            if (!nextUsedTimerIds.includes(alarmingTimer.id)) {
+              nextUsedTimerIds = [...nextUsedTimerIds, alarmingTimer.id];
+            }
+          }
+        }
+
+        const newState = { ...prev, timers: nextTimers, usedTimerIds: nextUsedTimerIds };
         broadcastState(newState);
         return newState;
       });
@@ -202,7 +226,11 @@ const App: React.FC = () => {
         }
         return t;
       });
-      const newState = { ...prev, timers: nextTimers };
+      
+      // Remove from usedTimerIds when reset
+      const nextUsedTimerIds = prev.usedTimerIds.filter(timerId => timerId !== id);
+      
+      const newState = { ...prev, timers: nextTimers, usedTimerIds: nextUsedTimerIds };
       broadcastState(newState);
       return newState;
     });
@@ -241,7 +269,7 @@ const App: React.FC = () => {
         });
       }
 
-      const newState = { ...prev, roundCount: nextCount, timers: newTimers };
+      const newState = { ...prev, roundCount: nextCount, timers: newTimers, usedTimerIds: [] };
       broadcastState(newState);
       return newState;
     });
@@ -332,6 +360,7 @@ const App: React.FC = () => {
           roomCode={roomCode}
           isConnected={isConnected}
           onShare={handleShare}
+          isUsed={gameState.usedTimerIds.includes(activeFullscreenTimer.id)}
         />
       )}
       
@@ -369,6 +398,7 @@ const App: React.FC = () => {
             timers={gameState.timers} 
             onToggle={handleTimerClick} 
             onReset={handleTimerReset}
+            usedTimerIds={gameState.usedTimerIds}
           />
         ) : (
           <div className="overflow-y-auto no-scrollbar flex-1">

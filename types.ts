@@ -25,6 +25,7 @@ export interface GameState {
   roundCount: number;
   isSoundOn: boolean;
   selectedSound: string;
+  usedTimerIds: string[];
 }
 
 export type SyncMessage = 

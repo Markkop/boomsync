@@ -12,9 +12,10 @@ interface FullscreenTimerProps {
   roomCode?: string | null;
   isConnected?: boolean;
   onShare?: () => void;
+  isUsed?: boolean;
 }
 
-export const FullscreenTimer: React.FC<FullscreenTimerProps> = ({ timer, onToggle, onReset, onClose, roomCode, isConnected, onShare }) => {
+export const FullscreenTimer: React.FC<FullscreenTimerProps> = ({ timer, onToggle, onReset, onClose, roomCode, isConnected, onShare, isUsed = false }) => {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isLongPress = useRef(false);
 
@@ -111,7 +112,7 @@ export const FullscreenTimer: React.FC<FullscreenTimerProps> = ({ timer, onToggl
 
       {/* Main Content - Rotated 90 degrees for 'table mode' */}
       <div className="transform rotate-90 flex flex-col items-center justify-center w-screen h-screen pointer-events-none text-current">
-        <div className="text-[25vh] font-black tracking-tighter leading-none drop-shadow-lg tabular-nums">
+        <div className={`text-[25vh] font-black tracking-tighter leading-none drop-shadow-lg tabular-nums transition-opacity duration-300 ${isUsed ? 'opacity-40' : ''}`}>
           {formatTime(timer.remainingSeconds)}
         </div>
         <div className="mt-8 flex flex-col items-center gap-2">

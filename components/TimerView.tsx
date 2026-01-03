@@ -6,9 +6,10 @@ interface TimerViewProps {
   timers: GameTimer[];
   onToggle: (id: string) => void;
   onReset: (id: string) => void;
+  usedTimerIds?: string[];
 }
 
-export const TimerView: React.FC<TimerViewProps> = ({ timers, onToggle, onReset }) => {
+export const TimerView: React.FC<TimerViewProps> = ({ timers, onToggle, onReset, usedTimerIds = [] }) => {
   // Refs to handle long press logic per timer
   // We use instance-specific handling via closures or careful event management.
   // Using refs here works because the events are synchronous to the user interaction sequence.
@@ -77,24 +78,28 @@ export const TimerView: React.FC<TimerViewProps> = ({ timers, onToggle, onReset 
 
   return (
     <div className="flex flex-col gap-2 h-full">
-      {timers.map((timer) => (
-        <button
-          key={timer.id}
-          onPointerDown={() => handlePointerDown(timer.id)}
-          onPointerUp={() => handlePointerUp(timer.id)}
-          onPointerLeave={handlePointerCancel}
-          onPointerCancel={handlePointerCancel}
-          onContextMenu={(e) => e.preventDefault()}
-          className={`
-            w-full flex-1 rounded-[40px] border-4 flex items-center justify-center
-            ${textSizeClass} font-black tracking-tighter transition-[transform,colors,shadow] duration-300
-            active:scale-95 touch-manipulation shadow-2xl select-none min-h-0
-            ${getTimerStyles(timer)}
-          `}
-        >
-          {formatTime(timer.remainingSeconds)}
-        </button>
-      ))}
+      {timers.map((timer) => {
+        const isUsed = usedTimerIds.includes(timer.id);
+        return (
+          <button
+            key={timer.id}
+            onPointerDown={() => handlePointerDown(timer.id)}
+            onPointerUp={() => handlePointerUp(timer.id)}
+            onPointerLeave={handlePointerCancel}
+            onPointerCancel={handlePointerCancel}
+            onContextMenu={(e) => e.preventDefault()}
+            className={`
+              w-full flex-1 rounded-[40px] border-4 flex items-center justify-center
+              ${textSizeClass} font-black tracking-tighter transition-[transform,colors,shadow,opacity] duration-300
+              active:scale-95 touch-manipulation shadow-2xl select-none min-h-0
+              ${getTimerStyles(timer)}
+              ${isUsed ? 'opacity-40' : ''}
+            `}
+          >
+            {formatTime(timer.remainingSeconds)}
+          </button>
+        );
+      })}
     </div>
   );
 };

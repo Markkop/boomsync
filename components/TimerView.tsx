@@ -6,10 +6,11 @@ interface TimerViewProps {
   timers: GameTimer[];
   onToggle: (id: string) => void;
   onReset: (id: string) => void;
+  onToggleDarken: (id: string) => void;
   usedTimerIds?: string[];
 }
 
-export const TimerView: React.FC<TimerViewProps> = ({ timers, onToggle, onReset, usedTimerIds = [] }) => {
+export const TimerView: React.FC<TimerViewProps> = ({ timers, onToggle, onReset, onToggleDarken, usedTimerIds = [] }) => {
   // Refs to handle long press logic per timer
   // We use instance-specific handling via closures or careful event management.
   // Using refs here works because the events are synchronous to the user interaction sequence.
@@ -22,11 +23,21 @@ export const TimerView: React.FC<TimerViewProps> = ({ timers, onToggle, onReset,
   const handlePointerDown = (id: string) => {
     isPressed.current = true;
     isLongPress.current = false;
+    const timer = timers.find(t => t.id === id);
+    const isDarkened = usedTimerIds.includes(id);
+    
     timeoutRef.current = setTimeout(() => {
       isLongPress.current = true;
       if (navigator.vibrate) navigator.vibrate(50);
-      onReset(id);
-    }, 500);
+      
+      // For idle timers (darkened or not), toggle darken state
+      // For other states (running, alarming), use reset behavior
+      if (timer?.status === TimerStatus.IDLE) {
+        onToggleDarken(id);
+      } else {
+        onReset(id);
+      }
+    }, 150);
   };
 
   const handlePointerUp = (id: string) => {

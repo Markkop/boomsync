@@ -8,6 +8,7 @@ interface FullscreenTimerProps {
   timer: GameTimer;
   onToggle: (id: string) => void;
   onReset: (id: string) => void;
+  onToggleDarken: (id: string) => void;
   onClose: () => void;
   roomCode?: string | null;
   isConnected?: boolean;
@@ -15,7 +16,7 @@ interface FullscreenTimerProps {
   isUsed?: boolean;
 }
 
-export const FullscreenTimer: React.FC<FullscreenTimerProps> = ({ timer, onToggle, onReset, onClose, roomCode, isConnected, onShare, isUsed = false }) => {
+export const FullscreenTimer: React.FC<FullscreenTimerProps> = ({ timer, onToggle, onReset, onToggleDarken, onClose, roomCode, isConnected, onShare, isUsed = false }) => {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isLongPress = useRef(false);
 
@@ -31,8 +32,15 @@ export const FullscreenTimer: React.FC<FullscreenTimerProps> = ({ timer, onToggl
     timeoutRef.current = setTimeout(() => {
       isLongPress.current = true;
       if (navigator.vibrate) navigator.vibrate(50);
-      onReset(timer.id);
-    }, 500);
+      
+      // For idle timers, toggle darken state
+      // For other states (running, alarming), use reset behavior
+      if (timer.status === TimerStatus.IDLE) {
+        onToggleDarken(timer.id);
+      } else {
+        onReset(timer.id);
+      }
+    }, 150);
   };
 
   const handlePointerUp = () => {

@@ -235,6 +235,32 @@ const App: React.FC = () => {
       return newState;
     });
   };
+
+  const toggleDarkenTimer = (id: string) => {
+    setGameState(prev => {
+      const timer = prev.timers.find(t => t.id === id);
+      const isDarkened = prev.usedTimerIds.includes(id);
+      
+      // Only toggle darken for idle timers
+      if (timer?.status === TimerStatus.IDLE) {
+        let nextUsedTimerIds: string[];
+        if (isDarkened) {
+          // Remove from darkened state
+          nextUsedTimerIds = prev.usedTimerIds.filter(timerId => timerId !== id);
+        } else {
+          // Add to darkened state
+          nextUsedTimerIds = [...prev.usedTimerIds, id];
+        }
+        
+        const newState = { ...prev, usedTimerIds: nextUsedTimerIds };
+        broadcastState(newState);
+        return newState;
+      }
+      
+      // For non-idle timers, fall back to reset behavior
+      return prev;
+    });
+  };
   
   // Wrapper for timer click to handle fullscreen logic
   const handleTimerClick = (id: string) => {
@@ -254,6 +280,18 @@ const App: React.FC = () => {
     resetTimer(id);
     if (fullscreenTimerId === id) {
       setFullscreenTimerId(null);
+    }
+  };
+
+  // Wrapper for toggle darken (Long press on idle timer)
+  const handleToggleDarken = (id: string) => {
+    const timer = gameState.timers.find(t => t.id === id);
+    // Only toggle darken for idle timers
+    if (timer?.status === TimerStatus.IDLE) {
+      toggleDarkenTimer(id);
+    } else {
+      // For non-idle timers, use reset behavior
+      handleTimerReset(id);
     }
   };
 
@@ -360,6 +398,7 @@ const App: React.FC = () => {
           timer={activeFullscreenTimer} 
           onToggle={handleTimerClick}
           onReset={handleTimerReset}
+          onToggleDarken={handleToggleDarken}
           onClose={() => setFullscreenTimerId(null)}
           roomCode={roomCode}
           isConnected={isConnected}
@@ -402,6 +441,7 @@ const App: React.FC = () => {
             timers={gameState.timers} 
             onToggle={handleTimerClick} 
             onReset={handleTimerReset}
+            onToggleDarken={handleToggleDarken}
             usedTimerIds={gameState.usedTimerIds}
           />
         ) : (

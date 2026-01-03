@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { peerService } from '../services/peerService';
 import { Icon } from './Icon';
@@ -17,6 +17,10 @@ export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = ''
   const [isHost, setIsHost] = useState(true);
   const [copied, setCopied] = useState(false);
 
+  // Track initial state to prevent auto-close when reopening modal
+  const initialConnectionCountRef = useRef<number | null>(null);
+  const initialStatusRef = useRef<string | null>(null);
+
   // Check if already hosting or connected
   useEffect(() => {
     const existingRoomCode = peerService.getRoomCode();
@@ -24,20 +28,25 @@ export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = ''
     const hostStatus = peerService.getIsHost();
     setIsHost(hostStatus);
     
+    // Capture initial state on mount
+    const initialCount = peerService.getConnectionCount();
+    initialConnectionCountRef.current = initialCount;
+    
     if (existingRoomCode) {
       setRoomCode(existingRoomCode);
-      setConnectionCount(peerService.getConnectionCount());
-      if (hostStatus) {
-        setStatus('hosting');
-      } else {
-        setStatus('connected');
-      }
+      setConnectionCount(initialCount);
+      const initialStatus = hostStatus ? 'hosting' : 'connected';
+      setStatus(initialStatus);
+      initialStatusRef.current = initialStatus;
     } else if (existingId) {
       // Fallback: if we have a peer ID but no room code, we're hosting
       setRoomCode(existingId);
-      setConnectionCount(peerService.getConnectionCount());
+      setConnectionCount(initialCount);
       setStatus('hosting');
       setIsHost(true);
+      initialStatusRef.current = 'hosting';
+    } else {
+      initialStatusRef.current = 'idle';
     }
   }, []);
 
@@ -63,14 +72,19 @@ export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = ''
 
   // Auto-close modal when hosting and another user joins (connectionCount > 1)
   useEffect(() => {
-    if (isHost && connectionCount > 1) {
+    // Only auto-close if connectionCount increased AFTER modal opened
+    if (isHost && connectionCount > 1 && 
+        initialConnectionCountRef.current !== null && 
+        connectionCount > initialConnectionCountRef.current) {
       onToggle();
     }
   }, [isHost, connectionCount, onToggle]);
 
   // Auto-close modal when joining and connection is established
   useEffect(() => {
-    if (status === 'connected' && !isHost) {
+    // Only auto-close if we transitioned to connected (wasn't connected on mount)
+    if (status === 'connected' && !isHost && 
+        initialStatusRef.current !== 'connected') {
       onToggle();
     }
   }, [status, isHost, onToggle]);

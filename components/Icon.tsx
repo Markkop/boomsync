@@ -21,7 +21,8 @@ import {
   Settings,
   Check,
   LogOut,
-  Github
+  Github,
+  Proportions
 } from 'lucide-react';
 
 const icons = {
@@ -46,7 +47,8 @@ const icons = {
   settings: Settings,
   check: Check,
   logout: LogOut,
-  github: Github
+  github: Github,
+  proportions: Proportions
 };
 
 interface IconProps {

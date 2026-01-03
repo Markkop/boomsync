@@ -105,7 +105,7 @@ export const ConfigModal: React.FC<ConfigModalProps> = ({
             `}
           >
              <div className={`p-4 rounded-full ${autoFullscreen ? 'bg-purple-500 text-zinc-950' : 'bg-zinc-800 text-zinc-600'}`}>
-              <Icon name="phone" size={24} />
+              <Icon name="proportions" size={24} />
             </div>
             <span className="font-bold text-xs tracking-widest uppercase text-center leading-tight">
               Auto Fullscreen

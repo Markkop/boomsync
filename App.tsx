@@ -433,6 +433,18 @@ const App: React.FC = () => {
           >
             <Icon name="settings" size={20} />
           </button>
+          <button 
+            onClick={() => setGameState(p => ({...p, isSoundOn: !p.isSoundOn}))}
+            className={`p-2 rounded-xl bg-zinc-800 active:bg-zinc-700 ${gameState.isSoundOn ? 'text-cyan-400' : 'text-zinc-400'}`}
+          >
+            <Icon name={gameState.isSoundOn ? "volumeOn" : "volumeOff"} size={20} />
+          </button>
+          <button 
+            onClick={() => setAutoFullscreen(!autoFullscreen)}
+            className={`p-2 rounded-xl bg-zinc-800 active:bg-zinc-700 ${autoFullscreen ? 'text-purple-400' : 'text-zinc-400'}`}
+          >
+            <Icon name="proportions" size={20} />
+          </button>
         </div>
 
         <button 

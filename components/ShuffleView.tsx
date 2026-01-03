@@ -49,7 +49,7 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
             <h3 className="text-zinc-500 font-bold uppercase tracking-widest text-xs px-2">Room A</h3>
             <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-4 space-y-2 min-h-[200px] neon-border-cyan">
               {roomA.map((name, i) => (
-                <div key={i} className="text-lg font-semibold text-cyan-400 py-1 border-b border-zinc-800 last:border-0 truncate">
+                <div key={i} className="text-lg font-semibold text-zinc-100 py-1 border-b border-zinc-800 last:border-0 truncate">
                   {name}
                 </div>
               ))}
@@ -59,7 +59,7 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
             <h3 className="text-zinc-500 font-bold uppercase tracking-widest text-xs px-2">Room B</h3>
             <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-4 space-y-2 min-h-[200px]">
               {roomB.map((name, i) => (
-                <div key={i} className="text-lg font-semibold text-rose-400 py-1 border-b border-zinc-800 last:border-0 truncate">
+                <div key={i} className="text-lg font-semibold text-zinc-100 py-1 border-b border-zinc-800 last:border-0 truncate">
                   {name}
                 </div>
               ))}

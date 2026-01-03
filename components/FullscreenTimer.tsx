@@ -1,5 +1,4 @@
-import React, { useRef, useMemo } from 'react';
-import { QRCodeSVG } from 'qrcode.react';
+import React, { useRef } from 'react';
 import { GameTimer, TimerStatus } from '../types';
 import { TIMER_COLORS } from '../constants';
 import { Icon } from './Icon';
@@ -10,24 +9,15 @@ interface FullscreenTimerProps {
   onReset: (id: string) => void;
   onToggleDarken: (id: string) => void;
   onClose: () => void;
-  roomCode?: string | null;
-  isConnected?: boolean;
   onShare?: () => void;
   isUsed?: boolean;
   isSoundOn?: boolean;
   onToggleSound?: () => void;
 }
 
-export const FullscreenTimer: React.FC<FullscreenTimerProps> = ({ timer, onToggle, onReset, onToggleDarken, onClose, roomCode, isConnected, onShare, isUsed = false, isSoundOn = true, onToggleSound }) => {
+export const FullscreenTimer: React.FC<FullscreenTimerProps> = ({ timer, onToggle, onReset, onToggleDarken, onClose, onShare, isUsed = false, isSoundOn = true, onToggleSound }) => {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isLongPress = useRef(false);
-
-  const getRoomLink = useMemo(() => {
-    if (!roomCode) return '';
-    const url = new URL(window.location.href);
-    url.searchParams.set('room', roomCode);
-    return url.toString();
-  }, [roomCode]);
 
   const handlePointerDown = () => {
     isLongPress.current = false;
@@ -143,36 +133,6 @@ export const FullscreenTimer: React.FC<FullscreenTimerProps> = ({ timer, onToggl
       <div className="transform rotate-90 flex flex-col items-center justify-center w-screen h-screen pointer-events-none text-current">
         <div className={`text-[25vh] font-black tracking-tighter leading-none drop-shadow-lg tabular-nums transition-opacity duration-300 ${isUsed ? 'opacity-40' : ''}`}>
           {timer.status === TimerStatus.READY_TO_BOOM ? 'Boom!' : formatTime(timer.remainingSeconds)}
-        </div>
-        <div className="mt-4 flex flex-col items-center gap-1">
-            {isConnected && roomCode && (
-              <div className="flex flex-col items-center gap-2">
-                <div className="text-base font-mono font-bold tracking-normal opacity-80 text-current">
-                  boom.markkop.dev
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="text-sm font-semibold uppercase tracking-widest opacity-70 text-current">
-                    ROOM CODE:
-                  </div>
-                  <div className="text-sm font-mono font-bold tracking-wider opacity-90 text-current">
-                    {roomCode}
-                  </div>
-                </div>
-                {getRoomLink && (
-                  <div className="flex flex-col items-center gap-2 mt-1">
-                    <div className="p-2 bg-black/30 rounded-xl backdrop-blur-sm">
-                      <QRCodeSVG 
-                        value={getRoomLink} 
-                        size={120}
-                        fgColor="currentColor"
-                        bgColor="transparent"
-                        className="opacity-90"
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
         </div>
       </div>
       

@@ -673,9 +673,7 @@ const App: React.FC = () => {
           onReset={handleTimerReset}
           onToggleDarken={handleToggleDarken}
           onClose={() => setFullscreenTimerId(null)}
-          roomCode={roomCode}
-          isConnected={isConnected}
-          onShare={handleShare}
+          onShare={() => setShowSyncModal(true)}
           isUsed={gameState.usedTimerIds.includes(activeFullscreenTimer.id)}
           isSoundOn={localPrefs.isSoundOn}
           onToggleSound={toggleSound}

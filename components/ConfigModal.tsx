@@ -9,6 +9,8 @@ interface ConfigModalProps {
   toggleAutoFullscreen: () => void;
   isBombSoundOn: boolean;
   toggleBombSound: () => void;
+  keepScreenAwake: boolean;
+  toggleKeepScreenAwake: () => void;
   selectedSound: string;
   onSelectSound: (url: string) => void;
   volume: number;
@@ -23,6 +25,8 @@ export const ConfigModal: React.FC<ConfigModalProps> = ({
   toggleAutoFullscreen,
   isBombSoundOn,
   toggleBombSound,
+  keepScreenAwake,
+  toggleKeepScreenAwake,
   selectedSound,
   onSelectSound,
   volume,
@@ -253,6 +257,24 @@ export const ConfigModal: React.FC<ConfigModalProps> = ({
             </div>
             <span className="font-bold text-xs tracking-widest uppercase text-center leading-tight">
               Bomb Sound
+            </span>
+          </button>
+
+          {/* Keep Screen Awake Toggle Card */}
+          <button 
+            onClick={toggleKeepScreenAwake}
+            className={`
+              aspect-square rounded-3xl flex flex-col items-center justify-center gap-3 p-4 transition-all duration-300 active:scale-95 border-2
+              ${keepScreenAwake 
+                ? 'bg-yellow-500/10 border-yellow-500/50 text-yellow-400' 
+                : 'bg-zinc-950 border-zinc-800 text-zinc-500'}
+            `}
+          >
+            <div className={`p-4 rounded-full ${keepScreenAwake ? 'bg-yellow-500 text-zinc-950' : 'bg-zinc-800 text-zinc-600'}`}>
+              <Icon name="sun" size={24} />
+            </div>
+            <span className="font-bold text-xs tracking-widest uppercase text-center leading-tight">
+              Screen Awake
             </span>
           </button>
 

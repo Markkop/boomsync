@@ -20,6 +20,7 @@ import { ConfigModal } from './components/ConfigModal';
 import { FullscreenTimer } from './components/FullscreenTimer';
 import { Icon } from './components/Icon';
 import { peerService } from './services/peerService';
+import { wakeLockService } from './services/wakeLockService';
 
 const STORAGE_KEY = 'boomsync_state';
 const PREFS_STORAGE_KEY = 'boomsync_prefs';
@@ -30,6 +31,7 @@ interface LocalPreferences {
   selectedSound: string;
   autoFullscreen: boolean;
   volume: number; // 0.0 to 1.0, defaults to 1.0
+  keepScreenAwake: boolean; // Prevent screen from locking, defaults to true
 }
 
 const App: React.FC = () => {
@@ -86,13 +88,18 @@ const App: React.FC = () => {
       if (parsed.volume === undefined) {
         parsed.volume = 1.0;
       }
+      // Ensure keepScreenAwake exists for backward compatibility (defaults to true)
+      if (parsed.keepScreenAwake === undefined) {
+        parsed.keepScreenAwake = true;
+      }
       return parsed;
     }
     return {
       isSoundOn: true,
       selectedSound: ALARM_SOUNDS[0].url,
       autoFullscreen: true,
-      volume: 1.0
+      volume: 1.0,
+      keepScreenAwake: true
     };
   });
 
@@ -147,6 +154,20 @@ const App: React.FC = () => {
       explosionAudioRef.current.volume = localPrefs.volume;
     }
   }, [localPrefs.volume]);
+
+  // --- Wake Lock Management ---
+  useEffect(() => {
+    if (localPrefs.keepScreenAwake) {
+      wakeLockService.enable();
+    } else {
+      wakeLockService.disable();
+    }
+
+    // Cleanup on unmount
+    return () => {
+      wakeLockService.disable();
+    };
+  }, [localPrefs.keepScreenAwake]);
 
   // --- Deep Link Detection ---
   useEffect(() => {
@@ -576,6 +597,11 @@ const App: React.FC = () => {
     setLocalPrefs(prev => ({ ...prev, autoFullscreen: !prev.autoFullscreen }));
   };
 
+  // Toggle keep screen awake (local only)
+  const toggleKeepScreenAwake = () => {
+    setLocalPrefs(prev => ({ ...prev, keepScreenAwake: !prev.keepScreenAwake }));
+  };
+
   // Toggle bomb sound (synced setting)
   const toggleBombSound = useCallback(() => {
     setGameState(prev => {
@@ -758,6 +784,8 @@ const App: React.FC = () => {
           toggleAutoFullscreen={toggleAutoFullscreen}
           isBombSoundOn={gameState.isBombSoundOn}
           toggleBombSound={toggleBombSound}
+          keepScreenAwake={localPrefs.keepScreenAwake}
+          toggleKeepScreenAwake={toggleKeepScreenAwake}
           selectedSound={localPrefs.selectedSound}
           onSelectSound={selectSound}
           volume={localPrefs.volume}

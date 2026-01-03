@@ -47,6 +47,7 @@ const App: React.FC = () => {
   const [showSyncModal, setShowSyncModal] = useState(false);
   const [showConfigModal, setShowConfigModal] = useState(false);
   const [initialRoomCode, setInitialRoomCode] = useState<string>('');
+  const [isHost, setIsHost] = useState(true); // Track if this peer is the host
   
   // New Feature States
   const [autoFullscreen, setAutoFullscreen] = useState(true);
@@ -81,6 +82,19 @@ const App: React.FC = () => {
     peerService.send({ type: 'SYNC_STATE', state });
   }, []);
 
+  // Track host status
+  useEffect(() => {
+    const updateHostStatus = () => {
+      setIsHost(peerService.getIsHost());
+    };
+    
+    // Update host status periodically and on connection events
+    const interval = setInterval(updateHostStatus, 100);
+    peerService.onConnected(updateHostStatus);
+    
+    return () => clearInterval(interval);
+  }, []);
+
   useEffect(() => {
     peerService.onMessage((msg: SyncMessage) => {
       if (msg.type === 'SYNC_STATE') {
@@ -111,7 +125,11 @@ const App: React.FC = () => {
   }, [gameState.timers, gameState.isSoundOn]);
 
   // --- Timer Logic ---
+  // Only run timer interval on the host to prevent multiple timers running simultaneously
   useEffect(() => {
+    // If not the host, don't run the timer interval
+    if (!isHost) return;
+
     const interval = setInterval(() => {
       setGameState(prev => {
         const anyRunning = prev.timers.some(t => t.status === TimerStatus.RUNNING);
@@ -139,7 +157,7 @@ const App: React.FC = () => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [broadcastState]);
+  }, [broadcastState, isHost]);
 
   const toggleTimer = (id: string) => {
     setGameState(prev => {

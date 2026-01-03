@@ -7,9 +7,12 @@ class PeerService {
   private connection: DataConnection | null = null;
   private onMessageCallback: ((msg: SyncMessage) => void) | null = null;
   private onConnectedCallback: (() => void) | null = null;
+  private isHost: boolean = true; // Default to true (standalone mode)
 
   init(id?: string): Promise<string> {
     return new Promise((resolve, reject) => {
+      // If id is provided, this peer is hosting
+      this.isHost = id !== undefined;
       this.peer = new Peer(id);
       this.peer.on('open', (id) => resolve(id));
       this.peer.on('error', (err) => reject(err));
@@ -22,6 +25,8 @@ class PeerService {
 
   connect(targetId: string) {
     if (!this.peer) return;
+    // When connecting to another peer, this peer is joining (not hosting)
+    this.isHost = false;
     const conn = this.peer.connect(targetId);
     this.handleConnection(conn);
   }
@@ -54,9 +59,15 @@ class PeerService {
     return this.peer?.id;
   }
 
+  getIsHost() {
+    return this.isHost;
+  }
+
   disconnect() {
     this.connection?.close();
     this.peer?.destroy();
+    // Reset to standalone mode after disconnect
+    this.isHost = true;
   }
 }
 

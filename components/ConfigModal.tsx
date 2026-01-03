@@ -159,6 +159,21 @@ export const ConfigModal: React.FC<ConfigModalProps> = ({
               })}
             </div>
           </div>
+
+          {/* GitHub Repository Card */}
+          <a 
+            href="https://github.com/Markkop/boomsync"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="col-span-2 rounded-3xl flex items-center gap-3 p-4 transition-all duration-300 active:scale-95 border-2 bg-zinc-950 border-zinc-800 text-zinc-400 hover:bg-zinc-900 hover:border-zinc-700 hover:text-zinc-300 mt-2"
+          >
+            <div className="p-3 rounded-full bg-zinc-800 text-zinc-500">
+              <Icon name="github" size={20} />
+            </div>
+            <span className="font-bold text-xs tracking-widest uppercase">
+              Github Repository
+            </span>
+          </a>
         </div>
       </div>
     </div>

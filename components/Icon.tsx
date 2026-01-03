@@ -20,7 +20,8 @@ import {
   Smartphone,
   Settings,
   Check,
-  LogOut
+  LogOut,
+  Github
 } from 'lucide-react';
 
 const icons = {
@@ -44,7 +45,8 @@ const icons = {
   phone: Smartphone,
   settings: Settings,
   check: Check,
-  logout: LogOut
+  logout: LogOut,
+  github: Github
 };
 
 interface IconProps {

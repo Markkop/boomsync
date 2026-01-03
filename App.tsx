@@ -415,7 +415,7 @@ const App: React.FC = () => {
       {showSyncModal && (
         <SyncModal 
           initialCode={initialRoomCode}
-          onClose={() => setShowSyncModal(true)} 
+          onClose={() => setShowSyncModal(false)} 
           onToggle={() => setShowSyncModal(false)}
         />
       )}

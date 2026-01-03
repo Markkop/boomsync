@@ -61,6 +61,20 @@ export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = ''
     return () => clearInterval(interval);
   }, []);
 
+  // Auto-close modal when hosting and another user joins (connectionCount > 1)
+  useEffect(() => {
+    if (isHost && connectionCount > 1) {
+      onToggle();
+    }
+  }, [isHost, connectionCount, onToggle]);
+
+  // Auto-close modal when joining and connection is established
+  useEffect(() => {
+    if (status === 'connected' && !isHost) {
+      onToggle();
+    }
+  }, [status, isHost, onToggle]);
+
   const handleJoin = useCallback((idToJoin: string) => {
     if (!idToJoin) return;
     setStatus('connecting');

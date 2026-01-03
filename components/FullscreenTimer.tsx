@@ -144,9 +144,9 @@ export const FullscreenTimer: React.FC<FullscreenTimerProps> = ({ timer, onToggl
         <div className={`text-[25vh] font-black tracking-tighter leading-none drop-shadow-lg tabular-nums transition-opacity duration-300 ${isUsed ? 'opacity-40' : ''}`}>
           {timer.status === TimerStatus.READY_TO_BOOM ? 'Boom!' : formatTime(timer.remainingSeconds)}
         </div>
-        <div className="mt-8 flex flex-col items-center gap-2">
+        <div className="mt-4 flex flex-col items-center gap-1">
             {isConnected && roomCode && (
-              <div className="flex flex-col items-center gap-3 mt-4">
+              <div className="flex flex-col items-center gap-2">
                 <div className="text-base font-mono font-bold tracking-normal opacity-80 text-current">
                   boom.markkop.dev
                 </div>
@@ -159,7 +159,7 @@ export const FullscreenTimer: React.FC<FullscreenTimerProps> = ({ timer, onToggl
                   </div>
                 </div>
                 {getRoomLink && (
-                  <div className="flex flex-col items-center gap-2 mt-2">
+                  <div className="flex flex-col items-center gap-2 mt-1">
                     <div className="p-2 bg-black/30 rounded-xl backdrop-blur-sm">
                       <QRCodeSVG 
                         value={getRoomLink} 

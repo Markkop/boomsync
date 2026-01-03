@@ -24,6 +24,8 @@ export interface GameState {
   roomB: string[];
   roundCount: number;
   usedTimerIds: string[];
+  activeTab: 'timers' | 'shuffle';
+  isEditingPlayers: boolean;
 }
 
 export type SyncMessage = 

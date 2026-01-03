@@ -19,6 +19,11 @@
         .neon-border-cyan { box-shadow: 0 0 15px rgba(6, 182, 212, 0.3); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @supports (padding: max(0px)) {
+            .pb-safe {
+                padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+            }
+        }
     </style>
 <script type="importmap">
 {

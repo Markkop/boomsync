@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Player } from '../types';
 import { Icon } from './Icon';
 
@@ -9,6 +9,8 @@ interface ShuffleViewProps {
   roomB: string[];
   onUpdatePlayers: (players: Player[]) => void;
   onShuffle: (players: Player[]) => void;
+  isEditing: boolean;
+  onSetEditing: (editing: boolean) => void;
 }
 
 export const ShuffleView: React.FC<ShuffleViewProps> = ({ 
@@ -16,9 +18,10 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
   roomA, 
   roomB, 
   onUpdatePlayers, 
-  onShuffle 
+  onShuffle,
+  isEditing,
+  onSetEditing
 }) => {
-  const [isEditing, setIsEditing] = useState(roomA.length === 0);
 
   const addPlayer = () => {
     onUpdatePlayers([...players, { id: Date.now().toString(), name: '' }]);
@@ -35,7 +38,7 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
 
   const handleShuffleClick = () => {
     onShuffle(players);
-    setIsEditing(false);
+    onSetEditing(false);
   };
 
   if (!isEditing) {
@@ -73,7 +76,7 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
             SHUFFLE
           </button>
           <button 
-            onClick={() => setIsEditing(true)}
+            onClick={() => onSetEditing(true)}
             className="p-6 bg-zinc-800 rounded-[32px] text-zinc-400 active:bg-zinc-700"
           >
             <Icon name="edit" size={28} />
@@ -84,8 +87,8 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
   }
 
   return (
-    <div className="space-y-4 pb-12 animate-in fade-in zoom-in-95 duration-200">
-      <div className="space-y-2">
+    <div className="space-y-4 animate-in fade-in zoom-in-95 duration-200">
+      <div className="space-y-2 pb-4">
         {players.map((p, idx) => (
           <div key={p.id} className="flex gap-2 group">
             <input
@@ -113,7 +116,7 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
         ADD PLAYER
       </button>
 
-      <div className="sticky bottom-20 left-0 right-0 bg-zinc-950/80 backdrop-blur-md pt-2">
+      <div className="sticky bottom-0 left-0 right-0 bg-zinc-950/80 backdrop-blur-md z-[35] -mx-4 px-4 pt-4">
         <button 
           onClick={handleShuffleClick}
           className="w-full bg-cyan-500 text-zinc-950 font-black text-xl py-6 rounded-[32px] flex items-center justify-center gap-3 shadow-2xl active:scale-95 transition-transform"

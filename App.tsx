@@ -41,6 +41,14 @@ const App: React.FC = () => {
       if (!parsed.usedTimerIds) {
         parsed.usedTimerIds = [];
       }
+      // Ensure activeTab exists for backward compatibility
+      if (parsed.activeTab === undefined) {
+        parsed.activeTab = 'timers';
+      }
+      // Ensure isEditingPlayers exists for backward compatibility
+      if (parsed.isEditingPlayers === undefined) {
+        parsed.isEditingPlayers = true;
+      }
       // Remove old isSoundOn and selectedSound if present (migration)
       delete parsed.isSoundOn;
       delete parsed.selectedSound;
@@ -57,7 +65,9 @@ const App: React.FC = () => {
       roomA: [],
       roomB: [],
       roundCount: 3,
-      usedTimerIds: []
+      usedTimerIds: [],
+      activeTab: 'timers',
+      isEditingPlayers: true
     };
   });
 
@@ -80,7 +90,6 @@ const App: React.FC = () => {
     };
   });
 
-  const [activeTab, setActiveTab] = useState<'timers' | 'shuffle'>('timers');
   const [showSyncModal, setShowSyncModal] = useState(false);
   const [showConfigModal, setShowConfigModal] = useState(false);
   const [initialRoomCode, setInitialRoomCode] = useState<string>('');
@@ -457,6 +466,22 @@ const App: React.FC = () => {
     });
   };
 
+  const setActiveTab = (tab: 'timers' | 'shuffle') => {
+    setGameState(prev => {
+      const newState = { ...prev, activeTab: tab };
+      broadcastState(newState);
+      return newState;
+    });
+  };
+
+  const setIsEditingPlayers = (editing: boolean) => {
+    setGameState(prev => {
+      const newState = { ...prev, isEditingPlayers: editing };
+      broadcastState(newState);
+      return newState;
+    });
+  };
+
   // Toggle sound on/off (local only, not synced)
   const toggleSound = () => {
     setLocalPrefs(prev => ({ ...prev, isSoundOn: !prev.isSoundOn }));
@@ -609,7 +634,7 @@ const App: React.FC = () => {
 
       {/* Main Content */}
       <main className="flex-1 overflow-hidden pb-24 px-4 pt-4 flex flex-col">
-        {activeTab === 'timers' ? (
+        {gameState.activeTab === 'timers' ? (
           <TimerView 
             timers={gameState.timers} 
             onToggle={handleTimerClick} 
@@ -625,23 +650,25 @@ const App: React.FC = () => {
               roomB={gameState.roomB}
               onUpdatePlayers={updatePlayers}
               onShuffle={handleShuffle}
+              isEditing={gameState.isEditingPlayers}
+              onSetEditing={setIsEditingPlayers}
             />
           </div>
         )}
       </main>
 
       {/* Bottom Nav */}
-      <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-zinc-950 border-t border-zinc-900 p-2 flex gap-2 z-40">
+      <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-zinc-950 border-t border-zinc-900 p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] flex z-40 w-full">
         <button 
           onClick={() => setActiveTab('timers')}
-          className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl transition-all ${activeTab === 'timers' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' : 'text-zinc-500 hover:bg-zinc-900'}`}
+          className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl transition-all min-w-0 ${gameState.activeTab === 'timers' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' : 'text-zinc-500 hover:bg-zinc-900'}`}
         >
           <Icon name="timer" size={20} />
           <span className="font-semibold">Timer</span>
         </button>
         <button 
           onClick={() => setActiveTab('shuffle')}
-          className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl transition-all ${activeTab === 'shuffle' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' : 'text-zinc-500 hover:bg-zinc-900'}`}
+          className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl transition-all min-w-0 ${gameState.activeTab === 'shuffle' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' : 'text-zinc-500 hover:bg-zinc-900'}`}
         >
           <Icon name="users" size={20} />
           <span className="font-semibold">Shuffle</span>

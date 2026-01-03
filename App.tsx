@@ -419,6 +419,8 @@ const App: React.FC = () => {
           isConnected={isConnected}
           onShare={handleShare}
           isUsed={gameState.usedTimerIds.includes(activeFullscreenTimer.id)}
+          isSoundOn={gameState.isSoundOn}
+          onToggleSound={() => setGameState(p => ({...p, isSoundOn: !p.isSoundOn}))}
         />
       )}
       

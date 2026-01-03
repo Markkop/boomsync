@@ -14,9 +14,11 @@ interface FullscreenTimerProps {
   isConnected?: boolean;
   onShare?: () => void;
   isUsed?: boolean;
+  isSoundOn?: boolean;
+  onToggleSound?: () => void;
 }
 
-export const FullscreenTimer: React.FC<FullscreenTimerProps> = ({ timer, onToggle, onReset, onToggleDarken, onClose, roomCode, isConnected, onShare, isUsed = false }) => {
+export const FullscreenTimer: React.FC<FullscreenTimerProps> = ({ timer, onToggle, onReset, onToggleDarken, onClose, roomCode, isConnected, onShare, isUsed = false, isSoundOn = true, onToggleSound }) => {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isLongPress = useRef(false);
 
@@ -82,6 +84,25 @@ export const FullscreenTimer: React.FC<FullscreenTimerProps> = ({ timer, onToggl
       onPointerCancel={handlePointerCancel}
       onContextMenu={(e) => e.preventDefault()}
     >
+      {/* Sound Toggle Button - Bottom Left */}
+      {onToggleSound && (
+        <button 
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleSound();
+          }}
+          onPointerDown={(e) => {
+            e.stopPropagation();
+          }}
+          onPointerUp={(e) => {
+            e.stopPropagation();
+          }}
+          className="absolute bottom-6 left-6 p-4 bg-black/20 text-white rounded-full hover:bg-black/30 backdrop-blur-sm transition-all active:scale-95 z-50"
+        >
+          <Icon name={isSoundOn ? "volumeOn" : "volumeOff"} size={32} className="rotate-90" />
+        </button>
+      )}
+
       {/* Share Button - Bottom Right, Vertical Style */}
       {onShare && (
         <button 

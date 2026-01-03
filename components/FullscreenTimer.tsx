@@ -124,10 +124,6 @@ export const FullscreenTimer: React.FC<FullscreenTimerProps> = ({ timer, onToggl
           {formatTime(timer.remainingSeconds)}
         </div>
         <div className="mt-8 flex flex-col items-center gap-2">
-            <div className="text-2xl font-bold uppercase tracking-[0.5em] opacity-80">
-            {timer.status === TimerStatus.IDLE ? 'TAP TO START' : 
-            timer.status === TimerStatus.ALARMING ? 'TIME UP' : ''}
-            </div>
             {isConnected && roomCode && (
               <div className="flex flex-col items-center gap-3 mt-4">
                 <div className="text-base font-mono font-bold tracking-normal opacity-80 text-current">

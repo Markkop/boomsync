@@ -24,7 +24,8 @@ import {
   Github,
   Proportions,
   Circle,
-  CheckCircle2
+  CheckCircle2,
+  Bomb
 } from 'lucide-react';
 
 const icons = {
@@ -52,7 +53,8 @@ const icons = {
   github: Github,
   proportions: Proportions,
   circle: Circle,
-  circleCheck: CheckCircle2
+  circleCheck: CheckCircle2,
+  bomb: Bomb
 };
 
 interface IconProps {

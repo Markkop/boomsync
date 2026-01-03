@@ -7,6 +7,8 @@ interface ConfigModalProps {
   toggleSound: () => void;
   autoFullscreen: boolean;
   toggleAutoFullscreen: () => void;
+  isBombSoundOn: boolean;
+  toggleBombSound: () => void;
   selectedSound: string;
   onSelectSound: (url: string) => void;
   volume: number;
@@ -19,6 +21,8 @@ export const ConfigModal: React.FC<ConfigModalProps> = ({
   toggleSound,
   autoFullscreen,
   toggleAutoFullscreen,
+  isBombSoundOn,
+  toggleBombSound,
   selectedSound,
   onSelectSound,
   volume,
@@ -231,6 +235,24 @@ export const ConfigModal: React.FC<ConfigModalProps> = ({
             </div>
              <span className="font-bold text-xs tracking-widest uppercase text-center leading-tight">
               Auto Fullscreen
+            </span>
+          </button>
+
+          {/* Bomb Sound Toggle Card */}
+          <button 
+            onClick={toggleBombSound}
+            className={`
+              aspect-square rounded-3xl flex flex-col items-center justify-center gap-3 p-4 transition-all duration-300 active:scale-95 border-2
+              ${isBombSoundOn 
+                ? 'bg-orange-500/10 border-orange-500/50 text-orange-400' 
+                : 'bg-zinc-950 border-zinc-800 text-zinc-500'}
+            `}
+          >
+            <div className={`p-4 rounded-full ${isBombSoundOn ? 'bg-orange-500 text-zinc-950' : 'bg-zinc-800 text-zinc-600'}`}>
+              <Icon name="bomb" size={24} />
+            </div>
+            <span className="font-bold text-xs tracking-widest uppercase text-center leading-tight">
+              Bomb Sound
             </span>
           </button>
 

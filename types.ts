@@ -2,7 +2,8 @@
 export enum TimerStatus {
   IDLE = 'idle',
   RUNNING = 'running',
-  ALARMING = 'alarming'
+  ALARMING = 'alarming',
+  READY_TO_BOOM = 'ready_to_boom'
 }
 
 export interface GameTimer {
@@ -26,6 +27,7 @@ export interface GameState {
   usedTimerIds: string[];
   activeTab: 'timers' | 'shuffle';
   isEditingPlayers: boolean;
+  isBombSoundOn: boolean;
 }
 
 export type SyncMessage = 
@@ -33,4 +35,5 @@ export type SyncMessage =
   | { type: 'HEARTBEAT'; peerId: string }
   | { type: 'CONNECTION_COUNT'; count: number }
   | { type: 'ROOM_DELETED' }
-  | { type: 'REQUEST_STATE' };
+  | { type: 'REQUEST_STATE' }
+  | { type: 'EXPLOSION' };

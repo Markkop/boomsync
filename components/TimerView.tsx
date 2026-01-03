@@ -107,7 +107,7 @@ export const TimerView: React.FC<TimerViewProps> = ({ timers, onToggle, onReset,
               ${isUsed ? 'opacity-40' : ''}
             `}
           >
-            {formatTime(timer.remainingSeconds)}
+            {timer.status === TimerStatus.READY_TO_BOOM ? 'Boom!' : formatTime(timer.remainingSeconds)}
           </button>
         );
       })}

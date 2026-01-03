@@ -10,7 +10,8 @@ import {
   ROUND_PRESETS, 
   ALARM_SOUNDS, 
   INITIAL_PLAYERS_COUNT,
-  COUNTDOWN_SOUND_URL
+  COUNTDOWN_SOUND_URL,
+  EXPLOSION_SOUND_URL
 } from './constants';
 import { TimerView } from './components/TimerView';
 import { ShuffleView } from './components/ShuffleView';
@@ -49,6 +50,10 @@ const App: React.FC = () => {
       if (parsed.isEditingPlayers === undefined) {
         parsed.isEditingPlayers = true;
       }
+      // Ensure isBombSoundOn exists for backward compatibility
+      if (parsed.isBombSoundOn === undefined) {
+        parsed.isBombSoundOn = true;
+      }
       // Remove old isSoundOn and selectedSound if present (migration)
       delete parsed.isSoundOn;
       delete parsed.selectedSound;
@@ -67,7 +72,8 @@ const App: React.FC = () => {
       roundCount: 3,
       usedTimerIds: [],
       activeTab: 'timers',
-      isEditingPlayers: true
+      isEditingPlayers: true,
+      isBombSoundOn: true
     };
   });
 
@@ -103,6 +109,7 @@ const App: React.FC = () => {
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const beepAudioRef = useRef<HTMLAudioElement | null>(null);
+  const explosionAudioRef = useRef<HTMLAudioElement | null>(null);
   const gameStateRef = useRef<GameState>(gameState);
 
   // Keep ref updated for use in callbacks
@@ -124,6 +131,8 @@ const App: React.FC = () => {
   useEffect(() => {
     beepAudioRef.current = new Audio(COUNTDOWN_SOUND_URL);
     beepAudioRef.current.volume = localPrefs.volume;
+    explosionAudioRef.current = new Audio(EXPLOSION_SOUND_URL);
+    explosionAudioRef.current.volume = localPrefs.volume;
   }, []);
 
   // Update audio volumes when volume preference changes
@@ -133,6 +142,9 @@ const App: React.FC = () => {
     }
     if (audioRef.current) {
       audioRef.current.volume = localPrefs.volume;
+    }
+    if (explosionAudioRef.current) {
+      explosionAudioRef.current.volume = localPrefs.volume;
     }
   }, [localPrefs.volume]);
 
@@ -197,10 +209,30 @@ const App: React.FC = () => {
         // Send current state to the requester
         peerService.send({ type: 'SYNC_STATE', state: gameStateRef.current });
       }
+      
+      // Handle EXPLOSION message - play explosion sound locally
+      if (msg.type === 'EXPLOSION') {
+        if (localPrefs.isSoundOn && explosionAudioRef.current) {
+          explosionAudioRef.current.currentTime = 0;
+          explosionAudioRef.current.volume = localPrefs.volume;
+          explosionAudioRef.current.play().catch(() => {});
+        }
+        
+        // Reset the 1:00 timer (id === '1') after explosion
+        setGameState(prev => {
+          const nextTimers = prev.timers.map(t => {
+            if (t.id === '1' && t.status === TimerStatus.READY_TO_BOOM) {
+              return { ...t, status: TimerStatus.IDLE, remainingSeconds: t.initialSeconds };
+            }
+            return t;
+          });
+          return { ...prev, timers: nextTimers };
+        });
+      }
     });
     
     return unsubscribe;
-  }, []);
+  }, [localPrefs.isSoundOn, localPrefs.volume]);
 
   // --- Countdown Beep Logic ---
   useEffect(() => {
@@ -296,6 +328,7 @@ const App: React.FC = () => {
       const timer = prev.timers.find(t => t.id === id);
       let nextUsedTimerIds = prev.usedTimerIds;
       const wasAlarming = timer?.status === TimerStatus.ALARMING;
+      const wasReadyToBoom = timer?.status === TimerStatus.READY_TO_BOOM;
       
       // When resuming a timer (IDLE -> RUNNING), remove it from darkened state
       if (timer?.status === TimerStatus.IDLE) {
@@ -307,8 +340,24 @@ const App: React.FC = () => {
           if (t.status === TimerStatus.IDLE) return { ...t, status: TimerStatus.RUNNING };
           if (t.status === TimerStatus.RUNNING) return { ...t, status: TimerStatus.IDLE };
           if (t.status === TimerStatus.ALARMING) {
-             if (audioRef.current) audioRef.current.pause();
-             return { ...t, status: TimerStatus.IDLE, remainingSeconds: t.initialSeconds };
+            if (audioRef.current) audioRef.current.pause();
+            // For 1:00 timer with bomb sound enabled, go to READY_TO_BOOM state
+            if (id === '1' && prev.isBombSoundOn) {
+              return { ...t, status: TimerStatus.READY_TO_BOOM };
+            }
+            // Otherwise, reset to IDLE
+            return { ...t, status: TimerStatus.IDLE, remainingSeconds: t.initialSeconds };
+          }
+          if (t.status === TimerStatus.READY_TO_BOOM) {
+            // Trigger explosion: broadcast EXPLOSION message and reset timer
+            peerService.send({ type: 'EXPLOSION' });
+            // Play explosion sound locally
+            if (localPrefs.isSoundOn && explosionAudioRef.current) {
+              explosionAudioRef.current.currentTime = 0;
+              explosionAudioRef.current.volume = localPrefs.volume;
+              explosionAudioRef.current.play().catch(() => {});
+            }
+            return { ...t, status: TimerStatus.IDLE, remainingSeconds: t.initialSeconds };
           }
         }
         return t;
@@ -316,7 +365,11 @@ const App: React.FC = () => {
       const newState = { ...prev, timers: nextTimers, usedTimerIds: nextUsedTimerIds };
       
       // Don't broadcast when resetting an alarming timer - each user handles locally
-      if (!wasAlarming) {
+      // But DO broadcast when transitioning from ALARMING to READY_TO_BOOM
+      if (!wasAlarming && !wasReadyToBoom) {
+        broadcastState(newState);
+      } else if (wasAlarming && id === '1' && prev.isBombSoundOn) {
+        // Broadcast the transition to READY_TO_BOOM
         broadcastState(newState);
       }
       return newState;
@@ -327,6 +380,7 @@ const App: React.FC = () => {
     setGameState(prev => {
       const timer = prev.timers.find(t => t.id === id);
       const wasAlarming = timer?.status === TimerStatus.ALARMING;
+      const wasReadyToBoom = timer?.status === TimerStatus.READY_TO_BOOM;
       
       // If alarming, stop audio
       if (wasAlarming) {
@@ -346,7 +400,8 @@ const App: React.FC = () => {
       const newState = { ...prev, timers: nextTimers, usedTimerIds: nextUsedTimerIds };
       
       // Don't broadcast when resetting an alarming timer - each user handles locally
-      if (!wasAlarming) {
+      // Also don't broadcast when resetting READY_TO_BOOM (handled by explosion)
+      if (!wasAlarming && !wasReadyToBoom) {
         broadcastState(newState);
       }
       return newState;
@@ -392,8 +447,12 @@ const App: React.FC = () => {
     if (timer && timer.status === TimerStatus.IDLE && localPrefs.autoFullscreen) {
       setFullscreenTimerId(id);
     }
-    // Exit fullscreen if clicking an expired timer that's currently in fullscreen
+    // Exit fullscreen if clicking an expired timer that's currently in fullscreen (but not READY_TO_BOOM)
     if (timer && timer.status === TimerStatus.ALARMING && fullscreenTimerId === id) {
+      setFullscreenTimerId(null);
+    }
+    // Close fullscreen when explosion happens (READY_TO_BOOM -> IDLE)
+    if (timer && timer.status === TimerStatus.READY_TO_BOOM && fullscreenTimerId === id) {
       setFullscreenTimerId(null);
     }
     toggleTimer(id);
@@ -517,6 +576,15 @@ const App: React.FC = () => {
     setLocalPrefs(prev => ({ ...prev, autoFullscreen: !prev.autoFullscreen }));
   };
 
+  // Toggle bomb sound (synced setting)
+  const toggleBombSound = useCallback(() => {
+    setGameState(prev => {
+      const newState = { ...prev, isBombSoundOn: !prev.isBombSoundOn };
+      broadcastState(newState);
+      return newState;
+    });
+  }, [broadcastState]);
+
   // Find active fullscreen timer
   const activeFullscreenTimer = fullscreenTimerId 
     ? gameState.timers.find(t => t.id === fullscreenTimerId) 
@@ -609,6 +677,12 @@ const App: React.FC = () => {
           >
             <Icon name="proportions" size={20} />
           </button>
+          <button 
+            onClick={toggleBombSound}
+            className={`p-2 rounded-xl bg-zinc-800 active:bg-zinc-700 ${gameState.isBombSoundOn ? 'text-orange-400' : 'text-zinc-400'}`}
+          >
+            <Icon name="bomb" size={20} />
+          </button>
         </div>
 
         <button 
@@ -682,6 +756,8 @@ const App: React.FC = () => {
           toggleSound={toggleSound}
           autoFullscreen={localPrefs.autoFullscreen}
           toggleAutoFullscreen={toggleAutoFullscreen}
+          isBombSoundOn={gameState.isBombSoundOn}
+          toggleBombSound={toggleBombSound}
           selectedSound={localPrefs.selectedSound}
           onSelectSound={selectSound}
           volume={localPrefs.volume}

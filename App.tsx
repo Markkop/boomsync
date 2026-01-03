@@ -252,15 +252,22 @@ const App: React.FC = () => {
       // Only toggle darken for idle timers
       if (timer?.status === TimerStatus.IDLE) {
         let nextUsedTimerIds: string[];
+        let nextTimers = prev.timers;
+        
         if (isDarkened) {
-          // Remove from darkened state
+          // Remove from darkened state (no timer reset)
           nextUsedTimerIds = prev.usedTimerIds.filter(timerId => timerId !== id);
         } else {
-          // Add to darkened state
+          // Add to darkened state AND reset the timer
           nextUsedTimerIds = [...prev.usedTimerIds, id];
+          nextTimers = prev.timers.map(t => 
+            t.id === id 
+              ? { ...t, remainingSeconds: t.initialSeconds } 
+              : t
+          );
         }
         
-        const newState = { ...prev, usedTimerIds: nextUsedTimerIds };
+        const newState = { ...prev, timers: nextTimers, usedTimerIds: nextUsedTimerIds };
         broadcastState(newState);
         return newState;
       }

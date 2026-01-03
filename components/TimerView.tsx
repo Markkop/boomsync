@@ -65,8 +65,18 @@ export const TimerView: React.FC<TimerViewProps> = ({ timers, onToggle, onReset 
     return TIMER_COLORS[timer.status];
   };
 
+  // Calculate text size based on number of timers
+  const getTextSizeClass = (timerCount: number) => {
+    if (timerCount === 3) return 'text-7xl';
+    if (timerCount === 4) return 'text-6xl';
+    if (timerCount >= 5) return 'text-5xl';
+    return 'text-7xl';
+  };
+
+  const textSizeClass = getTextSizeClass(timers.length);
+
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-2 h-full">
       {timers.map((timer) => (
         <button
           key={timer.id}
@@ -76,9 +86,9 @@ export const TimerView: React.FC<TimerViewProps> = ({ timers, onToggle, onReset 
           onPointerCancel={handlePointerCancel}
           onContextMenu={(e) => e.preventDefault()}
           className={`
-            w-full h-44 rounded-[40px] border-4 flex items-center justify-center
-            text-7xl font-black tracking-tighter transition-all duration-300
-            active:scale-95 touch-manipulation shadow-2xl select-none
+            w-full flex-1 rounded-[40px] border-4 flex items-center justify-center
+            ${textSizeClass} font-black tracking-tighter transition-[transform,colors,shadow] duration-300
+            active:scale-95 touch-manipulation shadow-2xl select-none min-h-0
             ${getTimerStyles(timer)}
           `}
         >

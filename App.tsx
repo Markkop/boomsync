@@ -363,7 +363,7 @@ const App: React.FC = () => {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-y-auto no-scrollbar pb-24 px-4 pt-4">
+      <main className="flex-1 overflow-hidden pb-24 px-4 pt-4 flex flex-col">
         {activeTab === 'timers' ? (
           <TimerView 
             timers={gameState.timers} 
@@ -371,13 +371,15 @@ const App: React.FC = () => {
             onReset={handleTimerReset}
           />
         ) : (
-          <ShuffleView 
-            players={gameState.players}
-            roomA={gameState.roomA}
-            roomB={gameState.roomB}
-            onUpdatePlayers={updatePlayers}
-            onShuffle={handleShuffle}
-          />
+          <div className="overflow-y-auto no-scrollbar flex-1">
+            <ShuffleView 
+              players={gameState.players}
+              roomA={gameState.roomA}
+              roomB={gameState.roomB}
+              onUpdatePlayers={updatePlayers}
+              onShuffle={handleShuffle}
+            />
+          </div>
         )}
       </main>
 

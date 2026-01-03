@@ -23,7 +23,7 @@ export interface GameState {
   players: Player[];
   roomA: string[];
   roomB: string[];
-  roundCount: number;
+  roundCount: number | 'test';
   usedTimerIds: string[];
   activeTab: 'timers' | 'shuffle';
   isEditingPlayers: boolean;

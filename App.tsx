@@ -505,17 +505,28 @@ const App: React.FC = () => {
   const cycleRoundCount = () => {
     setGameState(prev => {
       const counts = ROUND_PRESETS;
-      const currentIndex = counts.indexOf(prev.roundCount);
+      const currentIndex = counts.indexOf(prev.roundCount as any);
       const nextCount = counts[(currentIndex + 1) % counts.length];
       
-      const newTimers: GameTimer[] = [];
-      for (let i = nextCount; i >= 1; i--) {
-        newTimers.push({
-          id: i.toString(),
-          initialSeconds: i * 60,
-          remainingSeconds: i * 60,
-          status: TimerStatus.IDLE
-        });
+      let newTimers: GameTimer[];
+      if (nextCount === 'test') {
+        // Test preset: 5s, 4s, 3s timers
+        newTimers = [
+          { id: '3', initialSeconds: 5, remainingSeconds: 5, status: TimerStatus.IDLE },
+          { id: '2', initialSeconds: 4, remainingSeconds: 4, status: TimerStatus.IDLE },
+          { id: '1', initialSeconds: 3, remainingSeconds: 3, status: TimerStatus.IDLE },
+        ];
+      } else {
+        // Regular presets: timers in minutes
+        newTimers = [];
+        for (let i = nextCount; i >= 1; i--) {
+          newTimers.push({
+            id: i.toString(),
+            initialSeconds: i * 60,
+            remainingSeconds: i * 60,
+            status: TimerStatus.IDLE
+          });
+        }
       }
 
       const newState = { ...prev, roundCount: nextCount, timers: newTimers, usedTimerIds: [] };
@@ -717,7 +728,7 @@ const App: React.FC = () => {
           className="flex items-center gap-2 bg-zinc-800 px-3 py-2 rounded-xl text-zinc-300 font-bold active:scale-95 transition-transform"
         >
           <Icon name="timer" size={18} className="text-cyan-400" />
-          <span>{gameState.roundCount} Rounds</span>
+          <span>{gameState.roundCount === 'test' ? 'Test' : `${gameState.roundCount} Rounds`}</span>
         </button>
 
         <button 

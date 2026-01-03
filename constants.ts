@@ -1,7 +1,8 @@
 
 import { TimerStatus } from './types';
 
-export const ROUND_PRESETS = [3, 4, 5];
+export const ROUND_PRESETS = [3, 4, 5, 'test'] as const;
+export type RoundPreset = typeof ROUND_PRESETS[number];
 
 export const TIMER_COLORS = {
   [TimerStatus.IDLE]: 'bg-zinc-800 border-zinc-700 text-zinc-400',

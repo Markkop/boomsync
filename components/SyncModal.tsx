@@ -9,17 +9,49 @@ interface SyncModalProps {
 }
 
 export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = '' }) => {
-  const [peerId, setPeerId] = useState('');
+  const [roomCode, setRoomCode] = useState('');
   const [targetId, setTargetId] = useState(initialCode);
   const [status, setStatus] = useState<'idle' | 'hosting' | 'connecting' | 'connected'>('idle');
+  const [connectionCount, setConnectionCount] = useState(0);
 
-  // Check if already hosting
+  // Check if already hosting or connected
   useEffect(() => {
+    const existingRoomCode = peerService.getRoomCode();
     const existingId = peerService.getPeerId();
-    if (existingId) {
-      setPeerId(existingId);
+    if (existingRoomCode) {
+      setRoomCode(existingRoomCode);
+      setConnectionCount(peerService.getConnectionCount());
+      if (peerService.getIsHost()) {
+        setStatus('hosting');
+      } else {
+        setStatus('connected');
+      }
+    } else if (existingId) {
+      // Fallback: if we have a peer ID but no room code, we're hosting
+      setRoomCode(existingId);
+      setConnectionCount(peerService.getConnectionCount());
       setStatus('hosting');
     }
+  }, []);
+
+  // Listen for connection count updates
+  useEffect(() => {
+    const checkConnectionCount = () => {
+      const count = peerService.getConnectionCount();
+      if (count > 0) {
+        setConnectionCount(count);
+      }
+    };
+
+    // Check periodically for connection count updates
+    const interval = setInterval(checkConnectionCount, 500);
+    
+    // Also listen for messages that might update connection count
+    peerService.onMessage(() => {
+      checkConnectionCount();
+    });
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleJoin = useCallback((idToJoin: string) => {
@@ -35,7 +67,12 @@ export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = ''
       peerService.connect(idToJoin);
       peerService.onConnected(() => {
         setStatus('connected');
-        // We stay in modal briefly to show success, or user can close
+        // Update room code to the one we joined
+        const joinedRoomCode = peerService.getRoomCode();
+        if (joinedRoomCode) {
+          setRoomCode(joinedRoomCode);
+        }
+        setConnectionCount(peerService.getConnectionCount());
       });
     }).catch(e => {
         alert("Connection failed: " + e);
@@ -60,9 +97,13 @@ export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = ''
       setStatus('connecting');
       const code = generateShortCode();
       const id = await peerService.init(code);
-      setPeerId(id);
+      setRoomCode(id);
+      setConnectionCount(peerService.getConnectionCount());
       setStatus('hosting');
-      peerService.onConnected(() => setStatus('connected'));
+      peerService.onConnected(() => {
+        setStatus('connected');
+        setConnectionCount(peerService.getConnectionCount());
+      });
     } catch (e) {
       alert("Failed to initialize sync: " + e);
       setStatus('idle');
@@ -71,7 +112,7 @@ export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = ''
 
   const copyLink = () => {
     const url = new URL(window.location.href);
-    url.searchParams.set('room', peerId);
+    url.searchParams.set('room', roomCode);
     navigator.clipboard.writeText(url.toString());
     alert("Shareable link copied to clipboard!");
   };
@@ -94,8 +135,13 @@ export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = ''
             <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">Host a Room</h3>
             {status === 'hosting' || status === 'connected' ? (
               <div className="space-y-2">
-                <div className="bg-zinc-950 border border-zinc-800 p-4 rounded-2xl flex items-center justify-between">
-                  <code className="text-3xl font-mono font-bold text-cyan-400 tracking-wider mx-auto">{peerId}</code>
+                <div className="bg-zinc-950 border border-zinc-800 p-4 rounded-2xl flex flex-col items-center gap-2">
+                  <code className="text-3xl font-mono font-bold text-cyan-400 tracking-wider">{roomCode}</code>
+                  {connectionCount > 0 && (
+                    <div className="text-xs text-zinc-500 font-semibold">
+                      {connectionCount} {connectionCount === 1 ? 'person' : 'people'} connected
+                    </div>
+                  )}
                 </div>
                 <button 
                   onClick={copyLink}
@@ -124,23 +170,36 @@ export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = ''
           {/* Join Section */}
           <div className="space-y-3">
             <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">Join a Room</h3>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                placeholder="XXXXXX"
-                value={targetId}
-                onChange={(e) => setTargetId(e.target.value.toUpperCase())}
-                className="flex-1 bg-zinc-950 border border-zinc-800 px-4 py-4 rounded-2xl text-zinc-100 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 uppercase font-mono tracking-widest text-center font-bold"
-                maxLength={6}
-              />
-              <button 
-                onClick={() => handleJoin(targetId)}
-                disabled={status === 'connecting' || !targetId}
-                className="bg-cyan-500 p-4 rounded-2xl text-zinc-950 active:scale-90 transition-transform disabled:opacity-50 disabled:scale-100"
-              >
-                <Icon name="right" />
-              </button>
-            </div>
+            {status === 'connected' && roomCode ? (
+              <div className="space-y-2">
+                <div className="bg-zinc-950 border border-zinc-800 p-4 rounded-2xl flex flex-col items-center gap-2">
+                  <code className="text-3xl font-mono font-bold text-cyan-400 tracking-wider">{roomCode}</code>
+                  {connectionCount > 0 && (
+                    <div className="text-xs text-zinc-500 font-semibold">
+                      {connectionCount} {connectionCount === 1 ? 'person' : 'people'} connected
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="XXXXXX"
+                  value={targetId}
+                  onChange={(e) => setTargetId(e.target.value.toUpperCase())}
+                  className="flex-1 bg-zinc-950 border border-zinc-800 px-4 py-4 rounded-2xl text-zinc-100 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 uppercase font-mono tracking-widest text-center font-bold"
+                  maxLength={6}
+                />
+                <button 
+                  onClick={() => handleJoin(targetId)}
+                  disabled={status === 'connecting' || !targetId}
+                  className="bg-cyan-500 p-4 rounded-2xl text-zinc-950 active:scale-90 transition-transform disabled:opacity-50 disabled:scale-100"
+                >
+                  <Icon name="right" />
+                </button>
+              </div>
+            )}
           </div>
         </div>
 

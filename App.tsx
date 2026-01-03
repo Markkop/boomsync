@@ -100,6 +100,8 @@ const App: React.FC = () => {
       if (msg.type === 'SYNC_STATE') {
         setGameState(msg.state);
       }
+      // CONNECTION_COUNT messages are handled by SyncModal directly via peerService
+      // No action needed here, but we acknowledge the message type exists
     });
   }, []);
 

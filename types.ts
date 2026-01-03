@@ -29,4 +29,5 @@ export interface GameState {
 
 export type SyncMessage = 
   | { type: 'SYNC_STATE'; state: GameState }
-  | { type: 'HEARTBEAT' };
+  | { type: 'HEARTBEAT' }
+  | { type: 'CONNECTION_COUNT'; count: number };

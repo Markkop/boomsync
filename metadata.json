@@ -1,0 +1,7 @@
+{
+  "name": "BoomSync: 2 Rooms 1 Helper",
+  "description": "A high-performance, mobile-first helper for Two Rooms and a Boom. Features synced countdown timers, room shuffler, and P2P connectivity for game synchronization.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}

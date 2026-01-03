@@ -13,15 +13,19 @@ export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = ''
   const [targetId, setTargetId] = useState(initialCode);
   const [status, setStatus] = useState<'idle' | 'hosting' | 'connecting' | 'connected'>('idle');
   const [connectionCount, setConnectionCount] = useState(0);
+  const [isHost, setIsHost] = useState(true);
 
   // Check if already hosting or connected
   useEffect(() => {
     const existingRoomCode = peerService.getRoomCode();
     const existingId = peerService.getPeerId();
+    const hostStatus = peerService.getIsHost();
+    setIsHost(hostStatus);
+    
     if (existingRoomCode) {
       setRoomCode(existingRoomCode);
       setConnectionCount(peerService.getConnectionCount());
-      if (peerService.getIsHost()) {
+      if (hostStatus) {
         setStatus('hosting');
       } else {
         setStatus('connected');
@@ -31,6 +35,7 @@ export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = ''
       setRoomCode(existingId);
       setConnectionCount(peerService.getConnectionCount());
       setStatus('hosting');
+      setIsHost(true);
     }
   }, []);
 
@@ -65,8 +70,10 @@ export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = ''
 
     initPromise.then(() => {
       peerService.connect(idToJoin);
+      setIsHost(false);
       peerService.onConnected(() => {
         setStatus('connected');
+        setIsHost(false);
         // Update room code to the one we joined
         const joinedRoomCode = peerService.getRoomCode();
         if (joinedRoomCode) {
@@ -100,8 +107,10 @@ export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = ''
       setRoomCode(id);
       setConnectionCount(peerService.getConnectionCount());
       setStatus('hosting');
+      setIsHost(true);
       peerService.onConnected(() => {
         setStatus('connected');
+        setIsHost(true);
         setConnectionCount(peerService.getConnectionCount());
       });
     } catch (e) {
@@ -117,6 +126,19 @@ export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = ''
     alert("Shareable link copied to clipboard!");
   };
 
+  const handleDisconnect = () => {
+    peerService.disconnect();
+    setStatus('idle');
+    setRoomCode('');
+    setConnectionCount(0);
+    setTargetId('');
+    setIsHost(true);
+    // Clear URL parameter if present
+    const url = new URL(window.location.href);
+    url.searchParams.delete('room');
+    window.history.replaceState({}, '', url.toString());
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-zinc-950/90 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="w-full max-w-sm bg-zinc-900 border border-zinc-800 rounded-[40px] p-8 shadow-2xl relative overflow-hidden">
@@ -130,86 +152,104 @@ export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = ''
         <h2 className="text-2xl font-black mb-6 text-zinc-100">SYNC SESSIONS</h2>
 
         <div className="space-y-8">
-          {/* Host Section */}
-          <div className="space-y-3">
-            <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">Host a Room</h3>
-            {status === 'hosting' || status === 'connected' ? (
-              <div className="space-y-2">
-                <div className="bg-zinc-950 border border-zinc-800 p-4 rounded-2xl flex flex-col items-center gap-2">
-                  <code className="text-3xl font-mono font-bold text-cyan-400 tracking-wider">{roomCode}</code>
-                  {connectionCount > 0 && (
-                    <div className="text-xs text-zinc-500 font-semibold">
-                      {connectionCount} {connectionCount === 1 ? 'person' : 'people'} connected
-                    </div>
-                  )}
+          {/* Host Section - only show when hosting or when idle (not when joined as non-host) */}
+          {(isHost || status === 'idle') && (
+            <div className="space-y-3">
+              <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">Host a Room</h3>
+              {status === 'hosting' || (status === 'connected' && isHost) ? (
+                <div className="space-y-2">
+                  <div className="bg-zinc-950 border border-zinc-800 p-4 rounded-2xl flex flex-col items-center gap-2">
+                    <code className="text-3xl font-mono font-bold text-cyan-400 tracking-wider">{roomCode}</code>
+                    {connectionCount > 0 && (
+                      <div className="text-xs text-zinc-500 font-semibold">
+                        {connectionCount} {connectionCount === 1 ? 'person' : 'people'} connected
+                      </div>
+                    )}
+                  </div>
+                  <button 
+                    onClick={copyLink}
+                    className="w-full py-3 bg-cyan-500/10 text-cyan-400 font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-cyan-500/20 transition-colors"
+                  >
+                    <Icon name="share" size={18} />
+                    <span>COPY LINK</span>
+                  </button>
                 </div>
+              ) : (
                 <button 
-                  onClick={copyLink}
-                  className="w-full py-3 bg-cyan-500/10 text-cyan-400 font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-cyan-500/20 transition-colors"
+                  onClick={handleHost}
+                  disabled={status === 'connecting'}
+                  className="w-full py-4 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold rounded-2xl transition-all"
                 >
-                  <Icon name="share" size={18} />
-                  <span>COPY LINK</span>
+                  {status === 'connecting' ? 'Creating...' : 'CREATE ROOM'}
                 </button>
+              )}
+            </div>
+          )}
+
+          {/* Only show join section when not connected */}
+          {status !== 'hosting' && status !== 'connected' && (
+            <>
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-zinc-800"></div></div>
+                <div className="relative flex justify-center text-xs uppercase"><span className="bg-zinc-900 px-2 text-zinc-600 font-bold tracking-widest">OR</span></div>
               </div>
-            ) : (
-              <button 
-                onClick={handleHost}
-                disabled={status === 'connecting'}
-                className="w-full py-4 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold rounded-2xl transition-all"
-              >
-                {status === 'connecting' ? 'Creating...' : 'CREATE ROOM'}
-              </button>
-            )}
-          </div>
 
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-zinc-800"></div></div>
-            <div className="relative flex justify-center text-xs uppercase"><span className="bg-zinc-900 px-2 text-zinc-600 font-bold tracking-widest">OR</span></div>
-          </div>
-
-          {/* Join Section */}
-          <div className="space-y-3">
-            <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">Join a Room</h3>
-            {status === 'connected' && roomCode ? (
-              <div className="space-y-2">
-                <div className="bg-zinc-950 border border-zinc-800 p-4 rounded-2xl flex flex-col items-center gap-2">
-                  <code className="text-3xl font-mono font-bold text-cyan-400 tracking-wider">{roomCode}</code>
-                  {connectionCount > 0 && (
-                    <div className="text-xs text-zinc-500 font-semibold">
-                      {connectionCount} {connectionCount === 1 ? 'person' : 'people'} connected
-                    </div>
-                  )}
+              {/* Join Section */}
+              <div className="space-y-3">
+                <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">Join a Room</h3>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="XXXXXX"
+                    value={targetId}
+                    onChange={(e) => setTargetId(e.target.value.toUpperCase())}
+                    className="flex-1 bg-zinc-950 border border-zinc-800 px-4 py-4 rounded-2xl text-zinc-100 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 uppercase font-mono tracking-widest text-center font-bold"
+                    maxLength={6}
+                  />
+                  <button 
+                    onClick={() => handleJoin(targetId)}
+                    disabled={status === 'connecting' || !targetId}
+                    className="bg-cyan-500 p-4 rounded-2xl text-zinc-950 active:scale-90 transition-transform disabled:opacity-50 disabled:scale-100"
+                  >
+                    <Icon name="right" />
+                  </button>
                 </div>
               </div>
-            ) : (
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="XXXXXX"
-                  value={targetId}
-                  onChange={(e) => setTargetId(e.target.value.toUpperCase())}
-                  className="flex-1 bg-zinc-950 border border-zinc-800 px-4 py-4 rounded-2xl text-zinc-100 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 uppercase font-mono tracking-widest text-center font-bold"
-                  maxLength={6}
-                />
-                <button 
-                  onClick={() => handleJoin(targetId)}
-                  disabled={status === 'connecting' || !targetId}
-                  className="bg-cyan-500 p-4 rounded-2xl text-zinc-950 active:scale-90 transition-transform disabled:opacity-50 disabled:scale-100"
-                >
-                  <Icon name="right" />
-                </button>
+            </>
+          )}
+
+          {/* Show room info for joiners when connected */}
+          {status === 'connected' && roomCode && !isHost && (
+            <div className="space-y-3">
+              <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">Joined Room</h3>
+              <div className="bg-zinc-950 border border-zinc-800 p-4 rounded-2xl flex flex-col items-center gap-2">
+                <code className="text-3xl font-mono font-bold text-cyan-400 tracking-wider">{roomCode}</code>
+                {connectionCount > 0 && (
+                  <div className="text-xs text-zinc-500 font-semibold">
+                    {connectionCount} {connectionCount === 1 ? 'person' : 'people'} connected
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
-        {status === 'connected' && (
-          <div className="mt-8 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl text-emerald-400 text-center font-bold text-sm flex items-center justify-center gap-2 animate-in zoom-in">
-             <span className="relative flex h-3 w-3">
+        {(status === 'connected' || status === 'hosting') && (
+          <div className="mt-8 space-y-3">
+            <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl text-emerald-400 text-center font-bold text-sm flex items-center justify-center gap-2 animate-in zoom-in">
+              <span className="relative flex h-3 w-3">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
               </span>
-            SYNC ACTIVE
+              SYNC ACTIVE
+            </div>
+            <button 
+              onClick={handleDisconnect}
+              className="w-full py-3 bg-red-500/10 text-red-400 font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-red-500/20 transition-colors"
+            >
+              <Icon name="logout" size={18} />
+              <span>DISCONNECT</span>
+            </button>
           </div>
         )}
       </div>

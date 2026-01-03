@@ -19,7 +19,8 @@ import {
   Minimize2,
   Smartphone,
   Settings,
-  Check
+  Check,
+  LogOut
 } from 'lucide-react';
 
 const icons = {
@@ -42,7 +43,8 @@ const icons = {
   shrink: Minimize2,
   phone: Smartphone,
   settings: Settings,
-  check: Check
+  check: Check,
+  logout: LogOut
 };
 
 interface IconProps {

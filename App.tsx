@@ -242,6 +242,10 @@ const App: React.FC = () => {
     if (timer && timer.status === TimerStatus.IDLE && autoFullscreen) {
       setFullscreenTimerId(id);
     }
+    // Exit fullscreen if clicking an expired timer that's currently in fullscreen
+    if (timer && timer.status === TimerStatus.ALARMING && fullscreenTimerId === id) {
+      setFullscreenTimerId(null);
+    }
     toggleTimer(id);
   };
 

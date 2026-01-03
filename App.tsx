@@ -263,7 +263,10 @@ const App: React.FC = () => {
       if (t.status === TimerStatus.RUNNING) {
         const elapsed = t.initialSeconds - t.remainingSeconds;
         // Beep at 1s (:59), 2s (:58), and 3s (:57) elapsed
-        return elapsed >= 1 && elapsed <= 3;
+        const beepAtStart = elapsed >= 1 && elapsed <= 3;
+        // Beep at 3s, 2s, and 1s remaining
+        const beepAtEnd = t.remainingSeconds >= 1 && t.remainingSeconds <= 3;
+        return beepAtStart || beepAtEnd;
       }
       return false;
     });

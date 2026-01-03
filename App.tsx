@@ -195,6 +195,14 @@ const App: React.FC = () => {
 
   const toggleTimer = (id: string) => {
     setGameState(prev => {
+      const timer = prev.timers.find(t => t.id === id);
+      let nextUsedTimerIds = prev.usedTimerIds;
+      
+      // When resuming a timer (IDLE -> RUNNING), remove it from darkened state
+      if (timer?.status === TimerStatus.IDLE) {
+        nextUsedTimerIds = prev.usedTimerIds.filter(timerId => timerId !== id);
+      }
+      
       const nextTimers = prev.timers.map(t => {
         if (t.id === id) {
           if (t.status === TimerStatus.IDLE) return { ...t, status: TimerStatus.RUNNING };
@@ -206,7 +214,7 @@ const App: React.FC = () => {
         }
         return t;
       });
-      const newState = { ...prev, timers: nextTimers };
+      const newState = { ...prev, timers: nextTimers, usedTimerIds: nextUsedTimerIds };
       broadcastState(newState);
       return newState;
     });

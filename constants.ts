@@ -7,7 +7,7 @@ export const TIMER_COLORS = {
   [TimerStatus.IDLE]: 'bg-zinc-800 border-zinc-700 text-zinc-400',
   [TimerStatus.RUNNING]: 'bg-emerald-600 border-emerald-400 text-white neon-border-cyan',
   'warning': 'bg-amber-500 border-amber-300 text-zinc-900',
-  [TimerStatus.ALARMING]: 'bg-rose-600 border-rose-400 text-white animate-pulse'
+  [TimerStatus.ALARMING]: 'bg-rose-600 border-rose-400 text-white'
 };
 
 export const ALARM_SOUNDS = [

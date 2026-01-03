@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { QRCodeSVG } from 'qrcode.react';
 import { peerService } from '../services/peerService';
 import { Icon } from './Icon';
 
@@ -14,6 +15,7 @@ export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = ''
   const [status, setStatus] = useState<'idle' | 'hosting' | 'connecting' | 'connected'>('idle');
   const [connectionCount, setConnectionCount] = useState(0);
   const [isHost, setIsHost] = useState(true);
+  const [copied, setCopied] = useState(false);
 
   // Check if already hosting or connected
   useEffect(() => {
@@ -119,11 +121,22 @@ export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = ''
     }
   };
 
-  const copyLink = () => {
+  const getRoomLink = useMemo(() => {
+    if (!roomCode) return '';
     const url = new URL(window.location.href);
     url.searchParams.set('room', roomCode);
-    navigator.clipboard.writeText(url.toString());
-    alert("Shareable link copied to clipboard!");
+    return url.toString();
+  }, [roomCode]);
+
+  const copyLink = async () => {
+    if (!getRoomLink) return;
+    try {
+      await navigator.clipboard.writeText(getRoomLink);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (e) {
+      console.error('Failed to copy:', e);
+    }
   };
 
   const handleDisconnect = () => {
@@ -158,20 +171,34 @@ export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = ''
               <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">Host a Room</h3>
               {status === 'hosting' || (status === 'connected' && isHost) ? (
                 <div className="space-y-2">
-                  <div className="bg-zinc-950 border border-zinc-800 p-4 rounded-2xl flex flex-col items-center gap-2">
+                  <div className="bg-zinc-950 border border-zinc-800 p-4 rounded-2xl flex flex-col items-center gap-4">
                     <code className="text-3xl font-mono font-bold text-cyan-400 tracking-wider">{roomCode}</code>
                     {connectionCount > 0 && (
                       <div className="text-xs text-zinc-500 font-semibold">
                         {connectionCount} {connectionCount === 1 ? 'person' : 'people'} connected
                       </div>
                     )}
+                    {getRoomLink && (
+                      <div className="bg-white p-3 rounded-xl">
+                        <QRCodeSVG value={getRoomLink} size={160} />
+                      </div>
+                    )}
                   </div>
                   <button 
                     onClick={copyLink}
-                    className="w-full py-3 bg-cyan-500/10 text-cyan-400 font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-cyan-500/20 transition-colors"
+                    className="w-full py-3 bg-cyan-500/10 text-cyan-400 font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-cyan-500/20 transition-all relative overflow-hidden"
                   >
-                    <Icon name="share" size={18} />
-                    <span>COPY LINK</span>
+                    {copied ? (
+                      <span className="flex items-center gap-2 animate-in zoom-in duration-200">
+                        <Icon name="check" size={18} />
+                        <span>COPIED!</span>
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-2">
+                        <Icon name="share" size={18} />
+                        <span>COPY LINK</span>
+                      </span>
+                    )}
                   </button>
                 </div>
               ) : (
@@ -222,11 +249,16 @@ export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = ''
           {status === 'connected' && roomCode && !isHost && (
             <div className="space-y-3">
               <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">Joined Room</h3>
-              <div className="bg-zinc-950 border border-zinc-800 p-4 rounded-2xl flex flex-col items-center gap-2">
+              <div className="bg-zinc-950 border border-zinc-800 p-4 rounded-2xl flex flex-col items-center gap-4">
                 <code className="text-3xl font-mono font-bold text-cyan-400 tracking-wider">{roomCode}</code>
                 {connectionCount > 0 && (
                   <div className="text-xs text-zinc-500 font-semibold">
                     {connectionCount} {connectionCount === 1 ? 'person' : 'people'} connected
+                  </div>
+                )}
+                {getRoomLink && (
+                  <div className="bg-white p-3 rounded-xl">
+                    <QRCodeSVG value={getRoomLink} size={160} />
                   </div>
                 )}
               </div>
@@ -235,14 +267,7 @@ export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = ''
         </div>
 
         {(status === 'connected' || status === 'hosting') && (
-          <div className="mt-8 space-y-3">
-            <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl text-emerald-400 text-center font-bold text-sm flex items-center justify-center gap-2 animate-in zoom-in">
-              <span className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-              </span>
-              SYNC ACTIVE
-            </div>
+          <div className="mt-8">
             <button 
               onClick={handleDisconnect}
               className="w-full py-3 bg-red-500/10 text-red-400 font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-red-500/20 transition-colors"

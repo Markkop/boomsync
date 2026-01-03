@@ -48,6 +48,8 @@ const App: React.FC = () => {
   const [showConfigModal, setShowConfigModal] = useState(false);
   const [initialRoomCode, setInitialRoomCode] = useState<string>('');
   const [isHost, setIsHost] = useState(true); // Track if this peer is the host
+  const [roomCode, setRoomCode] = useState<string | null>(null);
+  const [isConnected, setIsConnected] = useState(false);
   
   // New Feature States
   const [autoFullscreen, setAutoFullscreen] = useState(true);
@@ -82,15 +84,21 @@ const App: React.FC = () => {
     peerService.send({ type: 'SYNC_STATE', state });
   }, []);
 
-  // Track host status
+  // Track host status and connection state
   useEffect(() => {
-    const updateHostStatus = () => {
+    const updateConnectionState = () => {
       setIsHost(peerService.getIsHost());
+      const code = peerService.getRoomCode();
+      setRoomCode(code);
+      setIsConnected(code !== null);
     };
     
-    // Update host status periodically and on connection events
-    const interval = setInterval(updateHostStatus, 100);
-    peerService.onConnected(updateHostStatus);
+    // Update connection state periodically and on connection events
+    const interval = setInterval(updateConnectionState, 100);
+    peerService.onConnected(updateConnectionState);
+    
+    // Initial check
+    updateConnectionState();
     
     return () => clearInterval(interval);
   }, []);
@@ -269,6 +277,47 @@ const App: React.FC = () => {
     ? gameState.timers.find(t => t.id === fullscreenTimerId) 
     : null;
 
+  // Handle share button click - create new room and copy link, or disconnect if already connected
+  const handleShare = async () => {
+    // If already connected or hosting, disconnect instead
+    if (isConnected) {
+      peerService.disconnect();
+      setIsConnected(false);
+      setRoomCode(null);
+      setIsHost(true);
+      
+      // If host, clear room code from URL to prevent auto-reconnect
+      if (isHost) {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('room');
+        window.history.replaceState({}, '', url.toString());
+      }
+      return;
+    }
+    
+    // If not connected, create new room and copy link
+    try {
+      const generateShortCode = () => {
+        return Math.random().toString(36).substring(2, 8).toUpperCase();
+      };
+      
+      const code = generateShortCode();
+      const id = await peerService.init(code);
+      setRoomCode(id);
+      setIsConnected(true);
+      setIsHost(true);
+      
+      // Copy link to clipboard
+      const url = new URL(window.location.href);
+      url.searchParams.set('room', id);
+      await navigator.clipboard.writeText(url.toString());
+      
+      // Optional: Show a brief notification (you could add a toast here)
+    } catch (e) {
+      console.error("Failed to create room:", e);
+    }
+  };
+
   return (
     <div className="flex flex-col h-screen max-w-md mx-auto relative select-none">
       <audio ref={audioRef} loop />
@@ -280,6 +329,9 @@ const App: React.FC = () => {
           onToggle={handleTimerClick}
           onReset={handleTimerReset}
           onClose={() => setFullscreenTimerId(null)}
+          roomCode={roomCode}
+          isConnected={isConnected}
+          onShare={handleShare}
         />
       )}
       
@@ -304,7 +356,7 @@ const App: React.FC = () => {
 
         <button 
           onClick={() => setShowSyncModal(true)}
-          className="p-2 rounded-xl bg-zinc-800 text-zinc-400 active:bg-zinc-700"
+          className={`p-2 rounded-xl bg-zinc-800 active:bg-zinc-700 transition-colors ${isConnected ? 'text-green-400' : 'text-zinc-400'}`}
         >
           <Icon name="share" size={20} />
         </button>

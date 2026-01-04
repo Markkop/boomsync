@@ -1,0 +1,20 @@
+{
+  "team": "yellow",
+  "characters": [
+    {
+      "name": "Assassin",
+      "winCondition": "If the President does not gain the \"Dead\" condition and you are in the same room as the President Yellow Team wins, but Blue Team loses. If the the President, Bomber, and you all end in the same room, then the Yellow Team, Blue Team, and even Red Team lose",
+      "powers": [
+        {
+          "name": "YELLOW",
+          "type": "card share",
+          "description": "You are on the Yellow Team. If the President does not gain the \"Dead\" condition and you are in the same room as the President Yellow Team wins, but Blue Team loses. If the the President, Bomber, and you all end in the same room, then the Yellow Team, Blue Team, and even Red Team lose. You also have YELLOW power. Any player that card or color shares with you joins the Yellow Team. New members of Yellow Team maintain their powers and conditions, but their allegiance (and therefore win condition) changes to Yellow Team. However, the YELLOW power does not work on primary characters (e.g. President, Bomber, Red Fist, etc.)."
+        }
+      ],
+      "tags": ["card share power", "color share power"],
+      "worksWellWith": ["experience players"],
+      "doesntWorkWellWith": [],
+      "notes": ["Works well for experience players.", "Adds a layer of complexity. May often lead to a lack of winners."]
+    }
+  ]
+}

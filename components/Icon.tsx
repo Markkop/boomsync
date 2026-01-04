@@ -26,7 +26,24 @@ import {
   Circle,
   CheckCircle2,
   Bomb,
-  Sun
+  Sun,
+  Search,
+  Eye,
+  Megaphone,
+  Sparkles,
+  Biohazard,
+  Theater,
+  ArrowLeftRight,
+  Archive,
+  Star,
+  Clock,
+  Hash,
+  Palette,
+  Minus,
+  List,
+  AlertTriangle,
+  Lock,
+  Unlock
 } from 'lucide-react';
 
 const icons = {
@@ -56,7 +73,24 @@ const icons = {
   circle: Circle,
   circleCheck: CheckCircle2,
   bomb: Bomb,
-  sun: Sun
+  sun: Sun,
+  search: Search,
+  eye: Eye,
+  megaphone: Megaphone,
+  sparkles: Sparkles,
+  virus: Biohazard,
+  theater: Theater,
+  swap: ArrowLeftRight,
+  archive: Archive,
+  star: Star,
+  clock: Clock,
+  hash: Hash,
+  palette: Palette,
+  minus: Minus,
+  list: List,
+  alert: AlertTriangle,
+  lock: Lock,
+  unlock: Unlock
 };
 
 interface IconProps {

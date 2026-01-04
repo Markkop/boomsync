@@ -1,0 +1,1503 @@
+{
+  "metadata": {
+    "version": "4.0",
+    "description": "Master index of all character cards for easy searching and filtering",
+    "lastUpdated": "2024"
+  },
+  "characters": [
+    {
+      "name": "Agent",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "private reveal power"
+      ],
+      "requires": [],
+      "description": "Forces players to card share with you once per round."
+    },
+    {
+      "name": "Alchemist",
+      "team": "blue",
+      "file": "blue.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "King must card share with you or Blue Team loses."
+    },
+    {
+      "name": "Alien",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Steals cards from anyone who card shares with you."
+    },
+    {
+      "name": "Ambassador",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [],
+      "requires": [],
+      "description": "Immune to all powers, can move freely between rooms."
+    },
+    {
+      "name": "Amnesiac",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [
+        "pauses game 50"
+      ],
+      "requires": [
+        "buried card"
+      ],
+      "description": "Guess the buried card's team to win."
+    },
+    {
+      "name": "Anarchist",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [],
+      "description": "Win by helping usurp leaders in most rounds."
+    },
+    {
+      "name": "Angel",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "condition",
+        "acting"
+      ],
+      "requires": [],
+      "description": "Must always tell the truth verbally."
+    },
+    {
+      "name": "Apprentice",
+      "team": "blue",
+      "file": "blue.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [
+        "Alchemist"
+      ],
+      "description": "Backup for Alchemist if they die or are buried."
+    },
+    {
+      "name": "Assassin",
+      "team": "yellow",
+      "file": "yellow.json",
+      "tags": [
+        "card share power",
+        "color share power"
+      ],
+      "requires": [],
+      "description": "End with President (no Bomber) to win as Yellow Team and beat Blue."
+    },
+    {
+      "name": "Beholder",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [
+        "condition"
+      ],
+      "requires": [],
+      "description": "Win by seeing any part of a player's card face."
+    },
+    {
+      "name": "The Black",
+      "team": "special",
+      "file": "special.json",
+      "tags": [
+        "color share power"
+      ],
+      "requires": [],
+      "description": "Win if anyone color shares with you."
+    },
+    {
+      "name": "Blind",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "condition",
+        "acting"
+      ],
+      "requires": [],
+      "description": "Must keep eyes closed throughout the game."
+    },
+    {
+      "name": "Blue Drone",
+      "team": "blue",
+      "file": "blue.json",
+      "tags": [
+        "primary character"
+      ],
+      "requires": [
+        "Red Fist"
+      ],
+      "description": "Blue wins if you're in same room as Red Fist."
+    },
+    {
+      "name": "Blue Firecracker",
+      "team": "blue",
+      "file": "blue.json",
+      "tags": [
+        "bury"
+      ],
+      "requires": [
+        "Blue Drone"
+      ],
+      "description": "Backup for Blue Drone if they die or are buried."
+    },
+    {
+      "name": "Blue Team",
+      "team": "blue",
+      "file": "blue.json",
+      "tags": [],
+      "requires": [],
+      "description": "Win if President doesn't gain the dead condition."
+    },
+    {
+      "name": "Bomber",
+      "team": "red",
+      "file": "red.json",
+      "tags": [
+        "primary character"
+      ],
+      "requires": [],
+      "description": "Everyone in your room gains dead condition at game end."
+    },
+    {
+      "name": "Body Snatcher",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Steals cards and can show them as face cards."
+    },
+    {
+      "name": "Born Leader",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [],
+      "description": "Win if you're a room's leader at game end."
+    },
+    {
+      "name": "Bouncer",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "private reveal power",
+        "odd player count"
+      ],
+      "requires": [],
+      "description": "Prevents players from leaving your room (odd player count)."
+    },
+    {
+      "name": "Bully",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "color share power"
+      ],
+      "requires": [],
+      "description": "Force players to reveal their character, not just their color."
+    },
+    {
+      "name": "Butler",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [
+        "Maid"
+      ],
+      "description": "Win if you're with Maid and President at game end."
+    },
+    {
+      "name": "Capitalist",
+      "team": "blue",
+      "file": "blue.json",
+      "tags": [
+        "card share power",
+        "card swap"
+      ],
+      "requires": [],
+      "description": "Recruit players to Blue Team; help your team protect the President."
+    },
+    {
+      "name": "Centipede",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Players who share with you must stay with you or publicly reveal."
+    },
+    {
+      "name": "Changer",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [
+        "card swap"
+      ],
+      "requires": [],
+      "description": "Swap your card for a random card from the Fun Deck."
+    },
+    {
+      "name": "Cleaner",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Removes conditions from players who card share with you."
+    },
+    {
+      "name": "Clone",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [],
+      "description": "Win if first person you share with wins."
+    },
+    {
+      "name": "Clown",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "acting"
+      ],
+      "requires": [],
+      "description": "Keep smiling throughout the game while pursuing your team's goal."
+    },
+    {
+      "name": "Conspirator",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Flip enemy players to secretly work for your team's goal."
+    },
+    {
+      "name": "Coy Boy",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "condition"
+      ],
+      "requires": [],
+      "description": "Can only color share, never card share."
+    },
+    {
+      "name": "Criminal",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Silence players to prevent them from sharing information."
+    },
+    {
+      "name": "Cult Leader",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [
+        "color share power",
+        "card share power",
+        "condition",
+        "contagious"
+      ],
+      "requires": [],
+      "description": "Spread your cult, but stay alive or all your cultists lose too."
+    },
+    {
+      "name": "Cupid",
+      "team": "blue",
+      "file": "blue.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Makes two players fall in love with each other."
+    },
+    {
+      "name": "Dealer",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Make players foolish so they can't refuse risky shares."
+    },
+    {
+      "name": "Decoy",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [
+        "Sniper",
+        "Target"
+      ],
+      "description": "Win if Sniper shoots you at game end."
+    },
+    {
+      "name": "Demon",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "acting",
+        "condition"
+      ],
+      "requires": [],
+      "description": "Must always lie verbally."
+    },
+    {
+      "name": "Doctor",
+      "team": "blue",
+      "file": "blue.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "President must card share with you or Blue Team loses."
+    },
+    {
+      "name": "Dragon",
+      "team": "red",
+      "file": "red.json",
+      "tags": [
+        "primary character"
+      ],
+      "requires": [],
+      "description": "Everyone in your room gains toast condition at game end."
+    },
+    {
+      "name": "Dragon Egg",
+      "team": "red",
+      "file": "red.json",
+      "tags": [
+        "bury"
+      ],
+      "requires": [
+        "Dragon"
+      ],
+      "description": "Backup for Dragon if they die or are buried."
+    },
+    {
+      "name": "Dr. Boom",
+      "team": "red",
+      "file": "red.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Game ends immediately if you card share with President."
+    },
+    {
+      "name": "Drunk",
+      "team": "special",
+      "file": "special.json",
+      "tags": [
+        "card swap"
+      ],
+      "requires": [],
+      "description": "Start as Drunk, become sober character in last round."
+    },
+    {
+      "name": "Easter Bunny",
+      "team": "special",
+      "file": "special.json",
+      "tags": [],
+      "requires": [],
+      "description": "Hide character cards for players to find."
+    },
+    {
+      "name": "Eggineer",
+      "team": "red",
+      "file": "red.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Dragon must card share with you or Red Team loses."
+    },
+    {
+      "name": "Engineer",
+      "team": "red",
+      "file": "red.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Bomber must card share with you or Red Team loses."
+    },
+    {
+      "name": "Enforcer",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "private reveal power"
+      ],
+      "requires": [],
+      "description": "Forces two players to card share with each other."
+    },
+    {
+      "name": "Enlisted",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "public reveal power"
+      ],
+      "requires": [],
+      "description": "Publicly reveal to become a hostage automatically."
+    },
+    {
+      "name": "Eris",
+      "team": "red",
+      "file": "red.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Makes two players hate each other."
+    },
+    {
+      "name": "Exhibitionist",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "condition"
+      ],
+      "requires": [],
+      "description": "Can only publicly reveal, never card or color share."
+    },
+    {
+      "name": "Fanatic",
+      "team": "red",
+      "file": "red.json",
+      "tags": [
+        "bury",
+        "card share power"
+      ],
+      "requires": [
+        "Eggineer"
+      ],
+      "description": "Backup for Eggineer if they die or are buried."
+    },
+    {
+      "name": "Father",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [
+        "private reveal power"
+      ],
+      "requires": [],
+      "description": "Choose two children, win if they end with President."
+    },
+    {
+      "name": "Fat Princess",
+      "team": "blue",
+      "file": "blue.json",
+      "tags": [
+        "bury"
+      ],
+      "requires": [
+        "King"
+      ],
+      "description": "Backup for King if they die or are buried."
+    },
+    {
+      "name": "Firefighter",
+      "team": "blue",
+      "file": "blue.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Gives fireproof condition to President."
+    },
+    {
+      "name": "Fool",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [
+        "condition"
+      ],
+      "requires": [],
+      "description": "Can never refuse a card or color share offer."
+    },
+    {
+      "name": "Frotteur",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [
+        "Prude"
+      ],
+      "description": "Must touch every player by game end without Prude catching you."
+    },
+    {
+      "name": "Fugitive",
+      "team": "red",
+      "file": "red.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [
+        "Marshal",
+        "Witness",
+        "One-Armed Man"
+      ],
+      "description": "Game ends immediately if you card share with One-Armed Man."
+    },
+    {
+      "name": "Gambler",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [
+        "pause game 25"
+      ],
+      "requires": [],
+      "description": "Publicly guess which team won at game end to win."
+    },
+    {
+      "name": "Gargoyle",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "public reveal power"
+      ],
+      "requires": [],
+      "description": "Publicly reveal to avoid being selected to leave room."
+    },
+    {
+      "name": "Gorgon",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Petrify players to prevent them from voting or usurping."
+    },
+    {
+      "name": "Grey Team",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [
+        "card swap"
+      ],
+      "requires": [],
+      "description": "Must choose to join Red or Blue Team before game ends."
+    },
+    {
+      "name": "Hero",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [],
+      "description": "Win if you're with both President and Bomber when the bomb goes off."
+    },
+    {
+      "name": "Hot Potato",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [
+        "bury",
+        "card share power",
+        "color share power"
+      ],
+      "requires": [],
+      "description": "Trade cards with anyone who card/color shares with you."
+    },
+    {
+      "name": "Hunter",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Steals cards from players who use card share powers on you."
+    },
+    {
+      "name": "Hypnotist",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Make players believe they're different characters to create chaos."
+    },
+    {
+      "name": "Identity Thief",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "card share power",
+        "card swap"
+      ],
+      "requires": [],
+      "description": "Trade cards and gain shy condition on card share."
+    },
+    {
+      "name": "Illuminati",
+      "team": "special",
+      "file": "special.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Win if anyone card shares with you."
+    },
+    {
+      "name": "Immunologist",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "condition"
+      ],
+      "requires": [],
+      "description": "Immune to all powers and conditions."
+    },
+    {
+      "name": "Informer",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [],
+      "requires": [],
+      "description": "Collects cards from opposing team, breaks ties."
+    },
+    {
+      "name": "Interrogator",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "private reveal power"
+      ],
+      "requires": [],
+      "description": "Ask one yes/no question per round to any player."
+    },
+    {
+      "name": "Intern",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [],
+      "description": "Win if you're in same room as President at game end."
+    },
+    {
+      "name": "Judge",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [
+        "Blue Drone",
+        "Red Fist",
+        "or Engineer",
+        "Doctor"
+      ],
+      "description": "Breaks ties by counting collected red vs blue cards."
+    },
+    {
+      "name": "Juliet",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [
+        "Romeo"
+      ],
+      "description": "Win if you're with Romeo and Bomber at game end."
+    },
+    {
+      "name": "Kangaroo",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "public reveal power"
+      ],
+      "requires": [],
+      "description": "Switch rooms and kick out one player."
+    },
+    {
+      "name": "King",
+      "team": "blue",
+      "file": "blue.json",
+      "tags": [
+        "primary character"
+      ],
+      "requires": [],
+      "description": "Blue wins if you don't gain the toast condition."
+    },
+    {
+      "name": "Leprechaun",
+      "team": "green",
+      "file": "green.json",
+      "tags": [
+        "card share power",
+        "card swap",
+        "color share power",
+        "condition"
+      ],
+      "requires": [],
+      "description": "Trade cards with anyone, Leprechaun always wins."
+    },
+    {
+      "name": "Loyalist",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "card share power",
+        "condition"
+      ],
+      "requires": [
+        "Conspirator"
+      ],
+      "description": "Immune to traitor condition, removes it from others."
+    },
+    {
+      "name": "Mad Scientist",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [
+        "private reveal power"
+      ],
+      "requires": [],
+      "description": "Force two players to trade cards once per game."
+    },
+    {
+      "name": "Maid",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [
+        "Butler"
+      ],
+      "description": "Win if you're with Butler and President at game end."
+    },
+    {
+      "name": "Marshal",
+      "team": "blue",
+      "file": "blue.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [
+        "Witness",
+        "Fugitive",
+        "One-Armed Man"
+      ],
+      "description": "Game ends immediately if you card share with Fugitive."
+    },
+    {
+      "name": "Martyr",
+      "team": "red",
+      "file": "red.json",
+      "tags": [
+        "bury"
+      ],
+      "requires": [
+        "Bomber"
+      ],
+      "description": "Backup for Bomber if they die or are buried."
+    },
+    {
+      "name": "Mastermind",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [
+        "pause game 95"
+      ],
+      "requires": [],
+      "description": "Guess every player's color at game end to win."
+    },
+    {
+      "name": "Mastermind (version 2)",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [],
+      "description": "Win if you're leader and were leader of opposite room."
+    },
+    {
+      "name": "Mayor",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "public reveal power"
+      ],
+      "requires": [],
+      "description": "Your vote counts as two votes when publicly revealed."
+    },
+    {
+      "name": "Medic",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Removes all conditions from players who card share."
+    },
+    {
+      "name": "MI6",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [],
+      "description": "Win if you card share with both Bomber and President."
+    },
+    {
+      "name": "Mime",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "acting"
+      ],
+      "requires": [],
+      "description": "Must remain completely silent throughout the game."
+    },
+    {
+      "name": "Minion",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [],
+      "description": "Win if no leader is usurped in your room."
+    },
+    {
+      "name": "Mistress",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [
+        "Wife"
+      ],
+      "description": "Win if you're with President and Wife is not."
+    },
+    {
+      "name": "Moby",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [
+        "Ahab"
+      ],
+      "description": "Win if Ahab gains dead condition and you don't."
+    },
+    {
+      "name": "Mother",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [
+        "private reveal power"
+      ],
+      "requires": [],
+      "description": "Choose two children, win if they don't die (unless Bomber)."
+    },
+    {
+      "name": "Mummy",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Gives cursed condition, prevents making noise."
+    },
+    {
+      "name": "Negotiator",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "condition"
+      ],
+      "requires": [],
+      "description": "Can only card share, never other reveal types."
+    },
+    {
+      "name": "Ninja",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "public reveal power"
+      ],
+      "requires": [],
+      "description": "Remove yourself and one player from the game."
+    },
+    {
+      "name": "Nuclear Tyrant",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [
+        "condition"
+      ],
+      "requires": [],
+      "description": "Win if neither President nor Bomber card share with you; can't refuse shares."
+    },
+    {
+      "name": "Nurse",
+      "team": "blue",
+      "file": "blue.json",
+      "tags": [
+        "card share power",
+        "bury"
+      ],
+      "requires": [
+        "Doctor"
+      ],
+      "description": "Backup for Doctor if they die or are buried."
+    },
+    {
+      "name": "One-Armed Man",
+      "team": "blue",
+      "file": "blue.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [
+        "Marshal",
+        "Fugitive",
+        "Witness"
+      ],
+      "description": "Game ends immediately if you card share with Witness."
+    },
+    {
+      "name": "Paparazzo",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "acting"
+      ],
+      "requires": [],
+      "description": "Must be intrusive and prevent private conversations."
+    },
+    {
+      "name": "Paper",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [
+        "Rock",
+        "Scissors"
+      ],
+      "description": "Win if with Rock but not with Scissors."
+    },
+    {
+      "name": "Paranoid",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "condition"
+      ],
+      "requires": [],
+      "description": "Can only card share once per game."
+    },
+    {
+      "name": "Piper",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Players who card share must stay in same room as you."
+    },
+    {
+      "name": "Pirate",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "public reveal power"
+      ],
+      "requires": [],
+      "description": "Force a player to be a hostage this round."
+    },
+    {
+      "name": "President",
+      "team": "blue",
+      "file": "blue.json",
+      "tags": [
+        "primary character"
+      ],
+      "requires": [],
+      "description": "Blue wins if you don't gain the dead condition."
+    },
+    {
+      "name": "President's Daughter",
+      "team": "blue",
+      "file": "blue.json",
+      "tags": [
+        "bury"
+      ],
+      "requires": [
+        "President"
+      ],
+      "description": "Backup for President if they die or are buried."
+    },
+    {
+      "name": "Private Investigator",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [
+        "pause game 05"
+      ],
+      "requires": [],
+      "description": "Guess the buried card's identity to win."
+    },
+    {
+      "name": "Professor",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Force players to only card share, preventing other reveal types."
+    },
+    {
+      "name": "Prude",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [
+        "Frotteur"
+      ],
+      "description": "Win if you grab Frotteur's wrist by game end."
+    },
+    {
+      "name": "Psychologist",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "card share power",
+        "private reveal power"
+      ],
+      "requires": [],
+      "description": "Can card share with shy/coy/paranoid players."
+    },
+    {
+      "name": "Pyrotech",
+      "team": "red",
+      "file": "red.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Gives firebomb condition to Bomber."
+    },
+    {
+      "name": "Queen",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [],
+      "description": "Win if President gains dead condition and you don't."
+    },
+    {
+      "name": "Rageaholic",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [],
+      "requires": [],
+      "description": "Win by counting to ten during parlay as leader."
+    },
+    {
+      "name": "Rat",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "public reveal power"
+      ],
+      "requires": [],
+      "description": "Publicly reveal to spy in opposite room, must return."
+    },
+    {
+      "name": "Red Fist",
+      "team": "red",
+      "file": "red.json",
+      "tags": [
+        "primary character"
+      ],
+      "requires": [
+        "Blue Drone"
+      ],
+      "description": "Red wins if you're not in same room as Blue Drone."
+    },
+    {
+      "name": "Red Foot",
+      "team": "red",
+      "file": "red.json",
+      "tags": [
+        "bury"
+      ],
+      "requires": [
+        "Red Fist"
+      ],
+      "description": "Backup for Red Fist if they die or are buried."
+    },
+    {
+      "name": "Red Team",
+      "team": "red",
+      "file": "red.json",
+      "tags": [],
+      "requires": [],
+      "description": "Win if President gains the dead condition."
+    },
+    {
+      "name": "Rival",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [],
+      "description": "Win if you're NOT in same room as President."
+    },
+    {
+      "name": "Robot",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [],
+      "description": "Win if first person you share with fails to win."
+    },
+    {
+      "name": "Rock",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [
+        "Paper",
+        "Scissors"
+      ],
+      "description": "Win if with Scissors but not with Paper."
+    },
+    {
+      "name": "Romeo",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [
+        "Juliet"
+      ],
+      "description": "Win if you're with Juliet and Bomber at game end."
+    },
+    {
+      "name": "Scissors",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [
+        "Paper",
+        "Rock"
+      ],
+      "description": "Win if with Paper but not with Rock."
+    },
+    {
+      "name": "Secret Police",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [],
+      "requires": [],
+      "description": "Win if you catch players gameplaying between rounds."
+    },
+    {
+      "name": "Security",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "public reveal power"
+      ],
+      "requires": [],
+      "description": "Prevent a player from leaving or force public reveal."
+    },
+    {
+      "name": "Seer",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [],
+      "requires": [],
+      "description": "See all cards at game start, gain shy condition."
+    },
+    {
+      "name": "Shy Guy",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "condition"
+      ],
+      "requires": [],
+      "description": "Cannot reveal any part of your card to anyone."
+    },
+    {
+      "name": "Sniper",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [
+        "pause game 15"
+      ],
+      "requires": [
+        "Decoy",
+        "Target"
+      ],
+      "description": "Shoot a player at game end, win if it's the Target."
+    },
+    {
+      "name": "Socialist",
+      "team": "red",
+      "file": "red.json",
+      "tags": [
+        "card share power",
+        "card swap"
+      ],
+      "requires": [],
+      "description": "Recruit players to Red Team; help your team find the President."
+    },
+    {
+      "name": "Spy",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [],
+      "requires": [],
+      "description": "Your card shows opposite team color."
+    },
+    {
+      "name": "Stunt Double",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [],
+      "description": "Win if in opposite room as President and gain dead."
+    },
+    {
+      "name": "Survivor",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [],
+      "description": "Win if you're NOT in same room as Bomber."
+    },
+    {
+      "name": "Target",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [
+        "Decoy",
+        "Sniper"
+      ],
+      "description": "Win if Sniper doesn't shoot you at game end."
+    },
+    {
+      "name": "Telepath",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [
+        "public reveal power"
+      ],
+      "requires": [],
+      "description": "Predict which hostage enters your room at game end."
+    },
+    {
+      "name": "Tentaclese",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "odd player count",
+        "public reveal power"
+      ],
+      "requires": [],
+      "description": "Grab a player and bring them to your room (odd count)."
+    },
+    {
+      "name": "Thug",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Force players to only color share, limiting their information sharing."
+    },
+    {
+      "name": "Time Lord",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "public reveal power"
+      ],
+      "requires": [],
+      "description": "Can end any round early by publicly revealing."
+    },
+    {
+      "name": "Tinkerer",
+      "team": "red",
+      "file": "red.json",
+      "tags": [
+        "bury",
+        "card share power"
+      ],
+      "requires": [
+        "Engineer"
+      ],
+      "description": "Backup for Engineer if they die or are buried."
+    },
+    {
+      "name": "Trader",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "card swap"
+      ],
+      "requires": [],
+      "description": "Trade your card for the buried card once per round."
+    },
+    {
+      "name": "Tuesday Knight",
+      "team": "blue",
+      "file": "blue.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Game ends immediately if you card share with Bomber."
+    },
+    {
+      "name": "Usurper",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "public reveal power"
+      ],
+      "requires": [],
+      "description": "Publicly reveal to automatically usurp the leader."
+    },
+    {
+      "name": "Vampire",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [],
+      "description": "Seduce players to control their actions and votes."
+    },
+    {
+      "name": "Victim",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [],
+      "description": "Win if you're in same room as Bomber at game end."
+    },
+    {
+      "name": "Villain",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [],
+      "description": "Win if with President and opposite room as Bomber."
+    },
+    {
+      "name": "Voyeur",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [],
+      "requires": [],
+      "description": "Can peek at the buried card anytime during the game."
+    },
+    {
+      "name": "Werewolf",
+      "team": "red-blue",
+      "file": "red-blue.json",
+      "tags": [
+        "card share power",
+        "color share power",
+        "contagious"
+      ],
+      "requires": [],
+      "description": "Bite players to make them answer your questions honestly."
+    },
+    {
+      "name": "Wife",
+      "team": "grey",
+      "file": "grey.json",
+      "tags": [],
+      "requires": [
+        "Mistress"
+      ],
+      "description": "Win if you're with President and Mistress is not."
+    },
+    {
+      "name": "Witness",
+      "team": "red",
+      "file": "red.json",
+      "tags": [
+        "card share power"
+      ],
+      "requires": [
+        "Marshal",
+        "Fugitive",
+        "One-Armed Man"
+      ],
+      "description": "Game ends immediately if you card share with Marshal."
+    },
+    {
+      "name": "Xenohunter",
+      "team": "blue",
+      "file": "blue.json",
+      "tags": [
+        "public reveal power"
+      ],
+      "requires": [],
+      "description": "Remove a blue player who publicly reveals."
+    },
+    {
+      "name": "Xenomorph",
+      "team": "red",
+      "file": "red.json",
+      "tags": [
+        "card share power",
+        "color share power"
+      ],
+      "requires": [],
+      "description": "Impregnate first blue player who shares with you."
+    },
+    {
+      "name": "Yog Sothoth",
+      "team": "green",
+      "file": "green.json",
+      "tags": [
+        "card share power",
+        "color share power"
+      ],
+      "requires": [],
+      "description": "Win if anyone card or color shares with you."
+    },
+    {
+      "name": "Zombie",
+      "team": "green",
+      "file": "green.json",
+      "tags": [
+        "card share power",
+        "color share power",
+        "condition",
+        "contagious"
+      ],
+      "requires": [],
+      "description": "Convert all living players to Team Zombie by game end to win."
+    }
+  ]
+}

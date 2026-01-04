@@ -1,0 +1,560 @@
+{
+  "team": "grey",
+  "characters": [
+    {
+      "name": "Agoraphobe",
+      "winCondition": "You win if you are never sent to a different room by anyone",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": ["Traveler"],
+      "doesntWorkWellWith": ["Bouncer", "Tentacles"],
+      "notes": []
+    },
+    {
+      "name": "Ahab",
+      "winCondition": "You win if Moby gains the \"dead\" condition and you do not",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Moby"],
+      "notes": ["Must be played with Moby. Strongly recommended to be played with Wife and Mistress.", "Without Wife and Mistress, Red Team may have an advantage."]
+    },
+    {
+      "name": "Amnesiac",
+      "winCondition": "At the end of the last round, before all players reveal their character cards, you must declare which team you are on by saying, \"I remember which team I am on. I am on the _________ .\" You must choose the Red Team, the Blue Team, or neither team. To win you want to guess the team allegiance of the buried card",
+      "powers": [],
+      "tags": ["pauses game 50"],
+      "worksWellWith": ["games with few amount of players"],
+      "doesntWorkWellWith": ["too many greys", "lots of players", "Ninjas", "Conspirators"],
+      "notes": ["This character card can only used with a buried card.", "If you choose the correct team (the team of the buried card), but your team loses, you lose too. If you say, \"I am on nobody's team,\" and the buried card is not on the Red Team or the Blue Team, you win.", "Works well to add flavor in a game with few amount of players.", "Works poorly with too many greys, lots of players, Ninjas, and Conspirators"]
+    },
+    {
+      "name": "Anarchist",
+      "winCondition": "You win if your vote helped successfully usurp a leader during a majority of the rounds",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": ["Born Leader", "Minion"],
+      "doesntWorkWellWith": [],
+      "notes": ["For example, in a 3 round game, you must have usurped a leader 2 of the 3 rounds."]
+    },
+    {
+      "name": "Beholder",
+      "winCondition": "If you see any part of a player's card face (color or character), audibly and loudly declare what you've seen right there and then to win the game",
+      "powers": [
+        {
+          "name": "BEHOLDER",
+          "type": "public reveal",
+          "description": "Before the game begins, but after character cards have been dealt, you must publicly announce \"I am the Beholder!\" and keep your card permanently publicly revealed for the rest of game. Do your best to make sure there are no private conversations. You may try to be as intrusive as possible, including looking over players' shoulders at their cards, and even getting on the ground to see the bottoms of cards being passed between players. You can't physically manipulate other players, nor should they try to physically manipulate you. If playing with the Privacy Promise rule variant, you ignore the rule."
+        }
+      ],
+      "tags": ["condition"],
+      "worksWellWith": ["Privacy Promise variant"],
+      "doesntWorkWellWith": [],
+      "notes": ["You have the \"immune\" condition. Players with the \"immune\" condition are immune to all powers and conditions without exception. The Beholder can walk freely between the two rooms. The Beholder can never take part in any vote (e.g. voting to nominate or usurp a leader). The Beholder can never be picked by leaders to be transferred into another room (or by other characters with such powers) as they are never actually counted as part of a room's population.", "If you win, all other players lose.", "Guessing is not allowed. If you publicly declare a color or card that you've seen and you are wrong, then you instantly lose.", "Because the Beholder is never considered a part of a room's population, they don't count towards the player count in the game and they don't count for or against Team Zombie's win objective. This means if you have 18 players including the Beholder, you should be playing a 15 player game.", "Good luck playing with any characters that have a public reveal power (like the Ambassador)"]
+    },
+    {
+      "name": "Born Leader",
+      "winCondition": "You win if you are a room's leader at the end of the game",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": ["at least 1 other Born Leader", "Anarchist"],
+      "doesntWorkWellWith": [],
+      "notes": ["Recommended to play with at least 1 other Born Leader. Also Anarchist makes it interesting.", "3 Born Leaders is fun, but devious."]
+    },
+    {
+      "name": "Butler",
+      "winCondition": "You win if you are in the same room as the Maid and the President at the end of the game",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": ["Romeo", "Juliet"],
+      "doesntWorkWellWith": ["10 players or fewer"],
+      "requires": ["Maid"],
+      "notes": ["Must be played with Maid. Works well with Romeo and Juliet", "Doesn't work well 10 players or fewer."]
+    },
+    {
+      "name": "Changer",
+      "winCondition": "At any point before the end of the game, you, the Changer, must change your card for a random card from the \"Fun Deck.\" This can only can be done once, unless the random card selected is another Changer card. If you forget to exchange your card by the end of the game or if you are unable to, then you fail to win your objective",
+      "powers": [
+        {
+          "name": "CHANGER",
+          "type": "card swap",
+          "description": "When playing with the Changer, create a \"Fun Deck.\" Take any number of character cards that are not being used for the current game and shuffle them together to create a \"Fun Deck.\" At any point before the end of the game, you, the Changer, must change your card for a random card from the \"Fun Deck.\" This can only can be done once, unless the random card selected is another Changer card."
+        }
+      ],
+      "tags": ["card swap"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": ["broken \"Fun Deck\"", "Mastermind(v1)"],
+      "notes": ["The card retrieved from the \"Fun Deck\" is always cleansed when it is first drawn, meaning it has no acquired conditions.", "Oh man, best Fun Deck ever has Hot Potato and Leprechaun.", "Works poorly with a broken \"Fun Deck\" or the Mastermind(v1)."]
+    },
+    {
+      "name": "Clone",
+      "winCondition": "You win if the first player with whom you card share or color share wins, succeeding at all of their win objectives",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": ["Robot"],
+      "doesntWorkWellWith": []
+    },
+    {
+      "name": "Cult Leader",
+      "winCondition": "Standard win condition plus: Players with the \"cultist\" condition lose the game if the Cult Leader gains the \"dead\" condition",
+      "powers": [
+        {
+          "name": "CULT LEADER",
+          "type": "card share",
+          "description": "You begin with the \"cultist\" condition. Any player that card shares or color shares with a player with the \"cultist\" condition (i.e. a cultist\" player) then also gains the \"cultist\" condition. Players with the \"cultist\" condition lose the game if the Cult Leader gains the \"dead\" condition. This is an additional win objective and does not replace or change a player's original win condition. If the Cult Leader gains the \"dead\" condition, so do all players with the \"cultist\" condition."
+        }
+      ],
+      "tags": ["color share power", "card share power", "condition", "contagious"],
+      "worksWellWith": ["Privacy Promise variant"],
+      "doesntWorkWellWith": [],
+      "notes": ["It is important for players to indicate that they are have the \"cultist\" condition when card sharing or color sharing with another player. This is usually done by whispering something along the lines of, \"I'm a cultist. Make sure our leader _______ stays alive.\"", "Works with the Privacy Promise variant.", "Almost requires the Privacy Promise variant."]
+    },
+    {
+      "name": "Decoy",
+      "winCondition": "You win if the Sniper shoots you at the end of the last round",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Sniper", "Target"]
+    },
+    {
+      "name": "Father",
+      "winCondition": "You win if these 2 target players end in the same room as the president",
+      "powers": [
+        {
+          "name": "FATHER",
+          "type": "private reveal",
+          "description": "During the first round of the game you must privately reveal your card to 2 players and verbally say to these 2 target players, \"You are my children.\" You do not have to privately reveal your card to both of these 2 target players simultaneously."
+        }
+      ],
+      "tags": ["private reveal power"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "notes": ["Feel the pride that a father might."]
+    },
+    {
+      "name": "Fool",
+      "winCondition": "Standard team win condition",
+      "powers": [
+        {
+          "name": "FOOLISH",
+          "type": "condition",
+          "description": "You begin with the \"foolish\" condition. Players with the \"foolish\" condition can never turn down an offer to card share or color share."
+        }
+      ],
+      "tags": ["condition"],
+      "worksWellWith": ["Zombie", "Nuclear Tyrant", "characters with card sharing powers"],
+      "doesntWorkWellWith": ["Hot Potato"],
+      "notes": ["If a player with the \"foolish\" condition were to acquire the \"shy\" condition, the two conditions would cancel one another, leaving the player with neither condition.", "You are Zombie fodder. Should never be played with Hot Potato."]
+    },
+    {
+      "name": "Frotteur",
+      "winCondition": "If you don't touch every player by the end of the game, you lose. If the Prude grabs your wrist, you lose",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": [],
+      "doesntWorkWellWith": ["10 players or less"],
+      "requires": ["Prude"],
+      "notes": ["AKA: \"The Gooser\"", "Is part of the \"paraphilia\" set (Voyeur, Exhibitionist).", "Doesn't work well with 10 players or less."]
+    },
+    {
+      "name": "Gambler",
+      "winCondition": "At the end of the last round (the 1 minute round), before all players reveal their cards, you, the Gambler, must publicly announce which team (Red Team, Blue Team, or neither) you think won the game. If you are correct, you win. If you are incorrect, you lose",
+      "powers": [],
+      "tags": ["pause game 25"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": []
+    },
+    {
+      "name": "Grey Team",
+      "winCondition": "At some point during the game, before time expires in the final round, you must exchange your card for a Red Team card or a Blue Team card (done with the extra unused team cards). You now assume the allegiance of the team you chose. If you forget to exchange your card by the end of the game or if they are unable to, then they fail to win their objective",
+      "powers": [
+        {
+          "name": "GREY TEAM",
+          "type": "card swap",
+          "description": "At some point during the game, before time expires in the final round, you must exchange your card for a Red Team card or a Blue Team card (done with the extra unused team cards). You now assume the allegiance of the team you chose."
+        }
+      ],
+      "tags": ["card swap"],
+      "worksWellWith": ["Socialist", "Capitalist"],
+      "doesntWorkWellWith": []
+    },
+    {
+      "name": "Hero",
+      "winCondition": "You win if you are in the same room as the President and Bomber at the end of the game. If you win, the both Red and Blue teams lose",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "notes": ["You get the chance to save the President! Villain strongly recommended", "If you win, the President is ashamed."]
+    },
+    {
+      "name": "Hot Potato",
+      "winCondition": "At the end of the game, the Hot Potato loses",
+      "powers": [
+        {
+          "name": "HOT POTATO",
+          "type": "card share",
+          "description": "Any player that card shares or even color shares with you immediately trades cards with you. Both you and the other player assume the powers and the allegiance of the newly acquired cards. At the end of the game, the Hot Potato loses."
+        }
+      ],
+      "tags": ["bury", "card share power", "color share power"],
+      "worksWellWith": ["more players", "Privacy Promise variant"],
+      "doesntWorkWellWith": ["characters that can't refuse a reveal (Fool, Nuclear Tyrant)"],
+      "notes": ["Characters that can inflict a status upon others (e.g. Vampire, Human Centipede, Hypnotist, etc.) lose their identity, but not previously established power over others when becoming the Hot Potato. For example, previously \"seduced\" players are still \"seduced\" by the former Vampire turned Hot Potato.", "Due to cleanse (see Cleanse rule on page #), if the President card, for any reason, shifts to a new player, the new President, must now card share with the Doctor to win REGARDLESS of the former President's card sharing history. This concept also applies to the Bomber and Engineer.", "Works well with more players and with the Privacy Promise variant.", "Doesn't work well with characters that can't refuse a reveal (Fool, Nuclear Tyrant)", "Remember that newly acquired characters are cleansed."]
+    },
+    {
+      "name": "Intern",
+      "winCondition": "You win if you are in the same room as the President at the end of the game",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": ["Rival", "Survivor", "Victim"],
+      "doesntWorkWellWith": [],
+      "notes": ["Works well with the Rival, Survivor, and Victim.", "Without the Victim, Intern may provide Blue Team with an advantage."]
+    },
+    {
+      "name": "Judge",
+      "winCondition": "At the end of the last round, if both Red and Blue teams win or lose (a tie), count the amount of red cards and blue cards you've accumulated. The team that gave you more cards of their color wins the game. You win if you get to use your JUDGEMENT power",
+      "powers": [
+        {
+          "name": "JUDGEMENT",
+          "type": "private reveal",
+          "description": "When any player privately reveals their card to you and says, \"Take my card,\" you MUST take that player's card. You are not permitted to do anything with acquired cards, including showing the cards to others or using powers associated with the cards."
+        }
+      ],
+      "tags": [],
+      "worksWellWith": [],
+      "doesntWorkWellWith": ["Informer"],
+      "requires": ["Blue Drone", "Red Fist", "or Engineer", "Doctor"],
+      "notes": ["Requires Blue Drone and Red Fist or Engineer and Doctor.", "Doesn't work with Informer.", "However, if the game still ends in a tie (due to having an equal number of red and blue cards) you still win, but Red and Blue teams both lose."]
+    },
+    {
+      "name": "Juliet",
+      "winCondition": "You win if you are in the same room as Romeo and the Bomber at the end of the game",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": ["Maid", "Butler"],
+      "doesntWorkWellWith": ["10 players or fewer"],
+      "requires": ["Romeo"],
+      "notes": ["Must be played with Romeo. Works well with Maid and Butler.", "Doesn't work well 10 players or fewer."]
+    },
+    {
+      "name": "Leprechaun",
+      "winCondition": "At the end of the game, the Leprechaun wins",
+      "powers": [
+        {
+          "name": "LEPRECHAUN",
+          "type": "card share",
+          "description": "You begin with the \"foolish\" condition. Players with the \"foolish\" condition can never turn down an offer to card share or color share. You also have the LEPRECHAUN power: Any player that card shares or even color shares with you immediately trades cards with you. Both you and the other player assume the powers and the allegiance of the newly acquired cards. At the end of the game, the Leprechaun wins. A single player can only ever be the Leprechaun once per game."
+        }
+      ],
+      "tags": ["card share power", "card swap", "color share power", "condition"],
+      "worksWellWith": ["more players", "Privacy Promise variant"],
+      "doesntWorkWellWith": ["characters that can't refuse a reveal (Fool, Nuclear Tyrant)"],
+      "notes": ["If I player is about to become the Leprechaun character for the second time, the must communicate that they can't receive the Leprechaun card. This communication can be done verbally or non-verbally.", "Characters that can inflict a status upon others (e.g. Vampire, Human Centipede, Hypnotist, etc.) lose their identity, but not previously established power over others when becoming the Leprechaun. For example, previously \"seduced\" players are still \"seduced\" by the former Vampire turned Leprechaun.", "Due to cleanse (see Cleanse rule on page #), if the President card, for any reason, shifts to a new player, the new President, must now card share with the Doctor to win REGARDLESS of the former President's card share history. This concept also applies for the Bomber and Engineer.", "Works well with more players and with the Privacy Promise variant.", "Doesn't work well with characters that can't refuse a reveal (Fool, Nuclear Tyrant)", "Remember that newly acquired characters are cleansed."]
+    },
+    {
+      "name": "Loyalist",
+      "winCondition": "Standard team win condition",
+      "powers": [
+        {
+          "name": "LOYALIST",
+          "type": "card share",
+          "description": "You are immune to the \"traitor\" condition. Moreover, if anyone card shares with you they lose the \"traitor\" condition."
+        }
+      ],
+      "tags": ["card share power", "condition"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Conspirator"],
+      "notes": ["Requires Conspirator to be any use.", "Pretty useless without the Conspirator."]
+    },
+    {
+      "name": "Mad Scientist",
+      "winCondition": "Standard team win condition",
+      "powers": [
+        {
+          "name": "MAD SCIENTIST",
+          "type": "private reveal",
+          "description": "Once per game, you may privately reveal your card to two players. You must verbally say to your target players, \"You MUST trade cards.\" Those two players must trade character cards. You can not use this power on yourself, but another Mad Scientist can use their MAD SCIENTIST power on you."
+        }
+      ],
+      "tags": ["private reveal power"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": ["10 players or fewer"],
+      "notes": ["Muhahaha!", "Doesn't work well with 10 players or fewer.", "Remember that newly acquired characters are cleansed."]
+    },
+    {
+      "name": "Maid",
+      "winCondition": "You win if you are in the same room as the Butler and the President at the end of the game",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": ["Romeo", "Juliet"],
+      "doesntWorkWellWith": ["10 players or fewer"],
+      "requires": ["Butler"],
+      "notes": ["Must be played with the Butler. Works well with Romeo and Juliet.", "Doesn't work well with 10 players or fewer."]
+    },
+    {
+      "name": "Mastermind",
+      "winCondition": "At the end of the last round (the 1 minute round), before all players reveal their cards, you, the Mastermind, must publicly announce the color of EVERY player. If you are able to correctly name the color of every player's character card, then you win and all other players lose",
+      "powers": [
+        {
+          "name": "MASTERMIND",
+          "type": "pause game",
+          "description": "At the end of the last round (the 1 minute round), before all players reveal their cards, you, the Mastermind, must publicly announce the color of EVERY player. Traditionally, this is done by having the Mastermind point, one-by-one, to each player and verbally naming a color as they do so (Red, Blue, Grey, Green, or Purple)."
+        }
+      ],
+      "tags": ["pause game 95"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "notes": ["Your character card has a red side and blue side. You may show either side when color sharing or revealing.", "If you get guess just 1 player's color wrong, then you lose the game.", "Winning as the Mastermind feels amazing.", "The more players, the more difficult. Throw in a character that can swap identities and you're in a nightmare."]
+    },
+    {
+      "name": "Mastermind (version 2)",
+      "winCondition": "You win if you end the game as a room's leader AND was a leader of the opposing room at some point during the game",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": [],
+      "doesntWorkWellWith": []
+    },
+    {
+      "name": "MI6",
+      "winCondition": "You win if you card share with the Bomber and the President before the end of the game",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": ["Nuclear Tyrant", "Fool"],
+      "doesntWorkWellWith": []
+    },
+    {
+      "name": "Minion",
+      "winCondition": "You win if a leader is never usurped in the same room as you",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": ["Born Leader", "Gorgon", "Usurper"],
+      "doesntWorkWellWith": [],
+      "notes": ["Can get boring if paired with a stable leader, tough to win with the Usurper."]
+    },
+    {
+      "name": "Mistress",
+      "winCondition": "You win if you are in the same room as the President at the end of the game and the Wife is not",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Wife"],
+      "notes": ["Requires Wife. Ahab and Moby strongly recommended.", "Without Ahab and Moby, Blue Team may have an advantage."]
+    },
+    {
+      "name": "Moby",
+      "winCondition": "You win if Ahab gains the \"dead\" condition and you do not",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Ahab"],
+      "notes": ["Requires Ahab. Wife and Mistress strongly recommended.", "Without Wife and Mistress, Red Team may have an advantage."]
+    },
+    {
+      "name": "Mother",
+      "winCondition": "You win if these 2 target players do not gain the \"dead\" condition unless 1 of the 2 players is the Bomber. If the Bomber is one of the 2 target players, then you only need the other target player you deemed as your child to not gain the \"dead\" condition",
+      "powers": [
+        {
+          "name": "MOTHER",
+          "type": "private reveal",
+          "description": "During the first round of the game you must privately reveal your card to 2 players and verbally say to these 2 target players, \"You are my children.\" You do not have to privately reveal your card to both of these 2 target players simultaneously."
+        }
+      ],
+      "tags": ["private reveal power"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "notes": ["Feel the concern that a mother might."]
+    },
+    {
+      "name": "Nuclear Tyrant",
+      "winCondition": "At the end of the game, you are asked if you shared your card with both the President and the Bomber. You win if the President and the Bomber do not card share with you by the end of the game. If you win, all other players lose",
+      "powers": [
+        {
+          "name": "FOOLISH",
+          "type": "condition",
+          "description": "The Nuclear Tyrant begins with the \"foolish\" condition. Players with the \"foolish\" condition can never turn down an offer to card share."
+        }
+      ],
+      "tags": ["condition"],
+      "worksWellWith": ["MI6"],
+      "doesntWorkWellWith": [],
+      "notes": ["If a player with the \"foolish\" condition were to acquire the \"shy\" condition, the two conditions would cancel one another, leaving the player with neither condition.", "Doesn't mix well with characters that have card swap abilities (e.g. Hot Potato, Leprechaun, etc.)"]
+    },
+    {
+      "name": "Paper",
+      "winCondition": "You win if you are in the same room as the Rock, but not in the same room as the Scissors",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Rock", "Scissors"]
+    },
+    {
+      "name": "Private Investigator",
+      "winCondition": "At the end of the last round, before all players reveal their character cards, you must publicly announce the identity of the buried card. If you are correct, you win. If you are incorrect, you lose",
+      "powers": [],
+      "tags": ["pause game 05"],
+      "worksWellWith": ["10 players or less"],
+      "doesntWorkWellWith": ["Criminal", "Trader", "Changer"],
+      "notes": ["Works great with 10 players or less.", "Private Investigator doesn't work well with the Criminal, Trader, or Changer.", "Note: if the Private Investigator is in play with any other characters that have a end-of-game public announcement (e.g. Amnesiac, Gambler, etc.) the Private Investigator must announce their guess first."]
+    },
+    {
+      "name": "Prude",
+      "winCondition": "You win if you grab one of the Frotteur's wrists by the end of the game",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": [],
+      "doesntWorkWellWith": ["10 players or less"],
+      "requires": ["Frotteur"],
+      "notes": ["You may only grab one player's wrist during the game. Once you grab a player's wrist, you may not let go until the end of the game. This also means that neither you, nor the player's whose wrist you grabbed may be a hostage without the other. The only way one of the two of you can leave the room is if the other is able to leave as well.", "A character that removes another character from the game (e.g. Ninja, Xenohunter, etc.) can not remove the Prude nor the player whose wrist the prude grabbed.", "Part of the \"paraphilia\" set.", "Doesn't work well with 10 players or less. Requires touching."]
+    },
+    {
+      "name": "Queen",
+      "winCondition": "You win the President gains the \"dead\" condition and you don't",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": [],
+      "doesntWorkWellWith": []
+    },
+    {
+      "name": "Rival",
+      "winCondition": "You win if you are NOT in the same room as the President at the end of the game",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": ["Intern", "Survivor", "Victim"],
+      "doesntWorkWellWith": [],
+      "notes": ["Works well with the Intern, Survivor, and Victim.", "Without the Survivor, Rival may provide Blue Team with an advantage."]
+    },
+    {
+      "name": "Robot",
+      "winCondition": "You win if the first player with whom you card share or color share fails to achieve all of their win objectives. If you fail to card share or color share with any players, then you lose",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": ["Clone"],
+      "doesntWorkWellWith": [],
+      "notes": ["Works well in combination with the Clone."]
+    },
+    {
+      "name": "Rock",
+      "winCondition": "You win if you are in the same room as the Scissors, but not in the same room as the Paper",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Paper", "Scissors"]
+    },
+    {
+      "name": "Romeo",
+      "winCondition": "You win if you are in the same room as Juliet and the Bomber at the end of the game",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": ["Maid", "Butler"],
+      "doesntWorkWellWith": ["10 players or fewer"],
+      "requires": ["Juliet"],
+      "notes": ["Works well with Maid and Butler.", "Doesn't work well 10 players or fewer."]
+    },
+    {
+      "name": "Scissors",
+      "winCondition": "You win if you are in the same room as the Paper, but not in the same room as the Rock",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Paper", "Rock"]
+    },
+    {
+      "name": "Sniper",
+      "winCondition": "At the end of the last round, before all players reveal their character cards, you must publicly announce which player you are shooting. You win if the player you selected is the Target",
+      "powers": [],
+      "tags": ["pause game 15"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Decoy", "Target"],
+      "notes": ["The selected player does not have to be in the same room as you.", "If the player you choose is not the Target or the Decoy, then the selected player gains the \"dead\" condition.", "Note: a \"dead\" Bomber does not detonate."]
+    },
+    {
+      "name": "Stunt Double",
+      "winCondition": "You win if you end in the opposite room as the President and if you gain the \"dead\" condition",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": [],
+      "doesntWorkWellWith": []
+    },
+    {
+      "name": "Survivor",
+      "winCondition": "You win if you are NOT in the same room as the Bomber at the end of the game",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": ["Victim", "Rival", "Intern"],
+      "doesntWorkWellWith": [],
+      "notes": ["Works well with the Victim, Rival, and Intern.", "Without the Rival, Survivor may provide Red Team with an advantage."]
+    },
+    {
+      "name": "Target",
+      "winCondition": "You win if the Sniper does not shoot you at the end of the last round",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Decoy", "Sniper"]
+    },
+    {
+      "name": "Telepath",
+      "winCondition": "You win if you correctly predict the player (not character) that will be the hostage coming into your room at the end of the last round",
+      "powers": [
+        {
+          "name": "TELEPATH",
+          "type": "public reveal",
+          "description": "To formalize your prediction, you must publicly reveal your card during the last round of the game and verbally name (or adequately describe) your prediction."
+        }
+      ],
+      "tags": ["public reveal power"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "notes": ["Your prediction can't be the hostage leaving your current room. You must predict the hostage that will be coming INTO your room."]
+    },
+    {
+      "name": "Traveler",
+      "winCondition": "You win if you are sent to a different room as a hostage at the end of MOST rounds",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": ["Agoraphobe"],
+      "doesntWorkWellWith": [],
+      "notes": ["This means in a 5 round game, you must change room 3 times to win. In a 3 round game, you must change rooms twice to win.", "Works well with Agoraphobe.", "Careful when playing with Zombie. Zombie Traveler has 2 win objectives."]
+    },
+    {
+      "name": "Victim",
+      "winCondition": "You win if you are in the same room as the Bomber at the end of the game",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": ["Survivor", "Rival", "Intern"],
+      "doesntWorkWellWith": [],
+      "notes": ["Works well with the Survivor, Rival, and Intern", "Without the Intern, Victim may provide Red Team with an advantage."]
+    },
+    {
+      "name": "Villain",
+      "winCondition": "You win if you are in the same room as the President and the opposite room as the Bomber. If you win, the both Red and Blue teams lose",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "notes": ["You get the chance take over the presidency!", "If you win, the President is ashamed."]
+    },
+    {
+      "name": "Wife",
+      "winCondition": "You win if you are in the same room as the President at the end of the game and the Mistress is not",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Mistress"],
+      "notes": ["Requires Mistress. Ahab and Moby are strongly recommended.", "Without Ahab and Moby, Blue Team may gain an advantage."]
+    }
+  ]
+}

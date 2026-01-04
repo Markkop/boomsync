@@ -1,0 +1,50 @@
+{
+  "team": "green",
+  "characters": [
+    {
+      "name": "Leprechaun",
+      "winCondition": "At the end of the game, the Leprechaun wins",
+      "powers": [
+        {
+          "name": "LEPRECHAUN",
+          "type": "card share",
+          "description": "You begin with the \"foolish\" condition. Players with the \"foolish\" condition can never turn down an offer to card share or color share. You also have the LEPRECHAUN power: Any player that card shares or even color shares with you immediately trades cards with you. Both you and the other player assume the powers and the allegiance of the newly acquired cards. At the end of the game, the Leprechaun wins. A single player can only ever be the Leprechaun once per game."
+        }
+      ],
+      "tags": ["card share power", "card swap", "color share power", "condition"],
+      "worksWellWith": ["more players", "Privacy Promise variant"],
+      "doesntWorkWellWith": ["characters that can't refuse a reveal (Fool, Nuclear Tyrant)"],
+      "notes": ["If I player is about to become the Leprechaun character for the second time, the must communicate that they can't receive the Leprechaun card. This communication can be done verbally or non-verbally.", "Characters that can inflict a status upon others (e.g. Vampire, Human Centipede, Hypnotist, etc.) lose their identity, but not previously established power over others when becoming the Leprechaun. For example, previously \"seduced\" players are still \"seduced\" by the former Vampire turned Leprechaun.", "Due to cleanse (see Cleanse rule on page #), if the President card, for any reason, shifts to a new player, the new President, must now card share with the Doctor to win REGARDLESS of the former President's card share history. This concept also applies for the Bomber and Engineer.", "Works well with more players and with the Privacy Promise variant.", "Doesn't work well with characters that can't refuse a reveal (Fool, Nuclear Tyrant)", "Remember that newly acquired characters are cleansed."]
+    },
+    {
+      "name": "Yog Sothoth",
+      "winCondition": "You win if any player color or card shares with you. If you win, all other players lose",
+      "powers": [
+        {
+          "name": "YOG SOTHOTH",
+          "type": "card share",
+          "description": "You win if any player color or card shares with you. If you win, all other players lose."
+        }
+      ],
+      "tags": ["card share power", "color share power"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "notes": ["Keep players on the toes when it come to sharing information.", "Not recommended with the Beholder, Leprechaun, or games with the \"foolish\" condition."]
+    },
+    {
+      "name": "Zombie",
+      "winCondition": "Team Zombie wins if all players without the \"dead\" condition at the end of the game are on Team Zombie",
+      "powers": [
+        {
+          "name": "ZOMBIE",
+          "type": "card share",
+          "description": "You begin with the \"zombie\" condition. The \"zombie\" condition changes a player's allegiance to Team Zombie. Team Zombie wins if all players without the \"dead\" condition at the end of the game are on Team Zombie. Any player that card shares or color shares with a member of Team Zombie gains the \"zombie\" condition. New members of Team Zombie maintain their powers and conditions, but their allegiance (and therefore win condition) changes to Team Zombie. This means that any previous win conditions for a player are replaced with the Team Zombie win condition."
+        }
+      ],
+      "tags": ["card share power", "color share power", "condition", "contagious"],
+      "worksWellWith": ["Doctor", "Engineer", "Privacy Promise variant"],
+      "doesntWorkWellWith": [],
+      "notes": ["Newly transformed Zombie players do not exchange their current character cards for Zombie cards. Therefore, it is important for players to indicate that they are on Team Zombie when card sharing or color sharing with another player. This is usually done by whispering something along the lines of, \"I'm a Zombie, and now so are you. Play it cool, man. Let's win this biznitch.\"", "Works well with Doctor and Engineer, is part of the \"monster\" set, and works with the Privacy Promise variant.", "Gets confusing with the Medic, Cleaner, and Hot Potato. Playing with characters that have permanent public reveals is difficult as they can't gain the \"zombie\" condition."]
+    }
+  ]
+}

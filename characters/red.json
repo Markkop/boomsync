@@ -1,0 +1,241 @@
+{
+  "team": "red",
+  "characters": [
+    {
+      "name": "Bomber",
+      "winCondition": "The Red Team wins if the President gains the \"dead\" condition",
+      "powers": [
+        {
+          "name": "BOMB",
+          "type": "end game",
+          "description": "Everyone in the same room as you at the end of the game gains the \"dead\" condition. The Red Team wins if the President gains the \"dead\" condition."
+        }
+      ],
+      "tags": ["primary character"],
+      "worksWellWith": ["Survivor", "Victim", "Moby", "Ahab"],
+      "doesntWorkWellWith": [],
+      "notes": ["It is possible that the Bomber receives the \"dead\" condition before the end of the game. If this happens, then the Bomber does not detonate, failing to provide the \"dead\" condition to everyone in the same room at the end of the game.", "Survivor, Victim, Moby, and Ahab are your natural grey allies."]
+    },
+    {
+      "name": "Dragon",
+      "winCondition": "The Red Team wins if the King gains the \"dead\" condition",
+      "powers": [
+        {
+          "name": "DRAGON BREATH",
+          "type": "end game",
+          "description": "Everyone in the same room as you at the end of the game gains the \"toast\" condition. The Red Team wins if the King gains the \"dead\" condition."
+        }
+      ],
+      "tags": ["primary character"],
+      "worksWellWith": ["Survivor", "Victim", "Moby", "Ahab"],
+      "doesntWorkWellWith": [],
+      "notes": ["It is possible that the Dragon receives the \"dead\" condition before the end of the game. If this happens, then the Dragon does not breathe, failing to provide the \"dead\" condition to everyone in the same room at the end of the game.", "Survivor, Victim, Moby, and Ahab are your natural grey allies."]
+    },
+    {
+      "name": "Dr. Boom",
+      "winCondition": "Standard team win condition",
+      "powers": [
+        {
+          "name": "BOOM",
+          "type": "card share",
+          "description": "If you card share with the President, the game immediately ends. Red Team wins."
+        }
+      ],
+      "tags": ["card share power"],
+      "worksWellWith": ["Engineer", "characters with card share powers"],
+      "doesntWorkWellWith": [],
+      "notes": ["The BOOM power never works on the President's Daughter. If the President is buried, the BOOM power is never used.", "Games can last less than 30 seconds, greatly limiting game play time."]
+    },
+    {
+      "name": "Eggineer",
+      "winCondition": "The Red Team has the following additional win condition: the Dragon must card share with the Eggineer before the end of the game or the Red Team loses",
+      "powers": [
+        {
+          "name": "EGGINEER",
+          "type": "card share",
+          "description": "When playing with the Eggineer, the Red Team has the following additional win condition: the Dragon must card share with the Eggineer before the end of the game or the Red Team loses. At the end of the game, the Bomber will be asked if he/she card shared with the Eggineer. At that time both players will verify or deny having card shared."
+        }
+      ],
+      "tags": ["card share power"],
+      "worksWellWith": ["Doctor", "characters with card share powers (Mummy, Vampire, etc.)"],
+      "doesntWorkWellWith": [],
+      "notes": ["Remember that if the Dragon character ever switches player control (perhaps due to the Hot Potato), then the new Dragon must card share with the Eggineer.", "Games with the Doctor and Engineer may lead to a game where all players lose."]
+    },
+    {
+      "name": "Engineer",
+      "winCondition": "The Red Team has the following additional win condition: the Bomber must card share with the Engineer before the end of the game or the Red Team loses",
+      "powers": [
+        {
+          "name": "ENGINEER",
+          "type": "card share",
+          "description": "When playing with the Engineer, the Red Team has the following additional win condition: the Bomber must card share with the Engineer before the end of the game or the Red Team loses. At the end of the game, the Bomber will be asked if he/she card shared with the Engineer. At that time both players will verify or deny having card shared."
+        }
+      ],
+      "tags": ["card share power"],
+      "worksWellWith": ["Doctor", "characters with card share powers (Mummy, Vampire, etc.)"],
+      "doesntWorkWellWith": [],
+      "notes": ["See Doctor/Engineer section for more clarification.", "Remember that if the Bomber character ever switches player control (perhaps due to the Hot Potato), then the new Bomber must card share with the Engineer.", "Games with the Doctor and Engineer may lead to a game where all players lose."]
+    },
+    {
+      "name": "Eris",
+      "winCondition": "Standard team win condition",
+      "powers": [
+        {
+          "name": "ERIS",
+          "type": "card share",
+          "description": "Once per game, you may privately reveal your card to two players. You must verbally say to your target players, \"You hate each other.\" Those two players gain the \"in hate\" condition. Players with the \"in hate\" condition replace their original win objective with the following win objective: be in the opposite room of the player with whom you are \"in hate\" at the end of the game or fail to win this objective. You cannot use this power on yourself."
+        }
+      ],
+      "tags": ["card share power"],
+      "worksWellWith": ["Cupid"],
+      "doesntWorkWellWith": [],
+      "notes": ["If a player with the \"in hate\" condition were to acquire the \"in love\" condition, the two conditions would cancel one another, leaving the player with neither condition.", "Cupid strongly recommended."]
+    },
+    {
+      "name": "Fanatic",
+      "winCondition": "Standard team win condition",
+      "powers": [
+        {
+          "name": "FANATIC",
+          "type": "backup",
+          "description": "You are the backup character for the Eggineer. If the Eggineer card is buried or the Eggineer receives the \"dead\" condition before the end of the game, you must carry out all responsibilities associated with the Eggineer (card sharing with the Dragon)."
+        }
+      ],
+      "tags": ["bury", "card share power"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Eggineer"]
+    },
+    {
+      "name": "Fugitive",
+      "winCondition": "If you card share with the One-Armed Man, the game immediately ends. Red Team wins",
+      "powers": [
+        {
+          "name": "FUGITIVE",
+          "type": "card share",
+          "description": "If you card share with the One-Armed Man, the game immediately ends. Red Team wins."
+        }
+      ],
+      "tags": ["card share power"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Marshal", "Witness", "One-Armed Man"]
+    },
+    {
+      "name": "Martyr",
+      "winCondition": "Standard team win condition",
+      "powers": [
+        {
+          "name": "MARTYR",
+          "type": "backup",
+          "description": "You are a secondary character. You are the backup character for the Bomber. If the Bomber card is buried or the Bomber receives the \"dead\" condition before activating the bomb, you must carry out all responsibilities associated with the Bomber (for example: ending the game in the same room as the President, card sharing with the Engineer)."
+        }
+      ],
+      "tags": ["bury"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Bomber"]
+    },
+    {
+      "name": "Pyrotech",
+      "winCondition": "Standard team win condition",
+      "powers": [
+        {
+          "name": "PYROTECH",
+          "type": "card share",
+          "description": "Card sharing with the Bomber provides the \"firebomb\" condition. If the Bomber has the \"firebomb\" condition at the end of the game, all players gain the \"dead\" condition (regardless of what room they are in)."
+        }
+      ],
+      "tags": ["card share power"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "notes": ["Almost requires Firefighter."]
+    },
+    {
+      "name": "Red Fist",
+      "winCondition": "The Red Team wins if you are not in the same room as the Blue Drone at the end of the game",
+      "powers": [],
+      "tags": ["primary character"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Blue Drone"],
+      "notes": ["Must be played with Blue Drone. Judge or Informant recommended (not both).", "Can cause a confusing end game result."]
+    },
+    {
+      "name": "Red Foot",
+      "winCondition": "Standard team win condition",
+      "powers": [
+        {
+          "name": "RED FOOT",
+          "type": "backup",
+          "description": "You are a secondary character. You are the backup character for the Red Fist. If the Red Fist card is buried or the Red Fist receives the \"dead\" condition before the bomb is activated, you must carry out all responsibilities associated with the Red Fist."
+        }
+      ],
+      "tags": ["bury"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Red Fist"],
+      "notes": ["If burying a card, consider not burying the Informers or Judge."]
+    },
+    {
+      "name": "Socialist",
+      "winCondition": "Standard team win condition",
+      "powers": [
+        {
+          "name": "SOCIALIST",
+          "type": "card share",
+          "description": "Any player that card shares with you must trade in their character card for a Red Team card before the beginning of the next round and before revealing any part of their card to another player. Your power has no effect on primary characters (President, Bomber, Red Fist, etc.), backup characters for primaries (President's Daughter, Martyr, Firecracker, etc.) or any character that is not aligned with either red or blue."
+        }
+      ],
+      "tags": ["card share power", "card swap"],
+      "worksWellWith": ["Capitalist"],
+      "doesntWorkWellWith": [],
+      "notes": ["Doesn't work well without the Capitalist."]
+    },
+    {
+      "name": "Tinkerer",
+      "winCondition": "Standard team win condition",
+      "powers": [
+        {
+          "name": "TINKERER",
+          "type": "backup",
+          "description": "You are the backup character for the Engineer. If the Engineer card is buried or the Engineer receives the \"dead\" condition before activating the bomb, you must carry out all responsibilities associated with the Engineer (card sharing with the Bomber)."
+        }
+      ],
+      "tags": ["bury", "card share power"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Engineer"]
+    },
+    {
+      "name": "Witness",
+      "winCondition": "If you card share with the Marshal, the game immediately ends. Red Team wins",
+      "powers": [
+        {
+          "name": "WITNESS",
+          "type": "card share",
+          "description": "If you card share with the Marshal, the game immediately ends. Red Team wins."
+        }
+      ],
+      "tags": ["card share power"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Marshal", "Fugitive", "One-Armed Man"]
+    },
+    {
+      "name": "Xenomorph",
+      "winCondition": "Standard team win condition",
+      "powers": [
+        {
+          "name": "XENOMORPH",
+          "type": "card share",
+          "description": "The first member of the blue team that color or card shares with you gains the \"impregnated\" condition and you must give them your Xenomorph character card. This means that using your XENOMORPH power will permanently remove your card from the game, not you. A player with the \"impregnated\" condition must not do anything with the Xenomorph card they hold, including showing the card to others or using powers associated with the card. They just have to hold onto it. However, a player with the \"impregnated\" condition can still use their own card as per usual. At the end of the game, everyone in the same room as blue player with the \"impregnated\" condition gains the \"dead\" condition."
+        }
+      ],
+      "tags": ["card share power", "color share power"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "notes": ["Xenohunter strongly recommended for game balance.", "Does not mix well with Spy, Conspirator, Capitalist, or Socialist."]
+    }
+  ]
+}

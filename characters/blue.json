@@ -1,0 +1,253 @@
+{
+  "team": "blue",
+  "characters": [
+    {
+      "name": "Alchemist",
+      "winCondition": "The Blue Team has the following additional win condition: the King must card share with the Alchemist before the end of the game or the Blue Team loses",
+      "powers": [
+        {
+          "name": "ALCHEMIST",
+          "type": "card share",
+          "description": "When playing with the Alchemist, the Blue Team has the following additional win condition: the King must card share with the Alchemist before the end of the game or the Blue Team loses. At the end of the game, the King will be asked if he/she card shared with the Alchemist. At that time both players will verify or deny having card shared."
+        }
+      ],
+      "tags": ["card share power"],
+      "worksWellWith": ["Eggineer", "characters with card share powers (e.g. Dr. Boom)"],
+      "doesntWorkWellWith": [],
+      "notes": ["Remember that if the King character ever switches player control (perhaps due to the Hot Potato), then the new King must card share with the Alchemist.", "Games with the Alchemist and Eggineer may lead to a game where all players lose."]
+    },
+    {
+      "name": "Apprentice",
+      "winCondition": "Standard team win condition",
+      "powers": [
+        {
+          "name": "APPRENTICE",
+          "type": "backup",
+          "description": "You are the backup character for the Alchemist. If the Alchemist card is buried or the Alchemist receives the \"dead\" condition before the end of the game, you must carry out all responsibilities associated with the Alchemist (card sharing with the King)."
+        }
+      ],
+      "tags": ["card share power"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Alchemist"]
+    },
+    {
+      "name": "Blue Drone",
+      "winCondition": "The Blue Team wins if you are in the same room as the Red Fist at the end of the game",
+      "powers": [],
+      "tags": ["primary character"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Red Fist"],
+      "notes": ["Must be played with Red Fist. Judge or Informant recommended (not both).", "The Blue Drone and Red Fist cards add additional win conditions to the game, adding complexity and greatly altering the standard win conditions.", "Can cause a confusing end game result. This role may be too complex for newer players."]
+    },
+    {
+      "name": "Blue Firecracker",
+      "winCondition": "Standard team win condition",
+      "powers": [
+        {
+          "name": "BLUE FIRECRACKER",
+          "type": "backup",
+          "description": "You are a secondary character. You are the backup character for the Blue Drone. If the Blue Drone card is buried or the Blue Drone receives the \"dead\" condition before the end of the game, you must carry out all responsibilities associated with the Blue Drone."
+        }
+      ],
+      "tags": ["bury"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Blue Drone"],
+      "notes": ["If burying a card, consider not burying the Informers or Judge."]
+    },
+    {
+      "name": "Blue Team",
+      "winCondition": "If the President does not gain the \"Dead\" condition, you win",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": ["first time players"],
+      "doesntWorkWellWith": [],
+      "notes": ["Any character card that has the white star icon on it is considered to be on the Blue Team.", "Works well for first time players.", "Can bore experienced players."]
+    },
+    {
+      "name": "Capitalist",
+      "winCondition": "Standard team win condition",
+      "powers": [
+        {
+          "name": "CAPITALIST",
+          "type": "card share",
+          "description": "Any player that card shares with you must trade in their character card for a Blue Team card before the beginning of the next round and before revealing any part of their card to another player. Your power has no effect any of the primary characters, secondary characters, or any character that is not aligned with either red or blue."
+        }
+      ],
+      "tags": ["card share power", "card swap"],
+      "worksWellWith": ["Socialist"],
+      "doesntWorkWellWith": [],
+      "notes": ["Doesn't work well without the Socialist."]
+    },
+    {
+      "name": "Cupid",
+      "winCondition": "Standard team win condition",
+      "powers": [
+        {
+          "name": "CUPID",
+          "type": "card share",
+          "description": "Once per game, you may privately reveal your card to two players. You must verbally say to your target players, \"You are in love with each other.\" Those two players gain the \"in love\" condition. Players with the \"in love\" condition replace their original win objective with the following win condition: be in the same room with the player with whom you are \"in love\" at the end of the game or fail to win your objective. The CUPID power cannot be used on yourself."
+        }
+      ],
+      "tags": ["card share power"],
+      "worksWellWith": ["Eris"],
+      "doesntWorkWellWith": [],
+      "notes": ["If a player with the \"in love\" condition were to acquire the \"in hate\" condition, the two conditions would cancel one another, leaving the player with neither condition."]
+    },
+    {
+      "name": "Doctor",
+      "winCondition": "The Blue Team has the following additional win condition: the President must card share with the Doctor before the end of the game or the Blue Team loses",
+      "powers": [
+        {
+          "name": "DOCTOR",
+          "type": "card share",
+          "description": "When playing with the Doctor, the Blue Team has the following additional win condition: the President must card share with the Doctor before the end of the game or the Blue Team loses. At the end of the game, the President will be asked if he/she card shared with the Doctor. At that time both players will verify or deny having card shared."
+        }
+      ],
+      "tags": ["card share power"],
+      "worksWellWith": ["Engineer", "characters with card share powers (e.g. Dr. Boom)"],
+      "doesntWorkWellWith": [],
+      "notes": ["See Doctor/Engineer section for more clarification.", "Remember that if the President character ever switches player control (perhaps due to the Hot Potato), then the new President must card share with the Doctor.", "Games with the Doctor and Engineer may lead to a game where all players lose."]
+    },
+    {
+      "name": "Fat Princess",
+      "winCondition": "Standard team win condition",
+      "powers": [
+        {
+          "name": "FAT PRINCESS",
+          "type": "backup",
+          "description": "You are a secondary character. You are the backup character for the King. If the King card is buried or the King receives the \"toast\" condition before the end of the game, you must carry out all responsibilities associated with the King (for example: ending the game in the same room as the King, card sharing with the Alchemist)."
+        }
+      ],
+      "tags": ["bury"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["King"]
+    },
+    {
+      "name": "Firefighter",
+      "winCondition": "Standard team win condition",
+      "powers": [
+        {
+          "name": "FIREFIGHTER",
+          "type": "card share",
+          "description": "Card sharing with the President provides the President the \"fireproof\" condition. If the President has the \"fireproof\" condition, then, at the end of the game, all players in the same room as the President also gain the \"fireproof\" condition. Players with the \"fireproof\" condition do not gain the \"dead\" condition from the \"firebomb\" condition."
+        }
+      ],
+      "tags": ["card share power"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "notes": ["Almost requires Pyrotech."]
+    },
+    {
+      "name": "King",
+      "winCondition": "Blue Team wins if you do not gain the \"toast\" condition",
+      "powers": [],
+      "tags": ["primary character"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": []
+    },
+    {
+      "name": "Marshal",
+      "winCondition": "If you card share with the Fugitive, the game immediately ends. Blue Team wins",
+      "powers": [
+        {
+          "name": "MARSHAL",
+          "type": "card share",
+          "description": "If you card share with the Fugitive, the game immediately ends. Blue Team wins."
+        }
+      ],
+      "tags": ["card share power"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Witness", "Fugitive", "One-Armed Man"]
+    },
+    {
+      "name": "Nurse",
+      "winCondition": "Standard team win condition",
+      "powers": [
+        {
+          "name": "NURSE",
+          "type": "backup",
+          "description": "You are the backup character for the Doctor. If the Doctor card is buried or the Doctor receives the \"dead\" condition before the end of the game, you must carry out all responsibilities associated with the Doctor (card sharing with the President)."
+        }
+      ],
+      "tags": ["card share power", "bury"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Doctor"]
+    },
+    {
+      "name": "One-Armed Man",
+      "winCondition": "If you card share with the Witness, the game immediately ends. Blue Team wins",
+      "powers": [
+        {
+          "name": "ONE-ARMED MAN",
+          "type": "card share",
+          "description": "If you card share with the Witness, the game immediately ends. Blue Team wins."
+        }
+      ],
+      "tags": ["card share power"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Marshal", "Fugitive", "Witness"]
+    },
+    {
+      "name": "President",
+      "winCondition": "Blue Team wins if you do not gain the \"dead\" condition",
+      "powers": [],
+      "tags": ["primary character"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "notes": ["Rival, Intern, Wife, and Mistress are your natural allies."]
+    },
+    {
+      "name": "President's Daughter",
+      "winCondition": "Standard team win condition",
+      "powers": [
+        {
+          "name": "PRESIDENT'S DAUGHTER",
+          "type": "backup",
+          "description": "You are a secondary character. You are the backup character for the President. If the President card is buried or the President receives the \"dead\" condition before the bomb is activated, you must carry out all responsibilities associated with the President (for example: ending the game in the opposite room as the Bomber, card sharing with the Doctor)."
+        }
+      ],
+      "tags": ["bury"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["President"],
+      "notes": ["No, this character should not be the \"Vice President\". Shut up already and laugh."]
+    },
+    {
+      "name": "Tuesday Knight",
+      "winCondition": "If you card share with the Bomber, the game immediately ends. Blue Team wins",
+      "powers": [
+        {
+          "name": "HUG",
+          "type": "card share",
+          "description": "If you card share with the Bomber, the game immediately ends. Blue Team wins."
+        }
+      ],
+      "tags": ["card share power"],
+      "worksWellWith": ["Engineer", "characters with card share powers"],
+      "doesntWorkWellWith": [],
+      "notes": ["The HUG power never works on the Martyr. If the Bomber is buried, the HUG power is never used.", "Games can last less than 30 seconds, greatly limiting game play time."]
+    },
+    {
+      "name": "Xenohunter",
+      "winCondition": "Standard team win condition",
+      "powers": [
+        {
+          "name": "XENOHUNTER",
+          "type": "public reveal",
+          "description": "After any member of the blue team publicly reveals their card to the entire room, you may give them your Xenohunter card. The player to whom you give your Xenohunter card is removed from the game with your card. This means that using your XENOHUNTER power will permanently remove your card from the game, not you."
+        }
+      ],
+      "tags": ["public reveal power"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "notes": ["Xenomorph strongly recommended for game balance.", "Does not mix well with Spy, Conspirator, Capitalist, or Socialist."]
+    }
+  ]
+}

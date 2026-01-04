@@ -1,0 +1,66 @@
+{
+  "team": "special",
+  "description": "Characters with unique team affiliations (black, pink, purple)",
+  "characters": [
+    {
+      "name": "The Black",
+      "winCondition": "If any player color shares with you then you win and all other players lose",
+      "powers": [
+        {
+          "name": "THE BLACK",
+          "type": "color share",
+          "description": "Your character card is completely black. If any player color shares with you then you win and all other players lose."
+        }
+      ],
+      "tags": ["color share power"],
+      "worksWellWith": ["Spies", "Coy Boys", "a group that shares too much information too often"],
+      "doesntWorkWellWith": ["fewer than 11 players"],
+      "notes": ["Pointless with fewer than 11 players."]
+    },
+    {
+      "name": "Easter Bunny",
+      "winCondition": "If all players find their character cards, then the Easter Bunny loses. For every player that fails to find a card, the Easter Bunny player must find the missing cards. If the Easter Bunny can't find these lost cards, then the Easter Bunny loses",
+      "powers": [
+        {
+          "name": "EASTER BUNNY",
+          "type": "setup",
+          "description": "This is complicated, but fun. Have all players gather into a circle. Spin the Easter Bunny card in the center of the player circle. To whichever player the Easter Bunny's ear points is the Easter Bunny. Prepare a typical game with a shuffled character deck. All players, except the Easter Bunny should close their eyes. The Easter Bunny then hides half of the cards in one of the rooms, and the other half of the cards in the other room, always being careful to keep the cards facedown. After this is done, the Easter Bunny rushes back and joins all the other players. At the beginning of the game, players evenly split into the two rooms as per usual. However, now players have to find a character card. Once a player finds a character card, they claim that card and only that card. That is their character for the game. If a player fails to find a character card by the end of the game, they lose."
+        }
+      ],
+      "tags": [],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "notes": ["The player that was the Easter Bunny has an additional win objective besides the one included with their non-Easter Bunny character."]
+    },
+    {
+      "name": "Illuminati",
+      "winCondition": "If any player card shares with you then you win and all other players lose",
+      "powers": [
+        {
+          "name": "ILLUMINATI",
+          "type": "card share",
+          "description": "Your character card has a red side and blue side. You may show either side when color sharing or revealing. If any player card shares with you then you win and all other players lose."
+        }
+      ],
+      "tags": ["card share power"],
+      "worksWellWith": ["Spies", "Coy Boys", "a group that shares too much information too often"],
+      "doesntWorkWellWith": [],
+      "notes": ["This makes for a very tense and potentially short game. Doesn't work well with \"foolish\" condition (see Fool)."]
+    },
+    {
+      "name": "Drunk",
+      "winCondition": "Standard win condition of the sober character card",
+      "powers": [
+        {
+          "name": "DRUNK",
+          "type": "card swap",
+          "description": "This character card requires the following setup: before characters cards are dealt but after they are shuffled, randomly remove a character card. This is the sober character card. The sober card needs to be placed face down in a location that is easily accessible to all players, regardless of room locations (usually between the 2 play areas). The Drunk card is then placed into the deck of character cards. Reshuffle the character cards. At the beginning of the last round of the game, the Drunk player should replace their Drunk card with the sober card. If they lost their Drunk character card (e.g. the Body Snatcher stole it), the sober card should still be retrieved. The player assumes all powers and responsibilities associated with the sober character card."
+        }
+      ],
+      "tags": ["card swap"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "notes": ["The \"sober\" card is always cleansed when it is first retrieved, meaning it has no acquired conditions."]
+    }
+  ]
+}

@@ -15,6 +15,10 @@ import {
 } from './constants';
 import { TimerView } from './components/TimerView';
 import { ShuffleView } from './components/ShuffleView';
+import { RolesView } from './components/RolesView';
+import { CharacterDetailModal } from './components/CharacterDetailModal';
+import { RoleListModal } from './components/RoleListModal';
+import { KeywordTooltip } from './components/KeywordTooltip';
 import { SyncModal } from './components/SyncModal';
 import { ConfigModal } from './components/ConfigModal';
 import { FullscreenTimer } from './components/FullscreenTimer';
@@ -56,6 +60,25 @@ const App: React.FC = () => {
       if (parsed.isBombSoundOn === undefined) {
         parsed.isBombSoundOn = true;
       }
+      // Ensure roles state exists for backward compatibility
+      if (parsed.rolesSearchQuery === undefined) {
+        parsed.rolesSearchQuery = '';
+      }
+      if (parsed.rolesTeamFilter === undefined) {
+        parsed.rolesTeamFilter = null;
+      }
+      if (parsed.rolesTagFilter === undefined) {
+        parsed.rolesTagFilter = null;
+      }
+      if (parsed.selectedCharacterName === undefined) {
+        parsed.selectedCharacterName = null;
+      }
+      if (parsed.selectedRoles === undefined) {
+        parsed.selectedRoles = [];
+      }
+      if (parsed.showRoleListModal === undefined) {
+        parsed.showRoleListModal = false;
+      }
       // Remove old isSoundOn and selectedSound if present (migration)
       delete parsed.isSoundOn;
       delete parsed.selectedSound;
@@ -75,7 +98,13 @@ const App: React.FC = () => {
       usedTimerIds: [],
       activeTab: 'timers',
       isEditingPlayers: true,
-      isBombSoundOn: true
+      isBombSoundOn: true,
+      rolesSearchQuery: '',
+      rolesTeamFilter: null,
+      rolesTagFilter: null,
+      selectedCharacterName: null,
+      selectedRoles: [],
+      showRoleListModal: false
     };
   });
 
@@ -113,6 +142,11 @@ const App: React.FC = () => {
   
   // Fullscreen state
   const [fullscreenTimerId, setFullscreenTimerId] = useState<string | null>(null);
+  
+  // Roles modals state (local, not synced)
+  const [showKeywordTooltip, setShowKeywordTooltip] = useState(false);
+  const [keywordTooltipText, setKeywordTooltipText] = useState('');
+  const [lockedRoles, setLockedRoles] = useState<string[]>([]);
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const beepAudioRef = useRef<HTMLAudioElement | null>(null);
@@ -560,7 +594,7 @@ const App: React.FC = () => {
     });
   };
 
-  const setActiveTab = (tab: 'timers' | 'shuffle') => {
+  const setActiveTab = (tab: 'timers' | 'shuffle' | 'roles') => {
     setGameState(prev => {
       const newState = { ...prev, activeTab: tab };
       broadcastState(newState);
@@ -624,6 +658,102 @@ const App: React.FC = () => {
       return newState;
     });
   }, [broadcastState]);
+
+  // Roles handlers
+  const setRolesSearchQuery = (query: string) => {
+    setGameState(prev => {
+      const newState = { ...prev, rolesSearchQuery: query };
+      broadcastState(newState);
+      return newState;
+    });
+  };
+
+  const setRolesTeamFilter = (team: string | null) => {
+    setGameState(prev => {
+      const newState = { ...prev, rolesTeamFilter: team };
+      broadcastState(newState);
+      return newState;
+    });
+  };
+
+  const setRolesTagFilter = (tag: string | null) => {
+    setGameState(prev => {
+      const newState = { ...prev, rolesTagFilter: tag };
+      broadcastState(newState);
+      return newState;
+    });
+  };
+
+  const toggleRole = (characterName: string) => {
+    setGameState(prev => {
+      const isSelected = prev.selectedRoles.includes(characterName);
+      const newSelectedRoles = isSelected
+        ? prev.selectedRoles.filter(name => name !== characterName)
+        : [...prev.selectedRoles, characterName];
+      const newState = { ...prev, selectedRoles: newSelectedRoles };
+      broadcastState(newState);
+      return newState;
+    });
+  };
+
+  const addRoles = (roleNames: string[]) => {
+    setGameState(prev => {
+      const newRoles = roleNames.filter(name => !prev.selectedRoles.includes(name));
+      if (newRoles.length === 0) return prev;
+      const newState = { ...prev, selectedRoles: [...prev.selectedRoles, ...newRoles] };
+      broadcastState(newState);
+      return newState;
+    });
+  };
+
+  const toggleLockRole = (characterName: string) => {
+    setLockedRoles(prev => 
+      prev.includes(characterName)
+        ? prev.filter(r => r !== characterName)
+        : [...prev, characterName]
+    );
+  };
+
+  const clearAllRoles = () => {
+    setGameState(prev => {
+      const newState = { ...prev, selectedRoles: [] };
+      broadcastState(newState);
+      return newState;
+    });
+  };
+
+  const applyPreset = (roles: string[]) => {
+    setGameState(prev => {
+      const newState = { ...prev, selectedRoles: roles };
+      broadcastState(newState);
+      return newState;
+    });
+  };
+
+  const setSelectedCharacter = (name: string | null) => {
+    setGameState(prev => {
+      const newState = { ...prev, selectedCharacterName: name };
+      broadcastState(newState);
+      return newState;
+    });
+  };
+
+  const setShowRoleListModal = (show: boolean) => {
+    setGameState(prev => {
+      const newState = { ...prev, showRoleListModal: show };
+      broadcastState(newState);
+      return newState;
+    });
+  };
+
+  const navigateToCharacter = (name: string) => {
+    setSelectedCharacter(name);
+  };
+
+  const showKeyword = (keyword: string) => {
+    setKeywordTooltipText(keyword);
+    setShowKeywordTooltip(true);
+  };
 
   // Find active fullscreen timer
   const activeFullscreenTimer = fullscreenTimerId 
@@ -703,24 +833,35 @@ const App: React.FC = () => {
           >
             <Icon name="settings" size={20} />
           </button>
-          <button 
-            onClick={toggleSound}
-            className={`p-2 rounded-xl bg-zinc-800 active:bg-zinc-700 ${localPrefs.isSoundOn ? 'text-cyan-400' : 'text-zinc-400'}`}
-          >
-            <Icon name={localPrefs.isSoundOn ? "volumeOn" : "volumeOff"} size={20} />
-          </button>
-          <button 
-            onClick={toggleAutoFullscreen}
-            className={`p-2 rounded-xl bg-zinc-800 active:bg-zinc-700 ${localPrefs.autoFullscreen ? 'text-purple-400' : 'text-zinc-400'}`}
-          >
-            <Icon name="proportions" size={20} />
-          </button>
-          <button 
-            onClick={toggleBombSound}
-            className={`p-2 rounded-xl bg-zinc-800 active:bg-zinc-700 ${gameState.isBombSoundOn ? 'text-orange-400' : 'text-zinc-400'}`}
-          >
-            <Icon name="bomb" size={20} />
-          </button>
+          {gameState.activeTab !== 'roles' ? (
+            <>
+              <button 
+                onClick={toggleSound}
+                className={`p-2 rounded-xl bg-zinc-800 active:bg-zinc-700 ${localPrefs.isSoundOn ? 'text-cyan-400' : 'text-zinc-400'}`}
+              >
+                <Icon name={localPrefs.isSoundOn ? "volumeOn" : "volumeOff"} size={20} />
+              </button>
+              <button 
+                onClick={toggleAutoFullscreen}
+                className={`p-2 rounded-xl bg-zinc-800 active:bg-zinc-700 ${localPrefs.autoFullscreen ? 'text-purple-400' : 'text-zinc-400'}`}
+              >
+                <Icon name="proportions" size={20} />
+              </button>
+              <button 
+                onClick={toggleBombSound}
+                className={`p-2 rounded-xl bg-zinc-800 active:bg-zinc-700 ${gameState.isBombSoundOn ? 'text-orange-400' : 'text-zinc-400'}`}
+              >
+                <Icon name="bomb" size={20} />
+              </button>
+            </>
+          ) : (
+            <button 
+              onClick={() => setShowRoleListModal(true)}
+              className="p-2 rounded-xl bg-zinc-800 text-zinc-400 active:bg-zinc-700"
+            >
+              <Icon name="list" size={20} />
+            </button>
+          )}
         </div>
 
         <button 
@@ -745,7 +886,7 @@ const App: React.FC = () => {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-hidden pb-24 px-4 pt-4 flex flex-col">
+      <main className="flex-1 overflow-hidden pb-20 flex flex-col">
         {gameState.activeTab === 'timers' ? (
           <TimerView 
             timers={gameState.timers} 
@@ -754,7 +895,7 @@ const App: React.FC = () => {
             onToggleDarken={handleToggleDarken}
             usedTimerIds={gameState.usedTimerIds}
           />
-        ) : (
+        ) : gameState.activeTab === 'shuffle' ? (
           <div className="overflow-y-auto no-scrollbar flex-1">
             <ShuffleView 
               players={gameState.players}
@@ -766,6 +907,23 @@ const App: React.FC = () => {
               onSetEditing={setIsEditingPlayers}
             />
           </div>
+        ) : (
+          <RolesView
+            searchQuery={gameState.rolesSearchQuery}
+            teamFilter={gameState.rolesTeamFilter}
+            tagFilter={gameState.rolesTagFilter}
+            selectedRoles={gameState.selectedRoles}
+            onSearchChange={setRolesSearchQuery}
+            onTeamFilterChange={setRolesTeamFilter}
+            onTagFilterChange={setRolesTagFilter}
+            onCharacterTap={(name) => setSelectedCharacter(name)}
+            onCharacterLongPress={toggleRole}
+            onOpenRoleList={() => setShowRoleListModal(true)}
+            onClearAll={clearAllRoles}
+            onApplyPreset={applyPreset}
+            lockedRoles={lockedRoles}
+            onToggleLock={toggleLockRole}
+          />
         )}
       </main>
 
@@ -784,6 +942,13 @@ const App: React.FC = () => {
         >
           <Icon name="users" size={20} />
           <span className="font-semibold">Shuffle</span>
+        </button>
+        <button 
+          onClick={() => setActiveTab('roles')}
+          className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl transition-all min-w-0 ${gameState.activeTab === 'roles' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' : 'text-zinc-500 hover:bg-zinc-900'}`}
+        >
+          <Icon name="list" size={20} />
+          <span className="font-semibold">Roles</span>
         </button>
       </nav>
 
@@ -811,6 +976,48 @@ const App: React.FC = () => {
           initialCode={initialRoomCode}
           onClose={() => setShowSyncModal(false)} 
           onToggle={() => setShowSyncModal(false)}
+        />
+      )}
+
+      {/* Roles Modals */}
+      {gameState.selectedCharacterName && (
+        <CharacterDetailModal
+          characterName={gameState.selectedCharacterName}
+          isSelected={gameState.selectedRoles.includes(gameState.selectedCharacterName)}
+          isLocked={lockedRoles.includes(gameState.selectedCharacterName)}
+          onClose={() => {
+            setSelectedCharacter(null);
+            // Keep role list modal open if it was open (modal stacking)
+          }}
+          onSelectCharacter={setSelectedCharacter}
+          onToggleRole={toggleRole}
+          onToggleLock={toggleLockRole}
+          onNavigateToCharacter={navigateToCharacter}
+          onShowKeyword={showKeyword}
+          onAddRoles={addRoles}
+        />
+      )}
+
+      {gameState.showRoleListModal && (
+        <RoleListModal
+          selectedRoles={gameState.selectedRoles}
+          onClose={() => setShowRoleListModal(false)}
+          onClearAll={clearAllRoles}
+          onCharacterTap={(name) => {
+            setSelectedCharacter(name);
+            // Don't close role list modal - modal stacking
+          }}
+          onCharacterLongPress={toggleRole}
+          onApplyPreset={applyPreset}
+          lockedRoles={lockedRoles}
+          onToggleLock={toggleLockRole}
+        />
+      )}
+
+      {showKeywordTooltip && (
+        <KeywordTooltip
+          keyword={keywordTooltipText}
+          onClose={() => setShowKeywordTooltip(false)}
         />
       )}
     </div>

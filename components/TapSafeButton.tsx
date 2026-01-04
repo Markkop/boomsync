@@ -72,6 +72,11 @@ export const TapSafeButton: React.FC<TapSafeButtonProps> = ({
       onPointerUp={(e) => {
         if (disabled) return;
         onPointerUp?.(e);
+        // Prefer pointer-up for touch reliability; suppress the follow-up click.
+        if (!movedRef.current) {
+          suppressClickRef.current = true;
+          onTap();
+        }
         startRef.current = null;
         movedRef.current = false;
       }}

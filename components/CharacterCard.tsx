@@ -136,6 +136,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
     }
+    // Fire tap on pointer-up for best mobile reliability, but suppress the
+    // follow-up click to avoid accidental activations after scroll.
+    if (!isLongPressRef.current && !didMoveRef.current) {
+      suppressClickRef.current = true;
+      onTap();
+    }
     didMoveRef.current = false;
   };
 

@@ -903,12 +903,6 @@ const App: React.FC = () => {
               >
                 <Icon name="proportions" size={20} />
               </button>
-              <button 
-                onClick={toggleBombSound}
-                className={`p-2 rounded-xl bg-zinc-800 active:bg-zinc-700 ${gameState.isBombSoundOn ? 'text-orange-400' : 'text-zinc-400'}`}
-              >
-                <Icon name="bomb" size={20} />
-              </button>
             </>
           ) : (
             <button 

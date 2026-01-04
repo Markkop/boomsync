@@ -25,6 +25,7 @@ import { FullscreenTimer } from './components/FullscreenTimer';
 import { Icon } from './components/Icon';
 import { peerService } from './services/peerService';
 import { wakeLockService } from './services/wakeLockService';
+import { getAllCharacters } from './services/characterService';
 
 const STORAGE_KEY = 'boomsync_state';
 const PREFS_STORAGE_KEY = 'boomsync_prefs';
@@ -43,46 +44,65 @@ const App: React.FC = () => {
   const [gameState, setGameState] = useState<GameState>(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
-      const parsed = JSON.parse(saved);
-      // Ensure usedTimerIds exists for backward compatibility
-      if (!parsed.usedTimerIds) {
-        parsed.usedTimerIds = [];
+      try {
+        const parsed = JSON.parse(saved);
+        // Ensure usedTimerIds exists for backward compatibility
+        if (!parsed.usedTimerIds) {
+          parsed.usedTimerIds = [];
+        }
+        // Ensure activeTab exists for backward compatibility
+        if (parsed.activeTab === undefined) {
+          parsed.activeTab = 'timers';
+        }
+        // Ensure isEditingPlayers exists for backward compatibility
+        if (parsed.isEditingPlayers === undefined) {
+          parsed.isEditingPlayers = true;
+        }
+        // Ensure isBombSoundOn exists for backward compatibility
+        if (parsed.isBombSoundOn === undefined) {
+          parsed.isBombSoundOn = true;
+        }
+        // Ensure roles state exists for backward compatibility
+        if (parsed.rolesSearchQuery === undefined) {
+          parsed.rolesSearchQuery = '';
+        }
+        if (parsed.rolesTeamFilter === undefined) {
+          parsed.rolesTeamFilter = null;
+        }
+        if (parsed.rolesTagFilter === undefined) {
+          parsed.rolesTagFilter = null;
+        }
+        if (parsed.selectedCharacterName === undefined) {
+          parsed.selectedCharacterName = null;
+        }
+        if (parsed.selectedRoles === undefined) {
+          parsed.selectedRoles = [];
+        }
+        if (parsed.showRoleListModal === undefined) {
+          parsed.showRoleListModal = false;
+        }
+
+        // Sanitize persisted role/character selections so a bad string
+        // (e.g. "Privacy Promise variant") can't lock the UI on refresh.
+        const validCharacterNames = new Set(getAllCharacters().map(c => c.name));
+        if (parsed.selectedCharacterName && !validCharacterNames.has(parsed.selectedCharacterName)) {
+          parsed.selectedCharacterName = null;
+        }
+        if (Array.isArray(parsed.selectedRoles)) {
+          parsed.selectedRoles = parsed.selectedRoles.filter((name: unknown) => {
+            return typeof name === 'string' && validCharacterNames.has(name);
+          });
+        } else {
+          parsed.selectedRoles = [];
+        }
+
+        // Remove old isSoundOn and selectedSound if present (migration)
+        delete parsed.isSoundOn;
+        delete parsed.selectedSound;
+        return parsed;
+      } catch (e) {
+        console.warn('Failed to parse saved state, resetting:', e);
       }
-      // Ensure activeTab exists for backward compatibility
-      if (parsed.activeTab === undefined) {
-        parsed.activeTab = 'timers';
-      }
-      // Ensure isEditingPlayers exists for backward compatibility
-      if (parsed.isEditingPlayers === undefined) {
-        parsed.isEditingPlayers = true;
-      }
-      // Ensure isBombSoundOn exists for backward compatibility
-      if (parsed.isBombSoundOn === undefined) {
-        parsed.isBombSoundOn = true;
-      }
-      // Ensure roles state exists for backward compatibility
-      if (parsed.rolesSearchQuery === undefined) {
-        parsed.rolesSearchQuery = '';
-      }
-      if (parsed.rolesTeamFilter === undefined) {
-        parsed.rolesTeamFilter = null;
-      }
-      if (parsed.rolesTagFilter === undefined) {
-        parsed.rolesTagFilter = null;
-      }
-      if (parsed.selectedCharacterName === undefined) {
-        parsed.selectedCharacterName = null;
-      }
-      if (parsed.selectedRoles === undefined) {
-        parsed.selectedRoles = [];
-      }
-      if (parsed.showRoleListModal === undefined) {
-        parsed.showRoleListModal = false;
-      }
-      // Remove old isSoundOn and selectedSound if present (migration)
-      delete parsed.isSoundOn;
-      delete parsed.selectedSound;
-      return parsed;
     }
     
     return {

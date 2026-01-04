@@ -21,6 +21,8 @@ interface RolesViewProps {
   onApplyPreset?: (roles: string[]) => void;
   lockedRoles?: string[];
   onToggleLock?: (roleName: string) => void;
+  onShowKeyword?: (keyword: string, position: { x: number; y: number }) => void;
+  onShowRequires?: (requires: string[], requiresGroup: string | undefined, characterName: string, position: { x: number; y: number }) => void;
 }
 
 const TEAMS = [
@@ -76,7 +78,9 @@ export const RolesView: React.FC<RolesViewProps> = ({
   onClearAll,
   onApplyPreset,
   lockedRoles = [],
-  onToggleLock
+  onToggleLock,
+  onShowKeyword,
+  onShowRequires
 }) => {
   const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
   const [activeInnerTab, setActiveInnerTab] = useState<InnerTab>('search');
@@ -213,11 +217,23 @@ export const RolesView: React.FC<RolesViewProps> = ({
       return a.name.localeCompare(b.name);
     });
 
-    // Separate into blue, red, grey, and others
+    // Separate into blue, red, red-blue (gradient), grey, and others
     const blueRoles = uniqueRoles.filter(r => r.team === 'blue');
     const redRoles = uniqueRoles.filter(r => r.team === 'red');
+    const redBlueRoles = uniqueRoles.filter(r => r.team === 'red-blue');
     const greyRoles = uniqueRoles.filter(r => r.team === 'grey');
-    const otherRoles = uniqueRoles.filter(r => r.team !== 'blue' && r.team !== 'red' && r.team !== 'grey');
+    const otherRoles = uniqueRoles.filter(r => r.team !== 'blue' && r.team !== 'red' && r.team !== 'red-blue' && r.team !== 'grey');
+
+    // Distribute red-blue roles between columns (alternating)
+    const redBlueLeft: typeof redBlueRoles = [];
+    const redBlueRight: typeof redBlueRoles = [];
+    redBlueRoles.forEach((role, index) => {
+      if (index % 2 === 0) {
+        redBlueLeft.push(role);
+      } else {
+        redBlueRight.push(role);
+      }
+    });
 
     // Distribute grey roles between columns (alternating)
     const greyLeft: typeof greyRoles = [];
@@ -230,9 +246,9 @@ export const RolesView: React.FC<RolesViewProps> = ({
       }
     });
 
-    // Combine: left = blue + grey (left half), right = red + grey (right half) + others
-    const leftColumnRoles = [...blueRoles, ...greyLeft];
-    const rightColumnRoles = [...redRoles, ...greyRight, ...otherRoles];
+    // Combine: left = blue + red-blue (left half) + grey (left half), right = red + red-blue (right half) + grey (right half) + others
+    const leftColumnRoles = [...blueRoles, ...redBlueLeft, ...greyLeft];
+    const rightColumnRoles = [...redRoles, ...redBlueRight, ...greyRight, ...otherRoles];
 
     return { blueRoles: leftColumnRoles, redOtherRoles: rightColumnRoles };
   }, [roleCounts, allCharacters]);
@@ -370,6 +386,8 @@ export const RolesView: React.FC<RolesViewProps> = ({
                         isLocked={lockedRoles.includes(name)}
                         onToggleLock={isGeneratorActive && onToggleLock ? () => onToggleLock(name) : undefined}
                         count={count}
+                        onTagClick={onShowKeyword}
+                        onRequiresClick={onShowRequires}
                       />
                     ))}
                   </div>
@@ -387,6 +405,8 @@ export const RolesView: React.FC<RolesViewProps> = ({
                         isLocked={lockedRoles.includes(name)}
                         onToggleLock={isGeneratorActive && onToggleLock ? () => onToggleLock(name) : undefined}
                         count={count}
+                        onTagClick={onShowKeyword}
+                        onRequiresClick={onShowRequires}
                       />
                     ))}
                   </div>
@@ -477,6 +497,8 @@ export const RolesView: React.FC<RolesViewProps> = ({
                     isSelected={selectedRoles.includes(character.name)}
                     onTap={() => onCharacterTap(character.name)}
                     onLongPress={() => onCharacterLongPress(character.name)}
+                    onTagClick={onShowKeyword}
+                    onRequiresClick={onShowRequires}
                   />
                 ))}
               </div>
@@ -495,6 +517,9 @@ export const RolesView: React.FC<RolesViewProps> = ({
                 onToggleLock={onToggleLock}
                 onGeneratorActiveChange={setIsGeneratorActive}
                 onSwitchToRolesTab={() => setActiveInnerTab('roles')}
+                onCharacterTap={onCharacterTap}
+                onShowKeyword={onShowKeyword}
+                onShowRequires={onShowRequires}
               />
             ) : (
               <div className="text-center py-12">

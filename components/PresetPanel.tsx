@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Preset, PresetGeneratorOptions } from '../types';
+import { Preset, PresetGeneratorOptions, CharacterIndex } from '../types';
 import { Icon } from './Icon';
 import { CharacterCard } from './CharacterCard';
 import { getPresetsForPlayerCount } from '../data/presets';
@@ -16,6 +16,9 @@ interface PresetPanelProps {
   onToggleLock?: (roleName: string) => void;
   onGeneratorActiveChange?: (isActive: boolean) => void;
   onSwitchToRolesTab?: () => void;
+  onCharacterTap?: (name: string) => void;
+  onShowKeyword?: (keyword: string, position: { x: number; y: number }) => void;
+  onShowRequires?: (requires: string[], requiresGroup: string | undefined, characterName: string, position: { x: number; y: number }) => void;
 }
 
 export const PresetPanel: React.FC<PresetPanelProps> = ({
@@ -27,6 +30,9 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
   onToggleLock,
   onGeneratorActiveChange,
   onSwitchToRolesTab,
+  onCharacterTap,
+  onShowKeyword,
+  onShowRequires,
 }) => {
   const [activeSection, setActiveSection] = useState<'presets' | 'custom' | 'generator'>('presets');
   
@@ -80,6 +86,92 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
   const getRoleTeam = (roleName: string): string => {
     const char = allCharacters.find(c => c.name === roleName);
     return char?.team || 'grey';
+  };
+
+  // Process roles: deduplicate, sort, and group by team (same logic as RolesView)
+  const processRolesForDisplay = (roles: string[]): { leftColumn: Array<{ name: string; character: CharacterIndex; count: number }>; rightColumn: Array<{ name: string; character: CharacterIndex; count: number }> } => {
+    // Count occurrences of each role
+    const roleCounts = new Map<string, number>();
+    for (const role of roles) {
+      roleCounts.set(role, (roleCounts.get(role) || 0) + 1);
+    }
+
+    // Get unique roles with their counts
+    const uniqueRoles = Array.from(roleCounts.keys()).map(roleName => {
+      const char = allCharacters.find(c => c.name === roleName);
+      return {
+        name: roleName,
+        character: char,
+        count: roleCounts.get(roleName) || 1,
+        team: char?.team || 'grey'
+      };
+    }).filter(item => item.character !== undefined) as Array<{
+      name: string;
+      character: CharacterIndex;
+      count: number;
+      team: string;
+    }>;
+
+    // Sort function: primary roles first, then team roles, then others
+    const getSortPriority = (name: string, team: string): number => {
+      // Primary roles
+      if (name === 'President' || name === 'Bomber') return 0;
+      // Team roles
+      if (name === 'Blue Team' || name === 'Red Team') return 1;
+      // Other roles
+      return 2;
+    };
+
+    // Sort roles
+    uniqueRoles.sort((a, b) => {
+      const priorityA = getSortPriority(a.name, a.team);
+      const priorityB = getSortPriority(b.name, b.team);
+      if (priorityA !== priorityB) return priorityA - priorityB;
+      
+      // Within same priority, sort by count descending for team roles, alphabetically for others
+      if (priorityA === 1) {
+        return b.count - a.count;
+      }
+      return a.name.localeCompare(b.name);
+    });
+
+    // Separate into blue, red, red-blue (gradient), grey, and others
+    const blueRoles = uniqueRoles.filter(r => r.team === 'blue');
+    const redRoles = uniqueRoles.filter(r => r.team === 'red');
+    const redBlueRoles = uniqueRoles.filter(r => r.team === 'red-blue');
+    const greyRoles = uniqueRoles.filter(r => r.team === 'grey');
+    const otherRoles = uniqueRoles.filter(r => r.team !== 'blue' && r.team !== 'red' && r.team !== 'red-blue' && r.team !== 'grey');
+
+    // Distribute red-blue roles between columns (alternating)
+    const redBlueLeft: typeof redBlueRoles = [];
+    const redBlueRight: typeof redBlueRoles = [];
+    redBlueRoles.forEach((role, index) => {
+      if (index % 2 === 0) {
+        redBlueLeft.push(role);
+      } else {
+        redBlueRight.push(role);
+      }
+    });
+
+    // Distribute grey roles between columns (alternating)
+    const greyLeft: typeof greyRoles = [];
+    const greyRight: typeof greyRoles = [];
+    greyRoles.forEach((role, index) => {
+      if (index % 2 === 0) {
+        greyLeft.push(role);
+      } else {
+        greyRight.push(role);
+      }
+    });
+
+    // Combine: left = blue + red-blue (left half) + grey (left half), right = red + red-blue (right half) + grey (right half) + others
+    const leftColumnRoles = [...blueRoles, ...redBlueLeft, ...greyLeft];
+    const rightColumnRoles = [...redRoles, ...redBlueRight, ...greyRight, ...otherRoles];
+
+    return {
+      leftColumn: leftColumnRoles.map(({ name, character, count }) => ({ name, character, count })),
+      rightColumn: rightColumnRoles.map(({ name, character, count }) => ({ name, character, count }))
+    };
   };
 
   // Component to render roles with colors
@@ -289,22 +381,39 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
                       <p className="text-xs text-zinc-500 mb-2">{preset.metaAnalysis}</p>
                       <RoleListDisplay roles={preset.roles} />
                     </div>
-                    <div className="grid grid-cols-2 gap-2 pt-2 border-t border-zinc-700">
-                      {preset.roles.map((roleName, index) => {
-                        const char = allCharacters.find(c => c.name === roleName);
-                        if (!char) return null;
-                        return (
+                    <div className="flex gap-2 pt-2 border-t border-zinc-700">
+                      <div className="flex-1 space-y-2">
+                        {processRolesForDisplay(preset.roles).leftColumn.map(({ name, character, count }) => (
                           <CharacterCard
-                            key={`${roleName}-${index}`}
-                            character={char}
+                            key={name}
+                            character={character}
                             isSelected={true}
-                            onTap={() => {}}
+                            onTap={() => onCharacterTap?.(name)}
                             onLongPress={() => {}}
                             compact={true}
                             showSelectionIndicator={false}
+                            count={count}
+                            onTagClick={onShowKeyword}
+                            onRequiresClick={onShowRequires}
                           />
-                        );
-                      })}
+                        ))}
+                      </div>
+                      <div className="flex-1 space-y-2">
+                        {processRolesForDisplay(preset.roles).rightColumn.map(({ name, character, count }) => (
+                          <CharacterCard
+                            key={name}
+                            character={character}
+                            isSelected={true}
+                            onTap={() => onCharacterTap?.(name)}
+                            onLongPress={() => {}}
+                            compact={true}
+                            showSelectionIndicator={false}
+                            count={count}
+                            onTagClick={onShowKeyword}
+                            onRequiresClick={onShowRequires}
+                          />
+                        ))}
+                      </div>
                     </div>
                     <div className="flex items-center justify-end pt-2 border-t border-zinc-700">
                       <button
@@ -523,22 +632,39 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
                 </label>
                 <RoleListDisplay roles={generatedRoles} />
               </div>
-              <div className="grid grid-cols-2 gap-2 pt-2 border-t border-zinc-700">
-                {generatedRoles.map((roleName, index) => {
-                  const char = allCharacters.find(c => c.name === roleName);
-                  if (!char) return null;
-                  return (
+              <div className="flex gap-2 pt-2 border-t border-zinc-700">
+                <div className="flex-1 space-y-2">
+                  {processRolesForDisplay(generatedRoles).leftColumn.map(({ name, character, count }) => (
                     <CharacterCard
-                      key={`${roleName}-${index}`}
-                      character={char}
+                      key={name}
+                      character={character}
                       isSelected={true}
-                      onTap={() => {}}
+                      onTap={() => onCharacterTap?.(name)}
                       onLongPress={() => {}}
                       compact={true}
                       showSelectionIndicator={false}
+                      count={count}
+                      onTagClick={onShowKeyword}
+                      onRequiresClick={onShowRequires}
                     />
-                  );
-                })}
+                  ))}
+                </div>
+                <div className="flex-1 space-y-2">
+                  {processRolesForDisplay(generatedRoles).rightColumn.map(({ name, character, count }) => (
+                    <CharacterCard
+                      key={name}
+                      character={character}
+                      isSelected={true}
+                      onTap={() => onCharacterTap?.(name)}
+                      onLongPress={() => {}}
+                      compact={true}
+                      showSelectionIndicator={false}
+                      count={count}
+                      onTagClick={onShowKeyword}
+                      onRequiresClick={onShowRequires}
+                    />
+                  ))}
+                </div>
               </div>
               <div className="flex items-center justify-end pt-2 border-t border-zinc-700">
                 <button

@@ -29,7 +29,8 @@
       "tags": ["card share power"],
       "worksWellWith": [],
       "doesntWorkWellWith": [],
-      "requires": ["Alchemist"]
+      "requires": ["Alchemist"],
+      "requiresGroup": "Backup: Alchemist"
     },
     {
       "name": "Blue Drone",
@@ -39,6 +40,7 @@
       "worksWellWith": [],
       "doesntWorkWellWith": [],
       "requires": ["Red Fist"],
+      "requiresGroup": "Drone/Fist Pair",
       "notes": ["Must be played with Red Fist. Judge or Informant recommended (not both).", "The Blue Drone and Red Fist cards add additional win conditions to the game, adding complexity and greatly altering the standard win conditions.", "Can cause a confusing end game result. This role may be too complex for newer players."]
     },
     {
@@ -55,6 +57,7 @@
       "worksWellWith": [],
       "doesntWorkWellWith": [],
       "requires": ["Blue Drone"],
+      "requiresGroup": "Backup: Blue Drone",
       "notes": ["If burying a card, consider not burying the Informers or Judge."]
     },
     {
@@ -124,7 +127,8 @@
       "tags": ["bury"],
       "worksWellWith": [],
       "doesntWorkWellWith": [],
-      "requires": ["King"]
+      "requires": ["King"],
+      "requiresGroup": "Backup: King"
     },
     {
       "name": "Firefighter",
@@ -162,7 +166,8 @@
       "tags": ["card share power"],
       "worksWellWith": [],
       "doesntWorkWellWith": [],
-      "requires": ["Witness", "Fugitive", "One-Armed Man"]
+      "requires": ["Witness", "Fugitive", "One-Armed Man"],
+      "requiresGroup": "Fugitive Group"
     },
     {
       "name": "Nurse",
@@ -177,7 +182,8 @@
       "tags": ["card share power", "bury"],
       "worksWellWith": [],
       "doesntWorkWellWith": [],
-      "requires": ["Doctor"]
+      "requires": ["Doctor"],
+      "requiresGroup": "Backup: Doctor"
     },
     {
       "name": "One-Armed Man",
@@ -192,7 +198,8 @@
       "tags": ["card share power"],
       "worksWellWith": [],
       "doesntWorkWellWith": [],
-      "requires": ["Marshal", "Fugitive", "Witness"]
+      "requires": ["Marshal", "Fugitive", "Witness"],
+      "requiresGroup": "Fugitive Group"
     },
     {
       "name": "President",
@@ -217,6 +224,7 @@
       "worksWellWith": [],
       "doesntWorkWellWith": [],
       "requires": ["President"],
+      "requiresGroup": "Backup: President",
       "notes": ["No, this character should not be the \"Vice President\". Shut up already and laugh."]
     },
     {

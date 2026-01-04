@@ -1,34 +1,29 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { CharacterIndex } from '../types';
 import { CharacterCard } from './CharacterCard';
 import { Icon } from './Icon';
 import { getAllCharacters } from '../services/characterService';
-import { PresetPanel } from './PresetPanel';
 import { TapSafeButton } from './TapSafeButton';
 
 interface RoleListModalProps {
   selectedRoles: string[];
   onClose: () => void;
-  onClearAll: () => void;
   onCharacterTap: (name: string) => void;
-  onCharacterLongPress: (name: string) => void;
-  onApplyPreset: (roles: string[]) => void;
   lockedRoles?: string[];
   onToggleLock?: (roleName: string) => void;
+  onShowKeyword?: (keyword: string, position: { x: number; y: number }) => void;
+  onShowRequires?: (requires: string[], requiresGroup: string | undefined, characterName: string, position: { x: number; y: number }) => void;
 }
 
 export const RoleListModal: React.FC<RoleListModalProps> = ({
   selectedRoles,
   onClose,
-  onClearAll,
   onCharacterTap,
-  onCharacterLongPress,
-  onApplyPreset,
   lockedRoles = [],
-  onToggleLock
+  onToggleLock,
+  onShowKeyword,
+  onShowRequires
 }) => {
-  const [showPresets, setShowPresets] = useState(false);
-  const [isGeneratorActive, setIsGeneratorActive] = useState(false);
   const allCharacters = getAllCharacters();
   const selectedCharacters = useMemo(() => {
     return selectedRoles
@@ -166,24 +161,6 @@ export const RoleListModal: React.FC<RoleListModalProps> = ({
           </div>
           <div className="flex items-center gap-2">
             <button
-              onClick={() => setShowPresets(!showPresets)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${
-                showPresets
-                  ? 'bg-cyan-500/20 border border-cyan-500 text-cyan-400'
-                  : 'bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-zinc-700'
-              }`}
-            >
-Presets
-            </button>
-            {selectedRoles.length > 0 && (
-              <button
-                onClick={onClearAll}
-                className="px-3 py-1.5 bg-rose-500/20 border border-rose-500 rounded-lg text-sm font-semibold text-rose-400 hover:bg-rose-500/30 transition-colors"
-              >
-                Clear
-              </button>
-            )}
-            <button
               onClick={onClose}
               className="p-2 -mr-2 text-zinc-500 hover:text-zinc-300 active:scale-95 transition-transform"
             >
@@ -193,20 +170,6 @@ Presets
         </div>
 
         <div className="space-y-4 px-2">
-          {/* Preset Panel */}
-          {showPresets && (
-            <div className="mb-4 pb-4 border-b border-zinc-800">
-              <PresetPanel
-                selectedRoles={selectedRoles}
-                onApplyPreset={onApplyPreset}
-                onPresetApplied={() => setShowPresets(false)}
-                lockedRoles={lockedRoles}
-                onToggleLock={onToggleLock}
-                onGeneratorActiveChange={setIsGeneratorActive}
-              />
-            </div>
-          )}
-          
           {/* Empty State */}
           {selectedRoles.length === 0 ? (
             <div className="text-center py-12">
@@ -218,8 +181,8 @@ Presets
             </div>
           ) : (
             <>
-              {/* Role List with Counts - Show when generator is active OR when not in presets */}
-              {(isGeneratorActive || !showPresets) && selectedRoles.length > 0 && (
+              {/* Role List with Counts */}
+              {selectedRoles.length > 0 && (
                 <div className="bg-zinc-800/50 rounded-xl p-3">
                   <div className="flex flex-wrap gap-1.5">
                     {Array.from(roleCounts.entries()).map(([role, count]) => {
@@ -257,45 +220,45 @@ Presets
                 </div>
               )}
 
-              {/* Role Grid - Two Column Layout - Hide when presets are shown (unless generator is active) */}
-              {(!showPresets || isGeneratorActive) && (
-                <div className="flex gap-3">
-                  {/* Left Column - Blue Team */}
-                  <div className="flex-1 space-y-3">
-                    {groupedRoles.blueRoles.map(({ name, character, count }) => (
-                      <CharacterCard
-                        key={name}
-                        character={character}
-                        isSelected={true}
-                        onTap={() => onCharacterTap(name)}
-                        onLongPress={() => onCharacterLongPress(name)}
-                        compact={true}
-                        showSelectionIndicator={false}
-                        isLocked={lockedRoles.includes(name)}
-                        onToggleLock={isGeneratorActive && onToggleLock ? () => onToggleLock(name) : undefined}
-                        count={count}
-                      />
-                    ))}
-                  </div>
-                  {/* Right Column - Red Team and Others */}
-                  <div className="flex-1 space-y-3">
-                    {groupedRoles.redOtherRoles.map(({ name, character, count }) => (
-                      <CharacterCard
-                        key={name}
-                        character={character}
-                        isSelected={true}
-                        onTap={() => onCharacterTap(name)}
-                        onLongPress={() => onCharacterLongPress(name)}
-                        compact={true}
-                        showSelectionIndicator={false}
-                        isLocked={lockedRoles.includes(name)}
-                        onToggleLock={isGeneratorActive && onToggleLock ? () => onToggleLock(name) : undefined}
-                        count={count}
-                      />
-                    ))}
-                  </div>
+              {/* Role Grid - Two Column Layout */}
+              <div className="flex gap-3">
+                {/* Left Column - Blue Team */}
+                <div className="flex-1 space-y-3">
+                  {groupedRoles.blueRoles.map(({ name, character, count }) => (
+                    <CharacterCard
+                      key={name}
+                      character={character}
+                      isSelected={true}
+                      onTap={() => onCharacterTap(name)}
+                      compact={true}
+                      showSelectionIndicator={false}
+                      isLocked={lockedRoles.includes(name)}
+                      onToggleLock={onToggleLock ? () => onToggleLock(name) : undefined}
+                      count={count}
+                      onTagClick={onShowKeyword}
+                      onRequiresClick={onShowRequires}
+                    />
+                  ))}
                 </div>
-              )}
+                {/* Right Column - Red Team and Others */}
+                <div className="flex-1 space-y-3">
+                  {groupedRoles.redOtherRoles.map(({ name, character, count }) => (
+                    <CharacterCard
+                      key={name}
+                      character={character}
+                      isSelected={true}
+                      onTap={() => onCharacterTap(name)}
+                      compact={true}
+                      showSelectionIndicator={false}
+                      isLocked={lockedRoles.includes(name)}
+                      onToggleLock={onToggleLock ? () => onToggleLock(name) : undefined}
+                      count={count}
+                      onTagClick={onShowKeyword}
+                      onRequiresClick={onShowRequires}
+                    />
+                  ))}
+                </div>
+              </div>
             </>
           )}
         </div>

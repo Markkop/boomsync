@@ -53,6 +53,7 @@
       "requires": [
         "buried card"
       ],
+      "requiresGroup": "Buried Card Mechanic",
       "description": "Guess the buried card's team to win."
     },
     {
@@ -84,6 +85,7 @@
       "requires": [
         "Alchemist"
       ],
+      "requiresGroup": "Backup: Alchemist",
       "description": "Backup for Alchemist if they die or are buried."
     },
     {
@@ -138,6 +140,7 @@
       "requires": [
         "Red Fist"
       ],
+      "requiresGroup": "Drone/Fist Pair",
       "description": "Blue wins if you're in same room as Red Fist."
     },
     {
@@ -150,6 +153,7 @@
       "requires": [
         "Blue Drone"
       ],
+      "requiresGroup": "Backup: Blue Drone",
       "description": "Backup for Blue Drone if they die or are buried."
     },
     {
@@ -217,6 +221,7 @@
       "requires": [
         "Maid"
       ],
+      "requiresGroup": "Butler/Maid Pair",
       "description": "Win if you're with Maid and President at game end."
     },
     {
@@ -350,6 +355,7 @@
         "Sniper",
         "Target"
       ],
+      "requiresGroup": "Sniper Group",
       "description": "Win if Sniper shoots you at game end."
     },
     {
@@ -393,6 +399,7 @@
       "requires": [
         "Dragon"
       ],
+      "requiresGroup": "Backup: Dragon",
       "description": "Backup for Dragon if they die or are buried."
     },
     {
@@ -494,6 +501,7 @@
       "requires": [
         "Eggineer"
       ],
+      "requiresGroup": "Backup: Eggineer",
       "description": "Backup for Eggineer if they die or are buried."
     },
     {
@@ -516,6 +524,7 @@
       "requires": [
         "King"
       ],
+      "requiresGroup": "Backup: King",
       "description": "Backup for King if they die or are buried."
     },
     {
@@ -546,6 +555,7 @@
       "requires": [
         "Prude"
       ],
+      "requiresGroup": "Frotteur/Prude Pair",
       "description": "Must touch every player by game end without Prude catching you."
     },
     {
@@ -560,6 +570,7 @@
         "Witness",
         "One-Armed Man"
       ],
+      "requiresGroup": "Fugitive Group",
       "description": "Game ends immediately if you card share with One-Armed Man."
     },
     {
@@ -710,6 +721,7 @@
         "or Engineer",
         "Doctor"
       ],
+      "requiresGroup": "Judge Mechanic",
       "description": "Breaks ties by counting collected red vs blue cards."
     },
     {
@@ -720,6 +732,7 @@
       "requires": [
         "Romeo"
       ],
+      "requiresGroup": "Romeo/Juliet Pair",
       "description": "Win if you're with Romeo and Bomber at game end."
     },
     {
@@ -766,6 +779,7 @@
       "requires": [
         "Conspirator"
       ],
+      "requiresGroup": "Conspirator Mechanic",
       "description": "Immune to traitor condition, removes it from others."
     },
     {
@@ -786,6 +800,7 @@
       "requires": [
         "Butler"
       ],
+      "requiresGroup": "Butler/Maid Pair",
       "description": "Win if you're with Butler and President at game end."
     },
     {
@@ -800,6 +815,7 @@
         "Fugitive",
         "One-Armed Man"
       ],
+      "requiresGroup": "Fugitive Group",
       "description": "Game ends immediately if you card share with Fugitive."
     },
     {
@@ -812,6 +828,7 @@
       "requires": [
         "Bomber"
       ],
+      "requiresGroup": "Backup: Bomber",
       "description": "Backup for Bomber if they die or are buried."
     },
     {
@@ -886,6 +903,7 @@
       "requires": [
         "Wife"
       ],
+      "requiresGroup": "Wife/Mistress Pair",
       "description": "Win if you're with President and Wife is not."
     },
     {
@@ -896,6 +914,7 @@
       "requires": [
         "Ahab"
       ],
+      "requiresGroup": "Ahab/Moby Pair",
       "description": "Win if Ahab gains dead condition and you don't."
     },
     {
@@ -959,6 +978,7 @@
       "requires": [
         "Doctor"
       ],
+      "requiresGroup": "Backup: Doctor",
       "description": "Backup for Doctor if they die or are buried."
     },
     {
@@ -973,6 +993,7 @@
         "Fugitive",
         "Witness"
       ],
+      "requiresGroup": "Fugitive Group",
       "description": "Game ends immediately if you card share with Witness."
     },
     {
@@ -994,6 +1015,7 @@
         "Rock",
         "Scissors"
       ],
+      "requiresGroup": "Rock Paper Scissors",
       "description": "Win if with Rock but not with Scissors."
     },
     {
@@ -1046,6 +1068,7 @@
       "requires": [
         "President"
       ],
+      "requiresGroup": "Backup: President",
       "description": "Backup for President if they die or are buried."
     },
     {
@@ -1076,6 +1099,7 @@
       "requires": [
         "Frotteur"
       ],
+      "requiresGroup": "Frotteur/Prude Pair",
       "description": "Win if you grab Frotteur's wrist by game end."
     },
     {
@@ -1135,6 +1159,7 @@
       "requires": [
         "Blue Drone"
       ],
+      "requiresGroup": "Drone/Fist Pair",
       "description": "Red wins if you're not in same room as Blue Drone."
     },
     {
@@ -1147,6 +1172,7 @@
       "requires": [
         "Red Fist"
       ],
+      "requiresGroup": "Backup: Red Fist",
       "description": "Backup for Red Fist if they die or are buried."
     },
     {
@@ -1182,6 +1208,7 @@
         "Paper",
         "Scissors"
       ],
+      "requiresGroup": "Rock Paper Scissors",
       "description": "Win if with Scissors but not with Paper."
     },
     {
@@ -1192,6 +1219,7 @@
       "requires": [
         "Juliet"
       ],
+      "requiresGroup": "Romeo/Juliet Pair",
       "description": "Win if you're with Juliet and Bomber at game end."
     },
     {
@@ -1203,6 +1231,7 @@
         "Paper",
         "Rock"
       ],
+      "requiresGroup": "Rock Paper Scissors",
       "description": "Win if with Paper but not with Rock."
     },
     {
@@ -1252,6 +1281,7 @@
         "Decoy",
         "Target"
       ],
+      "requiresGroup": "Sniper Group",
       "description": "Shoot a player at game end, win if it's the Target."
     },
     {
@@ -1298,6 +1328,7 @@
         "Decoy",
         "Sniper"
       ],
+      "requiresGroup": "Sniper Group",
       "description": "Win if Sniper doesn't shoot you at game end."
     },
     {
@@ -1352,6 +1383,7 @@
       "requires": [
         "Engineer"
       ],
+      "requiresGroup": "Backup: Engineer",
       "description": "Backup for Engineer if they die or are buried."
     },
     {

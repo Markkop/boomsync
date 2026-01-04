@@ -104,7 +104,8 @@
       "tags": ["bury", "card share power"],
       "worksWellWith": [],
       "doesntWorkWellWith": [],
-      "requires": ["Eggineer"]
+      "requires": ["Eggineer"],
+      "requiresGroup": "Backup: Eggineer"
     },
     {
       "name": "Fugitive",
@@ -119,7 +120,8 @@
       "tags": ["card share power"],
       "worksWellWith": [],
       "doesntWorkWellWith": [],
-      "requires": ["Marshal", "Witness", "One-Armed Man"]
+      "requires": ["Marshal", "Witness", "One-Armed Man"],
+      "requiresGroup": "Fugitive Group"
     },
     {
       "name": "Martyr",
@@ -134,7 +136,8 @@
       "tags": ["bury"],
       "worksWellWith": [],
       "doesntWorkWellWith": [],
-      "requires": ["Bomber"]
+      "requires": ["Bomber"],
+      "requiresGroup": "Backup: Bomber"
     },
     {
       "name": "Pyrotech",
@@ -159,6 +162,7 @@
       "worksWellWith": [],
       "doesntWorkWellWith": [],
       "requires": ["Blue Drone"],
+      "requiresGroup": "Drone/Fist Pair",
       "notes": ["Must be played with Blue Drone. Judge or Informant recommended (not both).", "Can cause a confusing end game result."]
     },
     {
@@ -175,6 +179,7 @@
       "worksWellWith": [],
       "doesntWorkWellWith": [],
       "requires": ["Red Fist"],
+      "requiresGroup": "Backup: Red Fist",
       "notes": ["If burying a card, consider not burying the Informers or Judge."]
     },
     {
@@ -205,7 +210,8 @@
       "tags": ["bury", "card share power"],
       "worksWellWith": [],
       "doesntWorkWellWith": [],
-      "requires": ["Engineer"]
+      "requires": ["Engineer"],
+      "requiresGroup": "Backup: Engineer"
     },
     {
       "name": "Witness",
@@ -220,7 +226,8 @@
       "tags": ["card share power"],
       "worksWellWith": [],
       "doesntWorkWellWith": [],
-      "requires": ["Marshal", "Fugitive", "One-Armed Man"]
+      "requires": ["Marshal", "Fugitive", "One-Armed Man"],
+      "requiresGroup": "Fugitive Group"
     },
     {
       "name": "Xenomorph",

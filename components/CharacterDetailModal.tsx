@@ -14,8 +14,8 @@ interface CharacterDetailModalProps {
   onToggleRole: (name: string) => void;
   onToggleLock?: (name: string) => void;
   onNavigateToCharacter: (name: string) => void;
-  onShowCharacterPeek?: (name: string) => void;
-  onShowKeyword?: (keyword: string) => void;
+  onShowCharacterPeek?: (name: string, position: { x: number; y: number }) => void;
+  onShowKeyword?: (keyword: string, position: { x: number; y: number }) => void;
   onAddRoles?: (roles: string[]) => void;
 }
 
@@ -48,6 +48,30 @@ const isWrappedInQuotes = (text: string, start: number, end: number) => {
   const before = text[start - 1];
   const after = text[end];
   return (before === '"' && after === '"') || (before === "'" && after === "'");
+};
+
+const isPartOfWinConditionPhrase = (text: string, termStart: number, termEnd: number) => {
+  // Check if "condition" is part of "win condition" or "win objective" phrases
+  const lowerText = text.toLowerCase();
+  const beforeStart = Math.max(0, termStart - 10); // Look back up to 10 chars to find "win"
+  
+  // Extract text from before the term to the end of the term
+  const contextText = lowerText.slice(beforeStart, termEnd);
+  
+  // Check for "win condition" or "win conditions" patterns
+  // Match "win" followed by whitespace and then "condition" (case insensitive)
+  const winConditionPattern = /\bwin\s+condition/i;
+  if (winConditionPattern.test(contextText)) {
+    return true;
+  }
+  
+  // Also check for "win objective" or "win objectives"
+  const winObjectivePattern = /\bwin\s+objective/i;
+  if (winObjectivePattern.test(contextText)) {
+    return true;
+  }
+  
+  return false;
 };
 
 const getTeamTextClasses = (team: string) => {
@@ -85,6 +109,21 @@ const getMechanicIcon = (keywordLower: string): React.ComponentProps<typeof Icon
   return null;
 };
 
+const getPowerTypeIcon = (powerType: string): React.ComponentProps<typeof Icon>['name'] | null => {
+  const typeLower = powerType.toLowerCase();
+  if (typeLower.includes('card share')) return 'share';
+  if (typeLower.includes('color share')) return 'palette';
+  if (typeLower.includes('public reveal')) return 'megaphone';
+  if (typeLower.includes('private reveal')) return 'eye';
+  if (typeLower.includes('bury')) return 'archive';
+  if (typeLower.includes('contagious')) return 'virus';
+  if (typeLower.includes('acting')) return 'theater';
+  if (typeLower.includes('condition')) return 'sparkles';
+  if (typeLower.includes('pause')) return 'clock';
+  if (typeLower.includes('odd')) return 'hash';
+  return null;
+};
+
 export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
   characterName,
   isSelected,
@@ -101,7 +140,6 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
   const [character, setCharacter] = useState<CharacterFull | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [expandedPowers, setExpandedPowers] = useState<Set<number>>(new Set());
   const allCharacters = getAllCharacters();
   const validCharacterNames = useMemo(() => new Set(allCharacters.map(c => c.name)), [allCharacters]);
   const characterTeamByName = useMemo(() => {
@@ -163,11 +201,15 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
       const isCharacter = Boolean(canonicalCharacter);
       const isKeyword = keywordSet.has(lower);
       const ambiguous = isCharacter && isKeyword;
+      
+      // Don't show "condition" keyword link if it's part of "win condition" phrase
+      const isWinConditionPhrase = lower === 'condition' && isPartOfWinConditionPhrase(text, termStart, termEnd);
 
       const shouldShowKeyword =
         Boolean(onShowKeyword) &&
         isKeyword &&
-        (!ambiguous || isWrappedInQuotes(text, termStart, termEnd));
+        (!ambiguous || isWrappedInQuotes(text, termStart, termEnd)) &&
+        !isWinConditionPhrase;
 
       if (shouldShowKeyword && onShowKeyword) {
         const iconName = getMechanicIcon(lower);
@@ -175,7 +217,10 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
           <button
             key={`kw-${lower}-${termStart}`}
             type="button"
-            onClick={() => onShowKeyword(lower)}
+            onClick={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              onShowKeyword(lower, { x: rect.left + rect.width / 2, y: rect.bottom });
+            }}
             className="inline-flex items-center gap-1 text-cyan-400 underline underline-offset-2 hover:text-cyan-300"
           >
             {iconName && <Icon name={iconName} size={14} className="flex-shrink-0" />}
@@ -189,7 +234,14 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
           <button
             key={`ch-${canonicalCharacter}-${termStart}`}
             type="button"
-            onClick={() => (onShowCharacterPeek ?? onNavigateToCharacter)(canonicalCharacter)}
+            onClick={(e) => {
+              if (onShowCharacterPeek) {
+                const rect = e.currentTarget.getBoundingClientRect();
+                onShowCharacterPeek(canonicalCharacter, { x: rect.left + rect.width / 2, y: rect.bottom });
+              } else {
+                onNavigateToCharacter(canonicalCharacter);
+              }
+            }}
             className={`underline underline-offset-2 ${teamClasses}`}
           >
             {term}
@@ -302,17 +354,6 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
   }
 
   const teamColorClasses = getTeamColorClasses(character.team);
-  const togglePower = (index: number) => {
-    setExpandedPowers(prev => {
-      const next = new Set(prev);
-      if (next.has(index)) {
-        next.delete(index);
-      } else {
-        next.add(index);
-      }
-      return next;
-    });
-  };
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4 overflow-y-auto">
@@ -385,36 +426,45 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
               <div className="space-y-2">
                 {character.powers.map((power, index) => {
                   if (!power || !power.name) return null;
+                  const powerTypeIcon = power.type ? getPowerTypeIcon(power.type) : null;
+                  const powerTypeLower = power.type ? power.type.toLowerCase() : '';
+                  const isPowerTypeKeyword = power.type && keywordSet.has(powerTypeLower);
+                  const canShowKeyword = isPowerTypeKeyword && Boolean(onShowKeyword);
+                  
+                  const PowerTypeBadge = canShowKeyword ? 'button' : 'span';
+                  const powerTypeProps = canShowKeyword ? {
+                    onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      onShowKeyword!(powerTypeLower, { x: rect.left + rect.width / 2, y: rect.bottom });
+                    },
+                    className: "px-2 py-1 bg-zinc-700 rounded text-xs font-semibold text-zinc-300 flex items-center gap-1 hover:bg-zinc-600 transition-colors cursor-pointer"
+                  } : {
+                    className: "px-2 py-1 bg-zinc-700 rounded text-xs font-semibold text-zinc-300 flex items-center gap-1"
+                  };
+                  
                   return (
                   <div
                     key={index}
                     className="bg-zinc-800/50 border border-zinc-700 rounded-xl overflow-hidden"
                   >
-                    <button
-                      onClick={() => togglePower(index)}
-                      className="w-full p-3 flex items-center justify-between text-left"
-                    >
-                      <div className="flex items-center gap-2">
+                    <div className="p-3">
+                      <div className="flex items-center gap-2 mb-2">
                         {power.type && (
-                          <span className="px-2 py-1 bg-zinc-700 rounded text-xs font-semibold text-zinc-300">
+                          <PowerTypeBadge {...powerTypeProps}>
+                            {powerTypeIcon && <Icon name={powerTypeIcon} size={12} className="flex-shrink-0" />}
                             {power.type.toUpperCase()}
-                          </span>
+                          </PowerTypeBadge>
                         )}
                         <span className="font-semibold text-zinc-100">{power.name || 'Unnamed Power'}</span>
                       </div>
-                      <Icon 
-                        name={expandedPowers.has(index) ? "right" : "right"} 
-                        size={16} 
-                        className={`text-zinc-400 transition-transform ${expandedPowers.has(index) ? 'rotate-90' : ''}`}
-                      />
-                    </button>
-                    {expandedPowers.has(index) && power.description && (
-                      <div className="p-3 pt-0 border-t border-zinc-700">
-                        <p className="text-zinc-300 text-sm leading-relaxed">
-                          {renderInteractiveText(power.description)}
-                        </p>
-                      </div>
-                    )}
+                      {power.description && (
+                        <div className="pt-2 border-t border-zinc-700">
+                          <p className="text-zinc-300 text-sm leading-relaxed">
+                            {renderInteractiveText(power.description)}
+                          </p>
+                        </div>
+                      )}
+                    </div>
                   </div>
                   );
                 })}
@@ -468,6 +518,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                       disabled={isCurrent}
                       darkened={isCurrent}
                       titleSuffix={isCurrent ? '(this)' : undefined}
+                      onTagClick={onShowKeyword}
                       showRequires={false}
                     />
                   );

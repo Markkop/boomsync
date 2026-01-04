@@ -18,6 +18,7 @@
       "worksWellWith": [],
       "doesntWorkWellWith": [],
       "requires": ["Moby"],
+      "requiresGroup": "Ahab/Moby Pair",
       "notes": ["Must be played with Moby. Strongly recommended to be played with Wife and Mistress.", "Without Wife and Mistress, Red Team may have an advantage."]
     },
     {
@@ -27,6 +28,8 @@
       "tags": ["pauses game 50"],
       "worksWellWith": ["games with few amount of players"],
       "doesntWorkWellWith": ["too many greys", "lots of players", "Ninjas", "Conspirators"],
+      "requires": ["buried card"],
+      "requiresGroup": "Buried Card Mechanic",
       "notes": ["This character card can only used with a buried card.", "If you choose the correct team (the team of the buried card), but your team loses, you lose too. If you say, \"I am on nobody's team,\" and the buried card is not on the Red Team or the Blue Team, you win.", "Works well to add flavor in a game with few amount of players.", "Works poorly with too many greys, lots of players, Ninjas, and Conspirators"]
     },
     {
@@ -70,6 +73,7 @@
       "worksWellWith": ["Romeo", "Juliet"],
       "doesntWorkWellWith": ["10 players or fewer"],
       "requires": ["Maid"],
+      "requiresGroup": "Butler/Maid Pair",
       "notes": ["Must be played with Maid. Works well with Romeo and Juliet", "Doesn't work well 10 players or fewer."]
     },
     {
@@ -117,7 +121,8 @@
       "tags": [],
       "worksWellWith": [],
       "doesntWorkWellWith": [],
-      "requires": ["Sniper", "Target"]
+      "requires": ["Sniper", "Target"],
+      "requiresGroup": "Sniper Group"
     },
     {
       "name": "Father",
@@ -157,6 +162,7 @@
       "worksWellWith": [],
       "doesntWorkWellWith": ["10 players or less"],
       "requires": ["Prude"],
+      "requiresGroup": "Frotteur/Prude Pair",
       "notes": ["AKA: \"The Gooser\"", "Is part of the \"paraphilia\" set (Voyeur, Exhibitionist).", "Doesn't work well with 10 players or less."]
     },
     {
@@ -228,6 +234,7 @@
       "worksWellWith": [],
       "doesntWorkWellWith": ["Informer"],
       "requires": ["Blue Drone", "Red Fist", "or Engineer", "Doctor"],
+      "requiresGroup": "Judge Mechanic",
       "notes": ["Requires Blue Drone and Red Fist or Engineer and Doctor.", "Doesn't work with Informer.", "However, if the game still ends in a tie (due to having an equal number of red and blue cards) you still win, but Red and Blue teams both lose."]
     },
     {
@@ -238,6 +245,7 @@
       "worksWellWith": ["Maid", "Butler"],
       "doesntWorkWellWith": ["10 players or fewer"],
       "requires": ["Romeo"],
+      "requiresGroup": "Romeo/Juliet Pair",
       "notes": ["Must be played with Romeo. Works well with Maid and Butler.", "Doesn't work well 10 players or fewer."]
     },
     {
@@ -269,6 +277,7 @@
       "worksWellWith": [],
       "doesntWorkWellWith": [],
       "requires": ["Conspirator"],
+      "requiresGroup": "Conspirator Mechanic",
       "notes": ["Requires Conspirator to be any use.", "Pretty useless without the Conspirator."]
     },
     {
@@ -294,6 +303,7 @@
       "worksWellWith": ["Romeo", "Juliet"],
       "doesntWorkWellWith": ["10 players or fewer"],
       "requires": ["Butler"],
+      "requiresGroup": "Butler/Maid Pair",
       "notes": ["Must be played with the Butler. Works well with Romeo and Juliet.", "Doesn't work well with 10 players or fewer."]
     },
     {
@@ -344,6 +354,7 @@
       "worksWellWith": [],
       "doesntWorkWellWith": [],
       "requires": ["Wife"],
+      "requiresGroup": "Wife/Mistress Pair",
       "notes": ["Requires Wife. Ahab and Moby strongly recommended.", "Without Ahab and Moby, Blue Team may have an advantage."]
     },
     {
@@ -354,6 +365,7 @@
       "worksWellWith": [],
       "doesntWorkWellWith": [],
       "requires": ["Ahab"],
+      "requiresGroup": "Ahab/Moby Pair",
       "notes": ["Requires Ahab. Wife and Mistress strongly recommended.", "Without Wife and Mistress, Red Team may have an advantage."]
     },
     {
@@ -393,7 +405,8 @@
       "tags": [],
       "worksWellWith": [],
       "doesntWorkWellWith": [],
-      "requires": ["Rock", "Scissors"]
+      "requires": ["Rock", "Scissors"],
+      "requiresGroup": "Rock Paper Scissors"
     },
     {
       "name": "Private Investigator",
@@ -412,6 +425,7 @@
       "worksWellWith": [],
       "doesntWorkWellWith": ["10 players or less"],
       "requires": ["Frotteur"],
+      "requiresGroup": "Frotteur/Prude Pair",
       "notes": ["You may only grab one player's wrist during the game. Once you grab a player's wrist, you may not let go until the end of the game. This also means that neither you, nor the player's whose wrist you grabbed may be a hostage without the other. The only way one of the two of you can leave the room is if the other is able to leave as well.", "A character that removes another character from the game (e.g. Ninja, Xenohunter, etc.) can not remove the Prude nor the player whose wrist the prude grabbed.", "Part of the \"paraphilia\" set.", "Doesn't work well with 10 players or less. Requires touching."]
     },
     {
@@ -447,7 +461,8 @@
       "tags": [],
       "worksWellWith": [],
       "doesntWorkWellWith": [],
-      "requires": ["Paper", "Scissors"]
+      "requires": ["Paper", "Scissors"],
+      "requiresGroup": "Rock Paper Scissors"
     },
     {
       "name": "Romeo",
@@ -457,6 +472,7 @@
       "worksWellWith": ["Maid", "Butler"],
       "doesntWorkWellWith": ["10 players or fewer"],
       "requires": ["Juliet"],
+      "requiresGroup": "Romeo/Juliet Pair",
       "notes": ["Works well with Maid and Butler.", "Doesn't work well 10 players or fewer."]
     },
     {
@@ -466,7 +482,8 @@
       "tags": [],
       "worksWellWith": [],
       "doesntWorkWellWith": [],
-      "requires": ["Paper", "Rock"]
+      "requires": ["Paper", "Rock"],
+      "requiresGroup": "Rock Paper Scissors"
     },
     {
       "name": "Sniper",
@@ -476,6 +493,7 @@
       "worksWellWith": [],
       "doesntWorkWellWith": [],
       "requires": ["Decoy", "Target"],
+      "requiresGroup": "Sniper Group",
       "notes": ["The selected player does not have to be in the same room as you.", "If the player you choose is not the Target or the Decoy, then the selected player gains the \"dead\" condition.", "Note: a \"dead\" Bomber does not detonate."]
     },
     {
@@ -502,7 +520,8 @@
       "tags": [],
       "worksWellWith": [],
       "doesntWorkWellWith": [],
-      "requires": ["Decoy", "Sniper"]
+      "requires": ["Decoy", "Sniper"],
+      "requiresGroup": "Sniper Group"
     },
     {
       "name": "Telepath",
@@ -554,6 +573,7 @@
       "worksWellWith": [],
       "doesntWorkWellWith": [],
       "requires": ["Mistress"],
+      "requiresGroup": "Wife/Mistress Pair",
       "notes": ["Requires Mistress. Ahab and Moby are strongly recommended.", "Without Ahab and Moby, Blue Team may gain an advantage."]
     }
   ]

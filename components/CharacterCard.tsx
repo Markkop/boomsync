@@ -16,6 +16,9 @@ interface CharacterCardProps {
   darkened?: boolean;
   titleSuffix?: string;
   showRequires?: boolean;
+  descriptionSize?: 'xs' | 'sm';
+  onTagClick?: (tag: string, position: { x: number; y: number }) => void;
+  onRequiresClick?: (requires: string[], requiresGroup: string | undefined, characterName: string, position: { x: number; y: number }) => void;
 }
 
 const getTeamColorClasses = (team: string, darkened: boolean = false) => {
@@ -81,7 +84,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   disabled = false,
   darkened = false,
   titleSuffix,
-  showRequires = true
+  showRequires = true,
+  descriptionSize = 'xs',
+  onTagClick,
+  onRequiresClick
 }) => {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isLongPressRef = useRef(false);
@@ -184,7 +190,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             {count && count > 1 ? `${count}x ` : ''}{character.name}{titleSuffix ? ` ${titleSuffix}` : ''}
           </h3>
           {character.description && (
-            <p className={`${darkened ? 'text-zinc-500' : 'text-zinc-400'} mt-1 ${compact ? 'text-xs' : 'text-xs'}`}>
+            <p className={`${darkened ? 'text-zinc-500' : 'text-zinc-400'} mt-1 ${descriptionSize === 'sm' ? 'text-sm' : 'text-xs'}`}>
               {character.description}
             </p>
           )}
@@ -225,11 +231,33 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       <div className="flex flex-wrap gap-1.5 mt-2">
         {visibleTags.map((tag, idx) => {
           const iconName = getTagIcon(tag);
+          const handleTagClick = (e: React.MouseEvent) => {
+            e.stopPropagation();
+            e.preventDefault();
+            if (onTagClick) {
+              const rect = e.currentTarget.getBoundingClientRect();
+              onTagClick(tag, { x: rect.left + rect.width / 2, y: rect.bottom });
+            }
+          };
+          const handleTagPointerDown = (e: React.PointerEvent) => {
+            e.stopPropagation();
+          };
+          const handleTagPointerUp = (e: React.PointerEvent) => {
+            e.stopPropagation();
+          };
+          const handleTagPointerMove = (e: React.PointerEvent) => {
+            e.stopPropagation();
+          };
           return (
-            <div
+            <button
               key={idx}
-              className={`flex items-center gap-1 rounded-lg px-2 py-1 min-w-0 ${darkened ? 'bg-zinc-800/30' : 'bg-zinc-800/50'}`}
+              onClick={handleTagClick}
+              onPointerDown={handleTagPointerDown}
+              onPointerUp={handleTagPointerUp}
+              onPointerMove={handleTagPointerMove}
+              className={`flex items-center gap-1 rounded-lg px-2 py-1 min-w-0 transition-colors ${darkened ? 'bg-zinc-800/30 hover:bg-zinc-800/50' : 'bg-zinc-800/50 hover:bg-zinc-800/70'} ${onTagClick ? 'cursor-pointer active:scale-95' : 'cursor-default'}`}
               title={tag}
+              type="button"
             >
               {iconName && (
                 <Icon name={iconName} size={12} className={`flex-shrink-0 ${darkened ? 'text-zinc-500' : 'text-zinc-400'}`} />
@@ -237,15 +265,58 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               <span className={`break-words ${compact ? 'text-xs' : 'text-xs'} ${darkened ? 'text-zinc-500' : 'text-zinc-300'}`}>
                 {formatTagLabel(tag)}
               </span>
-            </div>
+            </button>
           );
         })}
         {hasRequires && showRequires && (
-          <div className={`flex items-center gap-1 rounded-lg px-2 py-1 min-w-0 ${darkened ? 'bg-zinc-800/30' : 'bg-zinc-800/50'}`}>
-            <span className={`break-words ${compact ? 'text-xs' : 'text-xs'} ${darkened ? 'text-zinc-500' : 'text-zinc-400'}`}>
-              + {character.requires.join(', ')}
-            </span>
-          </div>
+          (() => {
+            const handleRequiresClick = (e: React.MouseEvent) => {
+              e.stopPropagation();
+              e.preventDefault();
+              if (onRequiresClick) {
+                const rect = e.currentTarget.getBoundingClientRect();
+                onRequiresClick(character.requires, character.requiresGroup, character.name, { 
+                  x: rect.left + rect.width / 2, 
+                  y: rect.bottom 
+                });
+              }
+            };
+            const handleRequiresPointerDown = (e: React.PointerEvent) => {
+              e.stopPropagation();
+            };
+            const handleRequiresPointerUp = (e: React.PointerEvent) => {
+              e.stopPropagation();
+            };
+            const handleRequiresPointerMove = (e: React.PointerEvent) => {
+              e.stopPropagation();
+            };
+            
+            if (onRequiresClick) {
+              return (
+                <button
+                  onClick={handleRequiresClick}
+                  onPointerDown={handleRequiresPointerDown}
+                  onPointerUp={handleRequiresPointerUp}
+                  onPointerMove={handleRequiresPointerMove}
+                  className={`flex items-center gap-1 rounded-lg px-2 py-1 min-w-0 transition-colors cursor-pointer active:scale-95 ${darkened ? 'bg-zinc-800/30 hover:bg-zinc-800/50' : 'bg-zinc-800/50 hover:bg-zinc-800/70'}`}
+                  title={character.requiresGroup || `Requires: ${character.requires.join(', ')}`}
+                  type="button"
+                >
+                  <span className={`break-words ${compact ? 'text-xs' : 'text-xs'} ${darkened ? 'text-zinc-500' : 'text-zinc-400'}`}>
+                    {character.requiresGroup || `+ ${character.requires.join(', ')}`}
+                  </span>
+                </button>
+              );
+            }
+            
+            return (
+              <div className={`flex items-center gap-1 rounded-lg px-2 py-1 min-w-0 ${darkened ? 'bg-zinc-800/30' : 'bg-zinc-800/50'}`}>
+                <span className={`break-words ${compact ? 'text-xs' : 'text-xs'} ${darkened ? 'text-zinc-500' : 'text-zinc-400'}`}>
+                  {character.requiresGroup || `+ ${character.requires.join(', ')}`}
+                </span>
+              </div>
+            );
+          })()
         )}
       </div>
     </>

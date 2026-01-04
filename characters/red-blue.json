@@ -387,6 +387,7 @@
       "worksWellWith": [],
       "doesntWorkWellWith": ["Judge"],
       "requires": ["characters that may cause a tie game (e.g. Doctor, Engineer, Blue Drone, Red Fist, etc.)"],
+      "requiresGroup": "Tie Game Mechanic",
       "notes": ["Incompatible with Judge. Should not be buried."]
     },
     {

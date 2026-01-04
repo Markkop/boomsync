@@ -30,6 +30,7 @@ export async function getCharacter(name: string): Promise<CharacterFull | null> 
         worksWellWith: Array.isArray(char.worksWellWith) ? char.worksWellWith : [],
         doesntWorkWellWith: Array.isArray(char.doesntWorkWellWith) ? char.doesntWorkWellWith : [],
         requires: Array.isArray(char.requires) ? char.requires : [],
+        requiresGroup: char.requiresGroup || indexEntry.requiresGroup,
         notes: Array.isArray(char.notes) ? char.notes : []
       };
       characterCache.set(name, normalizedChar);

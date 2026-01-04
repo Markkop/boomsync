@@ -51,6 +51,7 @@ export interface CharacterFull {
   worksWellWith: string[];
   doesntWorkWellWith: string[];
   requires: string[];
+  requiresGroup?: string;
   notes: string[];
 }
 
@@ -60,6 +61,7 @@ export interface CharacterIndex {
   file: string;
   tags: string[];
   requires: string[];
+  requiresGroup?: string;
   description?: string;
 }
 

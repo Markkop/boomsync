@@ -20,6 +20,7 @@ import { CharacterDetailModal } from './components/CharacterDetailModal';
 import { RoleListModal } from './components/RoleListModal';
 import { KeywordTooltip } from './components/KeywordTooltip';
 import { CharacterPeekTooltip } from './components/CharacterPeekTooltip';
+import { RequiresTooltip } from './components/RequiresTooltip';
 import { SyncModal } from './components/SyncModal';
 import { ConfigModal } from './components/ConfigModal';
 import { FullscreenTimer } from './components/FullscreenTimer';
@@ -167,8 +168,17 @@ const App: React.FC = () => {
   // Roles modals state (local, not synced)
   const [showKeywordTooltip, setShowKeywordTooltip] = useState(false);
   const [keywordTooltipText, setKeywordTooltipText] = useState('');
+  const [keywordTooltipPosition, setKeywordTooltipPosition] = useState<{ x: number; y: number } | null>(null);
   const [showCharacterPeekTooltip, setShowCharacterPeekTooltip] = useState(false);
   const [characterPeekName, setCharacterPeekName] = useState<string | null>(null);
+  const [characterPeekPosition, setCharacterPeekPosition] = useState<{ x: number; y: number } | null>(null);
+  const [showRequiresTooltip, setShowRequiresTooltip] = useState(false);
+  const [requiresTooltipData, setRequiresTooltipData] = useState<{
+    requires: string[];
+    requiresGroup?: string;
+    characterName: string;
+    position: { x: number; y: number };
+  } | null>(null);
   const [lockedRoles, setLockedRoles] = useState<string[]>([]);
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -773,14 +783,26 @@ const App: React.FC = () => {
     setSelectedCharacter(name);
   };
 
-  const showKeyword = (keyword: string) => {
+  const showKeyword = (keyword: string, position: { x: number; y: number }) => {
     setKeywordTooltipText(keyword);
+    setKeywordTooltipPosition(position);
     setShowKeywordTooltip(true);
   };
 
-  const showCharacterPeek = (name: string) => {
+  const showCharacterPeek = (name: string, position: { x: number; y: number }) => {
     setCharacterPeekName(name);
+    setCharacterPeekPosition(position);
     setShowCharacterPeekTooltip(true);
+  };
+
+  const showRequires = (
+    requires: string[], 
+    requiresGroup: string | undefined, 
+    characterName: string, 
+    position: { x: number; y: number }
+  ) => {
+    setRequiresTooltipData({ requires, requiresGroup, characterName, position });
+    setShowRequiresTooltip(true);
   };
 
   // Find active fullscreen timer
@@ -864,6 +886,12 @@ const App: React.FC = () => {
           {gameState.activeTab !== 'roles' ? (
             <>
               <button 
+                onClick={() => setShowRoleListModal(true)}
+                className="p-2 rounded-xl bg-zinc-800 text-zinc-400 active:bg-zinc-700"
+              >
+                <Icon name="list" size={20} />
+              </button>
+              <button 
                 onClick={toggleSound}
                 className={`p-2 rounded-xl bg-zinc-800 active:bg-zinc-700 ${localPrefs.isSoundOn ? 'text-cyan-400' : 'text-zinc-400'}`}
               >
@@ -892,13 +920,15 @@ const App: React.FC = () => {
           )}
         </div>
 
-        <button 
-          onClick={cycleRoundCount}
-          className="flex items-center gap-2 bg-zinc-800 px-3 py-2 rounded-xl text-zinc-300 font-bold active:scale-95 transition-transform"
-        >
-          <Icon name="timer" size={18} className="text-cyan-400" />
-          <span>{gameState.roundCount === 'test' ? 'Test' : `${gameState.roundCount} Rounds`}</span>
-        </button>
+        {gameState.activeTab === 'timers' && (
+          <button 
+            onClick={cycleRoundCount}
+            className="flex items-center gap-2 bg-zinc-800 px-3 py-2 rounded-xl text-zinc-300 font-bold active:scale-95 transition-transform"
+          >
+            <Icon name="timer" size={18} className="text-cyan-400" />
+            <span>{gameState.roundCount === 'test' ? 'Test' : `${gameState.roundCount} Rounds`}</span>
+          </button>
+        )}
 
         <button 
           onClick={() => setShowSyncModal(true)}
@@ -951,6 +981,8 @@ const App: React.FC = () => {
             onApplyPreset={applyPreset}
             lockedRoles={lockedRoles}
             onToggleLock={toggleLockRole}
+            onShowKeyword={showKeyword}
+            onShowRequires={showRequires}
           />
         )}
       </main>
@@ -1031,36 +1063,60 @@ const App: React.FC = () => {
         <RoleListModal
           selectedRoles={gameState.selectedRoles}
           onClose={() => setShowRoleListModal(false)}
-          onClearAll={clearAllRoles}
           onCharacterTap={(name) => {
             setSelectedCharacter(name);
             // Don't close role list modal - modal stacking
           }}
-          onCharacterLongPress={toggleRole}
-          onApplyPreset={applyPreset}
           lockedRoles={lockedRoles}
           onToggleLock={toggleLockRole}
+          onShowKeyword={showKeyword}
+          onShowRequires={showRequires}
         />
       )}
 
-      {showKeywordTooltip && (
+      {showKeywordTooltip && keywordTooltipPosition && (
         <KeywordTooltip
           keyword={keywordTooltipText}
-          onClose={() => setShowKeywordTooltip(false)}
+          position={keywordTooltipPosition}
+          onClose={() => {
+            setShowKeywordTooltip(false);
+            setKeywordTooltipPosition(null);
+          }}
         />
       )}
 
-      {showCharacterPeekTooltip && characterPeekName && (
-        <CharacterPeekTooltip
-          characterName={characterPeekName}
-          description={getAllCharacters().find(c => c.name === characterPeekName)?.description}
+      {showCharacterPeekTooltip && characterPeekName && characterPeekPosition && (() => {
+        const character = getAllCharacters().find(c => c.name === characterPeekName);
+        return character ? (
+          <CharacterPeekTooltip
+            character={character}
+            position={characterPeekPosition}
+            onClose={() => {
+              setShowCharacterPeekTooltip(false);
+              setCharacterPeekName(null);
+              setCharacterPeekPosition(null);
+            }}
+            onOpenDetail={() => {
+              setShowCharacterPeekTooltip(false);
+              setCharacterPeekName(null);
+              setCharacterPeekPosition(null);
+              setSelectedCharacter(characterPeekName);
+            }}
+            onShowKeyword={showKeyword}
+            onShowRequires={showRequires}
+          />
+        ) : null;
+      })()}
+
+      {showRequiresTooltip && requiresTooltipData && (
+        <RequiresTooltip
+          requires={requiresTooltipData.requires}
+          requiresGroup={requiresTooltipData.requiresGroup}
+          characterName={requiresTooltipData.characterName}
+          position={requiresTooltipData.position}
           onClose={() => {
-            setShowCharacterPeekTooltip(false);
-            setCharacterPeekName(null);
-          }}
-          onSeeMore={() => {
-            setShowCharacterPeekTooltip(false);
-            setSelectedCharacter(characterPeekName);
+            setShowRequiresTooltip(false);
+            setRequiresTooltipData(null);
           }}
         />
       )}

@@ -14,6 +14,7 @@ interface CharacterDetailModalProps {
   onToggleRole: (name: string) => void;
   onToggleLock?: (name: string) => void;
   onNavigateToCharacter: (name: string) => void;
+  onShowCharacterPeek?: (name: string) => void;
   onShowKeyword?: (keyword: string) => void;
   onAddRoles?: (roles: string[]) => void;
 }
@@ -58,6 +59,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
   onToggleRole,
   onToggleLock,
   onNavigateToCharacter,
+  onShowCharacterPeek,
   onShowKeyword,
   onAddRoles
 }) => {
@@ -143,7 +145,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
           <button
             key={`ch-${canonicalCharacter}-${termStart}`}
             type="button"
-            onClick={() => onNavigateToCharacter(canonicalCharacter)}
+            onClick={() => (onShowCharacterPeek ?? onNavigateToCharacter)(canonicalCharacter)}
             className="text-emerald-400 underline underline-offset-2 hover:text-emerald-300"
           >
             {term}

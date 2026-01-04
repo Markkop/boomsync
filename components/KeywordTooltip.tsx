@@ -31,7 +31,7 @@ export const KeywordTooltip: React.FC<KeywordTooltipProps> = ({ keyword, onClose
   const definition = KEYWORD_DEFINITIONS[keyword.toLowerCase()] || 'No definition available for this keyword.';
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
       <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 max-w-md w-full shadow-2xl">
         <div className="flex items-start justify-between mb-4">
           <h3 className="text-xl font-bold text-zinc-100 capitalize">{keyword}</h3>

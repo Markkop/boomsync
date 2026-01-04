@@ -19,6 +19,7 @@ import { RolesView } from './components/RolesView';
 import { CharacterDetailModal } from './components/CharacterDetailModal';
 import { RoleListModal } from './components/RoleListModal';
 import { KeywordTooltip } from './components/KeywordTooltip';
+import { CharacterPeekTooltip } from './components/CharacterPeekTooltip';
 import { SyncModal } from './components/SyncModal';
 import { ConfigModal } from './components/ConfigModal';
 import { FullscreenTimer } from './components/FullscreenTimer';
@@ -166,6 +167,8 @@ const App: React.FC = () => {
   // Roles modals state (local, not synced)
   const [showKeywordTooltip, setShowKeywordTooltip] = useState(false);
   const [keywordTooltipText, setKeywordTooltipText] = useState('');
+  const [showCharacterPeekTooltip, setShowCharacterPeekTooltip] = useState(false);
+  const [characterPeekName, setCharacterPeekName] = useState<string | null>(null);
   const [lockedRoles, setLockedRoles] = useState<string[]>([]);
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -775,6 +778,11 @@ const App: React.FC = () => {
     setShowKeywordTooltip(true);
   };
 
+  const showCharacterPeek = (name: string) => {
+    setCharacterPeekName(name);
+    setShowCharacterPeekTooltip(true);
+  };
+
   // Find active fullscreen timer
   const activeFullscreenTimer = fullscreenTimerId 
     ? gameState.timers.find(t => t.id === fullscreenTimerId) 
@@ -1013,6 +1021,7 @@ const App: React.FC = () => {
           onToggleRole={toggleRole}
           onToggleLock={toggleLockRole}
           onNavigateToCharacter={navigateToCharacter}
+          onShowCharacterPeek={showCharacterPeek}
           onShowKeyword={showKeyword}
           onAddRoles={addRoles}
         />
@@ -1038,6 +1047,21 @@ const App: React.FC = () => {
         <KeywordTooltip
           keyword={keywordTooltipText}
           onClose={() => setShowKeywordTooltip(false)}
+        />
+      )}
+
+      {showCharacterPeekTooltip && characterPeekName && (
+        <CharacterPeekTooltip
+          characterName={characterPeekName}
+          description={getAllCharacters().find(c => c.name === characterPeekName)?.description}
+          onClose={() => {
+            setShowCharacterPeekTooltip(false);
+            setCharacterPeekName(null);
+          }}
+          onSeeMore={() => {
+            setShowCharacterPeekTooltip(false);
+            setSelectedCharacter(characterPeekName);
+          }}
         />
       )}
     </div>

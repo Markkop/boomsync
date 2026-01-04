@@ -3,6 +3,7 @@ import { CharacterFull, CharacterIndex } from '../types';
 import { Icon } from './Icon';
 import { getCharacter, getAllCharacters } from '../services/characterService';
 import { CharacterCard } from './CharacterCard';
+import { KEYWORD_DEFINITIONS } from './KeywordTooltip';
 
 interface CharacterDetailModalProps {
   characterName: string;
@@ -13,6 +14,7 @@ interface CharacterDetailModalProps {
   onToggleRole: (name: string) => void;
   onToggleLock?: (name: string) => void;
   onNavigateToCharacter: (name: string) => void;
+  onShowCharacterPeek?: (name: string) => void;
   onShowKeyword?: (keyword: string) => void;
   onAddRoles?: (roles: string[]) => void;
 }
@@ -38,51 +40,49 @@ const getTeamColorClasses = (team: string) => {
   }
 };
 
-const extractKeywords = (text: string): string[] => {
-  const keywords = ['dead', 'card share', 'color share', 'bury', 'contagious', 'foolish', 'cultist', 'zombie', 'in love', 'in hate', 'traitor', 'immune', 'fireproof', 'firebomb', 'impregnated', 'toast', 'shy', 'cleanse'];
-  const found: string[] = [];
-  keywords.forEach(keyword => {
-    if (text.toLowerCase().includes(keyword.toLowerCase())) {
-      found.push(keyword);
-    }
-  });
-  return found;
+const escapeRegExp = (value: string) =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const isWrappedInQuotes = (text: string, start: number, end: number) => {
+  if (start <= 0 || end >= text.length) return false;
+  const before = text[start - 1];
+  const after = text[end];
+  return (before === '"' && after === '"') || (before === "'" && after === "'");
 };
 
-const renderTextWithKeywords = (text: string, onKeywordClick?: (keyword: string) => void) => {
-  if (!onKeywordClick) return text;
-  
-  const keywords = extractKeywords(text);
-  if (keywords.length === 0) return text;
-  
-  let result: React.ReactNode[] = [];
-  let lastIndex = 0;
-  const lowerText = text.toLowerCase();
-  
-  keywords.forEach(keyword => {
-    const index = lowerText.indexOf(keyword.toLowerCase(), lastIndex);
-    if (index !== -1) {
-      if (index > lastIndex) {
-        result.push(text.substring(lastIndex, index));
-      }
-      result.push(
-        <button
-          key={`${keyword}-${index}`}
-          onClick={() => onKeywordClick(keyword)}
-          className="text-cyan-400 underline underline-offset-2 hover:text-cyan-300"
-        >
-          {text.substring(index, index + keyword.length)}
-        </button>
-      );
-      lastIndex = index + keyword.length;
-    }
-  });
-  
-  if (lastIndex < text.length) {
-    result.push(text.substring(lastIndex));
+const getTeamTextClasses = (team: string) => {
+  switch (team) {
+    case 'blue':
+      return 'text-blue-400 hover:text-blue-300';
+    case 'red':
+      return 'text-red-400 hover:text-red-300';
+    case 'red-blue':
+      return 'bg-gradient-to-r from-red-400 to-blue-400 bg-clip-text text-transparent hover:from-red-300 hover:to-blue-300';
+    case 'green':
+      return 'text-green-400 hover:text-green-300';
+    case 'yellow':
+      return 'text-yellow-400 hover:text-yellow-300';
+    case 'special':
+      return 'text-pink-400 hover:text-pink-300';
+    case 'grey':
+    default:
+      return 'text-zinc-300 hover:text-zinc-200';
   }
-  
-  return result.length > 0 ? result : text;
+};
+
+const getMechanicIcon = (keywordLower: string): React.ComponentProps<typeof Icon>['name'] | null => {
+  // Map common mechanics/keywords to existing tag icons
+  if (keywordLower.includes('card share')) return 'share';
+  if (keywordLower.includes('color share')) return 'palette';
+  if (keywordLower.includes('public reveal')) return 'megaphone';
+  if (keywordLower.includes('private reveal')) return 'eye';
+  if (keywordLower.includes('bury')) return 'archive';
+  if (keywordLower.includes('contagious')) return 'virus';
+  if (keywordLower.includes('acting')) return 'theater';
+  if (keywordLower.includes('condition')) return 'sparkles';
+  if (keywordLower.includes('pause')) return 'clock';
+  if (keywordLower.includes('odd')) return 'hash';
+  return null;
 };
 
 export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
@@ -94,6 +94,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
   onToggleRole,
   onToggleLock,
   onNavigateToCharacter,
+  onShowCharacterPeek,
   onShowKeyword,
   onAddRoles
 }) => {
@@ -103,6 +104,110 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
   const [expandedPowers, setExpandedPowers] = useState<Set<number>>(new Set());
   const allCharacters = getAllCharacters();
   const validCharacterNames = useMemo(() => new Set(allCharacters.map(c => c.name)), [allCharacters]);
+  const characterTeamByName = useMemo(() => {
+    const map = new Map<string, string>();
+    allCharacters.forEach((c) => map.set(c.name, c.team));
+    return map;
+  }, [allCharacters]);
+
+  const keywordSet = useMemo(() => new Set(Object.keys(KEYWORD_DEFINITIONS)), []);
+  const lowerToCharacterName = useMemo(() => {
+    const map = new Map<string, string>();
+    validCharacterNames.forEach((name) => map.set(name.toLowerCase(), name));
+    return map;
+  }, [validCharacterNames]);
+
+  const interactiveTextRegex = useMemo(() => {
+    // Prefer character spelling for ambiguous terms (e.g. "Zombie"), but still
+    // allow keyword tooltips when the term is quoted like "zombie".
+    const repByLower = new Map<string, string>();
+    validCharacterNames.forEach((name) => repByLower.set(name.toLowerCase(), name));
+    Object.keys(KEYWORD_DEFINITIONS).forEach((kw) => {
+      const lower = kw.toLowerCase();
+      if (!repByLower.has(lower)) repByLower.set(lower, kw);
+    });
+
+    const reps = Array.from(repByLower.values()).sort((a, b) => b.length - a.length);
+    const alternation = reps.map(escapeRegExp).join('|');
+    // Boundary-safe match without lookbehind (mobile Safari friendly):
+    // capture boundary char (or start), then capture term, ensure boundary after.
+    return new RegExp(`(^|[^A-Za-z0-9])(${alternation})(?=[^A-Za-z0-9]|$)`, 'gi');
+  }, [validCharacterNames]);
+
+  const renderInteractiveText = (text: string) => {
+    if (!onShowKeyword && !onNavigateToCharacter) return text;
+    if (!text) return text;
+
+    interactiveTextRegex.lastIndex = 0;
+    const result: React.ReactNode[] = [];
+    let lastIndex = 0;
+    let match: RegExpExecArray | null;
+
+    while ((match = interactiveTextRegex.exec(text)) !== null) {
+      const fullStart = match.index;
+      const boundary = match[1] ?? '';
+      const term = match[2] ?? '';
+
+      const termStart = fullStart + boundary.length;
+      const termEnd = termStart + term.length;
+
+      if (fullStart > lastIndex) {
+        result.push(text.slice(lastIndex, fullStart));
+      }
+      if (boundary) {
+        result.push(boundary);
+      }
+
+      const lower = term.toLowerCase();
+      const canonicalCharacter = lowerToCharacterName.get(lower);
+      const isCharacter = Boolean(canonicalCharacter);
+      const isKeyword = keywordSet.has(lower);
+      const ambiguous = isCharacter && isKeyword;
+
+      const shouldShowKeyword =
+        Boolean(onShowKeyword) &&
+        isKeyword &&
+        (!ambiguous || isWrappedInQuotes(text, termStart, termEnd));
+
+      if (shouldShowKeyword && onShowKeyword) {
+        const iconName = getMechanicIcon(lower);
+        result.push(
+          <button
+            key={`kw-${lower}-${termStart}`}
+            type="button"
+            onClick={() => onShowKeyword(lower)}
+            className="inline-flex items-center gap-1 text-cyan-400 underline underline-offset-2 hover:text-cyan-300"
+          >
+            {iconName && <Icon name={iconName} size={14} className="flex-shrink-0" />}
+            <span>{term}</span>
+          </button>
+        );
+      } else if (isCharacter && canonicalCharacter) {
+        const team = characterTeamByName.get(canonicalCharacter) ?? 'grey';
+        const teamClasses = getTeamTextClasses(team);
+        result.push(
+          <button
+            key={`ch-${canonicalCharacter}-${termStart}`}
+            type="button"
+            onClick={() => (onShowCharacterPeek ?? onNavigateToCharacter)(canonicalCharacter)}
+            className={`underline underline-offset-2 ${teamClasses}`}
+          >
+            {term}
+          </button>
+        );
+      } else {
+        result.push(term);
+      }
+
+      lastIndex = termEnd;
+    }
+
+    if (lastIndex < text.length) {
+      result.push(text.slice(lastIndex));
+    }
+
+    return result.length > 0 ? result : text;
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -269,7 +374,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
           <div>
             <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-2">Win Condition</h3>
             <p className="text-zinc-200 leading-relaxed">
-              {renderTextWithKeywords(character.winCondition, onShowKeyword)}
+              {renderInteractiveText(character.winCondition)}
             </p>
           </div>
 
@@ -306,7 +411,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                     {expandedPowers.has(index) && power.description && (
                       <div className="p-3 pt-0 border-t border-zinc-700">
                         <p className="text-zinc-300 text-sm leading-relaxed">
-                          {renderTextWithKeywords(power.description, onShowKeyword)}
+                          {renderInteractiveText(power.description)}
                         </p>
                       </div>
                     )}
@@ -436,7 +541,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
               <div className="space-y-2">
                 {character.notes.map((note, index) => (
                   <p key={index} className="text-zinc-300 text-sm leading-relaxed">
-                    {renderTextWithKeywords(note, onShowKeyword)}
+                    {renderInteractiveText(note)}
                   </p>
                 ))}
               </div>

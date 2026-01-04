@@ -4,6 +4,7 @@ import { CharacterCard } from './CharacterCard';
 import { Icon } from './Icon';
 import { getAllCharacters, getAllTags, searchCharacters } from '../services/characterService';
 import { PresetPanel } from './PresetPanel';
+import { TapSafeButton } from './TapSafeButton';
 
 interface RolesViewProps {
   searchQuery: string;
@@ -324,13 +325,13 @@ export const RolesView: React.FC<RolesViewProps> = ({
                       const team = char?.team || 'grey';
                       const colorClass = getRoleTeamColorClasses(team);
                       return (
-                        <button
+                        <TapSafeButton
                           key={role}
-                          onClick={() => onCharacterTap(role)}
+                          onTap={() => onCharacterTap(role)}
                           className={`text-xs ${colorClass} font-medium hover:opacity-80 transition-opacity active:scale-95`}
                         >
                           {count > 1 ? `${count}x ` : ''}{role}
-                        </button>
+                        </TapSafeButton>
                       );
                     })}
                   </div>

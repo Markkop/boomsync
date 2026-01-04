@@ -86,37 +86,71 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isLongPressRef = useRef(false);
   const isPressedRef = useRef(false);
+  const pointerStartRef = useRef<{ x: number; y: number; pointerId: number } | null>(null);
+  const didMoveRef = useRef(false);
+  const suppressClickRef = useRef(false);
+  const MOVE_THRESHOLD_PX = 10;
 
-  const handlePointerDown = () => {
+  const handlePointerDown: React.PointerEventHandler<HTMLButtonElement> = (e) => {
     if (disabled) return;
     isPressedRef.current = true;
     isLongPressRef.current = false;
+    didMoveRef.current = false;
+    suppressClickRef.current = false;
+    pointerStartRef.current = { x: e.clientX, y: e.clientY, pointerId: e.pointerId };
     
     timeoutRef.current = setTimeout(() => {
       isLongPressRef.current = true;
+      suppressClickRef.current = true;
       if (navigator.vibrate) navigator.vibrate(50);
       onLongPress();
     }, 500);
   };
 
-  const handlePointerUp = () => {
+  const handlePointerMove: React.PointerEventHandler<HTMLButtonElement> = (e) => {
+    if (disabled) return;
+    if (!isPressedRef.current) return;
+    const start = pointerStartRef.current;
+    if (!start || start.pointerId !== e.pointerId) return;
+
+    const dx = e.clientX - start.x;
+    const dy = e.clientY - start.y;
+    if (!didMoveRef.current && Math.hypot(dx, dy) > MOVE_THRESHOLD_PX) {
+      didMoveRef.current = true;
+      suppressClickRef.current = true;
+      // If the user is scrolling, cancel the long-press timer and suppress tap.
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    }
+  };
+
+  const handlePointerUp: React.PointerEventHandler<HTMLButtonElement> = () => {
     if (disabled) return;
     if (!isPressedRef.current) return;
     isPressedRef.current = false;
+    pointerStartRef.current = null;
     
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
     }
-    
-    if (!isLongPressRef.current) {
+    // Fire tap on pointer-up for best mobile reliability, but suppress the
+    // follow-up click to avoid accidental activations after scroll.
+    if (!isLongPressRef.current && !didMoveRef.current) {
+      suppressClickRef.current = true;
       onTap();
     }
+    didMoveRef.current = false;
   };
 
   const handlePointerCancel = () => {
     if (disabled) return;
     isPressedRef.current = false;
+    pointerStartRef.current = null;
+    didMoveRef.current = false;
+    suppressClickRef.current = true;
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
@@ -229,7 +263,18 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
   return (
     <button
+      onClick={(e) => {
+        if (disabled) return;
+        if (suppressClickRef.current || isLongPressRef.current) {
+          e.preventDefault();
+          e.stopPropagation();
+          suppressClickRef.current = false;
+          return;
+        }
+        onTap();
+      }}
       onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerLeave={handlePointerCancel}
       onPointerCancel={handlePointerCancel}

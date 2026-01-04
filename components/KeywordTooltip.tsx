@@ -6,7 +6,7 @@ interface KeywordTooltipProps {
   onClose: () => void;
 }
 
-const keywordDefinitions: Record<string, string> = {
+export const KEYWORD_DEFINITIONS: Record<string, string> = {
   'dead': 'A condition that causes a player to lose the game. Players with the "dead" condition cannot win.',
   'card share': 'When two players privately show each other their character cards. This activates certain character powers.',
   'color share': 'When two players show each other the colored side of their cards (red or blue) without revealing the character name.',
@@ -28,7 +28,7 @@ const keywordDefinitions: Record<string, string> = {
 };
 
 export const KeywordTooltip: React.FC<KeywordTooltipProps> = ({ keyword, onClose }) => {
-  const definition = keywordDefinitions[keyword.toLowerCase()] || 'No definition available for this keyword.';
+  const definition = KEYWORD_DEFINITIONS[keyword.toLowerCase()] || 'No definition available for this keyword.';
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">

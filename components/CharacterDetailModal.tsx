@@ -99,15 +99,37 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
 }) => {
   const [character, setCharacter] = useState<CharacterFull | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [expandedPowers, setExpandedPowers] = useState<Set<number>>(new Set());
   const allCharacters = getAllCharacters();
+  const validCharacterNames = useMemo(() => new Set(allCharacters.map(c => c.name)), [allCharacters]);
 
   useEffect(() => {
+    let cancelled = false;
     setLoading(true);
-    getCharacter(characterName).then(char => {
-      setCharacter(char);
-      setLoading(false);
-    });
+    setLoadError(null);
+    getCharacter(characterName)
+      .then(char => {
+        if (cancelled) return;
+        setCharacter(char);
+        if (!char) {
+          setLoadError('Character not found.');
+        }
+      })
+      .catch((e) => {
+        if (cancelled) return;
+        console.error('Failed to load character:', e);
+        setCharacter(null);
+        setLoadError('Failed to load character.');
+      })
+      .finally(() => {
+        if (cancelled) return;
+        setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [characterName]);
 
   // Get current character's CharacterIndex data
@@ -135,11 +157,40 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
     return required;
   }, [character?.requires, allCharacters, currentCharacterIndex, characterName]);
 
-  if (loading || !character) {
+  if (loading) {
     return (
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center">
         <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8">
           <div className="text-zinc-400">Loading...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!character) {
+    return (
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 max-w-md w-full shadow-2xl">
+          <div className="flex items-start justify-between mb-3">
+            <h3 className="text-xl font-bold text-zinc-100">Unable to open</h3>
+            <button
+              onClick={onClose}
+              className="p-1 rounded-lg bg-zinc-800 text-zinc-400 hover:text-zinc-100 transition-colors"
+            >
+              <Icon name="close" size={20} />
+            </button>
+          </div>
+          <p className="text-zinc-300 leading-relaxed">
+            {loadError || 'This character could not be loaded.'}
+          </p>
+          <div className="mt-4 flex justify-end">
+            <button
+              onClick={onClose}
+              className="px-4 py-2 rounded-xl bg-zinc-800 text-zinc-200 hover:bg-zinc-700 transition-colors font-semibold"
+            >
+              Close
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -325,15 +376,26 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
             <div>
               <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-2">Works Well With</h3>
               <div className="flex flex-wrap gap-2">
-                {character.worksWellWith.map((name, index) => (
-                  <button
-                    key={index}
-                    onClick={() => onNavigateToCharacter(name)}
-                    className="px-3 py-1 bg-green-500/20 border border-green-500 rounded-lg text-sm text-green-400 hover:bg-green-500/30 transition-colors"
-                  >
-                    {name}
-                  </button>
-                ))}
+                {character.worksWellWith.map((name, index) => {
+                  const isCharacter = validCharacterNames.has(name);
+                  return isCharacter ? (
+                    <button
+                      key={index}
+                      onClick={() => onNavigateToCharacter(name)}
+                      className="px-3 py-1 bg-green-500/20 border border-green-500 rounded-lg text-sm text-green-400 hover:bg-green-500/30 transition-colors"
+                    >
+                      {name}
+                    </button>
+                  ) : (
+                    <span
+                      key={index}
+                      className="px-3 py-1 bg-zinc-800/60 border border-zinc-700 rounded-lg text-sm text-zinc-300"
+                      title="Not a character"
+                    >
+                      {name}
+                    </span>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -343,15 +405,26 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
             <div>
               <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-2">Doesn't Work Well With</h3>
               <div className="flex flex-wrap gap-2">
-                {character.doesntWorkWellWith.map((name, index) => (
-                  <button
-                    key={index}
-                    onClick={() => onNavigateToCharacter(name)}
-                    className="px-3 py-1 bg-rose-500/20 border border-rose-500 rounded-lg text-sm text-rose-400 hover:bg-rose-500/30 transition-colors"
-                  >
-                    {name}
-                  </button>
-                ))}
+                {character.doesntWorkWellWith.map((name, index) => {
+                  const isCharacter = validCharacterNames.has(name);
+                  return isCharacter ? (
+                    <button
+                      key={index}
+                      onClick={() => onNavigateToCharacter(name)}
+                      className="px-3 py-1 bg-rose-500/20 border border-rose-500 rounded-lg text-sm text-rose-400 hover:bg-rose-500/30 transition-colors"
+                    >
+                      {name}
+                    </button>
+                  ) : (
+                    <span
+                      key={index}
+                      className="px-3 py-1 bg-zinc-800/60 border border-zinc-700 rounded-lg text-sm text-zinc-300"
+                      title="Not a character"
+                    >
+                      {name}
+                    </span>
+                  );
+                })}
               </div>
             </div>
           )}

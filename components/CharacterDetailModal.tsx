@@ -50,6 +50,41 @@ const isWrappedInQuotes = (text: string, start: number, end: number) => {
   return (before === '"' && after === '"') || (before === "'" && after === "'");
 };
 
+const getTeamTextClasses = (team: string) => {
+  switch (team) {
+    case 'blue':
+      return 'text-blue-400 hover:text-blue-300';
+    case 'red':
+      return 'text-red-400 hover:text-red-300';
+    case 'red-blue':
+      return 'bg-gradient-to-r from-red-400 to-blue-400 bg-clip-text text-transparent hover:from-red-300 hover:to-blue-300';
+    case 'green':
+      return 'text-green-400 hover:text-green-300';
+    case 'yellow':
+      return 'text-yellow-400 hover:text-yellow-300';
+    case 'special':
+      return 'text-pink-400 hover:text-pink-300';
+    case 'grey':
+    default:
+      return 'text-zinc-300 hover:text-zinc-200';
+  }
+};
+
+const getMechanicIcon = (keywordLower: string): React.ComponentProps<typeof Icon>['name'] | null => {
+  // Map common mechanics/keywords to existing tag icons
+  if (keywordLower.includes('card share')) return 'share';
+  if (keywordLower.includes('color share')) return 'palette';
+  if (keywordLower.includes('public reveal')) return 'megaphone';
+  if (keywordLower.includes('private reveal')) return 'eye';
+  if (keywordLower.includes('bury')) return 'archive';
+  if (keywordLower.includes('contagious')) return 'virus';
+  if (keywordLower.includes('acting')) return 'theater';
+  if (keywordLower.includes('condition')) return 'sparkles';
+  if (keywordLower.includes('pause')) return 'clock';
+  if (keywordLower.includes('odd')) return 'hash';
+  return null;
+};
+
 export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
   characterName,
   isSelected,
@@ -69,6 +104,11 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
   const [expandedPowers, setExpandedPowers] = useState<Set<number>>(new Set());
   const allCharacters = getAllCharacters();
   const validCharacterNames = useMemo(() => new Set(allCharacters.map(c => c.name)), [allCharacters]);
+  const characterTeamByName = useMemo(() => {
+    const map = new Map<string, string>();
+    allCharacters.forEach((c) => map.set(c.name, c.team));
+    return map;
+  }, [allCharacters]);
 
   const keywordSet = useMemo(() => new Set(Object.keys(KEYWORD_DEFINITIONS)), []);
   const lowerToCharacterName = useMemo(() => {
@@ -130,23 +170,27 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
         (!ambiguous || isWrappedInQuotes(text, termStart, termEnd));
 
       if (shouldShowKeyword && onShowKeyword) {
+        const iconName = getMechanicIcon(lower);
         result.push(
           <button
             key={`kw-${lower}-${termStart}`}
             type="button"
             onClick={() => onShowKeyword(lower)}
-            className="text-cyan-400 underline underline-offset-2 hover:text-cyan-300"
+            className="inline-flex items-center gap-1 text-cyan-400 underline underline-offset-2 hover:text-cyan-300"
           >
-            {term}
+            {iconName && <Icon name={iconName} size={14} className="flex-shrink-0" />}
+            <span>{term}</span>
           </button>
         );
       } else if (isCharacter && canonicalCharacter) {
+        const team = characterTeamByName.get(canonicalCharacter) ?? 'grey';
+        const teamClasses = getTeamTextClasses(team);
         result.push(
           <button
             key={`ch-${canonicalCharacter}-${termStart}`}
             type="button"
             onClick={() => (onShowCharacterPeek ?? onNavigateToCharacter)(canonicalCharacter)}
-            className="text-emerald-400 underline underline-offset-2 hover:text-emerald-300"
+            className={`underline underline-offset-2 ${teamClasses}`}
           >
             {term}
           </button>

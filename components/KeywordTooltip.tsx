@@ -29,12 +29,28 @@ export const KEYWORD_DEFINITIONS: Record<string, string> = {
 
 export const KeywordTooltip: React.FC<KeywordTooltipProps> = ({ keyword, onClose }) => {
   const definition = KEYWORD_DEFINITIONS[keyword.toLowerCase()] || 'No definition available for this keyword.';
+  const lower = keyword.toLowerCase();
+  const iconName =
+    lower.includes('card share') ? 'share'
+    : lower.includes('color share') ? 'palette'
+    : lower.includes('public reveal') ? 'megaphone'
+    : lower.includes('private reveal') ? 'eye'
+    : lower.includes('bury') ? 'archive'
+    : lower.includes('contagious') ? 'virus'
+    : lower.includes('acting') ? 'theater'
+    : lower.includes('condition') ? 'sparkles'
+    : lower.includes('pause') ? 'clock'
+    : lower.includes('odd') ? 'hash'
+    : null;
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
       <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 max-w-md w-full shadow-2xl">
         <div className="flex items-start justify-between mb-4">
-          <h3 className="text-xl font-bold text-zinc-100 capitalize">{keyword}</h3>
+          <h3 className="text-xl font-bold text-zinc-100 capitalize flex items-center gap-2">
+            {iconName && <Icon name={iconName} size={18} className="text-cyan-300" />}
+            {keyword}
+          </h3>
           <button
             onClick={onClose}
             className="p-1 rounded-lg bg-zinc-800 text-zinc-400 hover:text-zinc-100 transition-colors"

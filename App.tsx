@@ -903,6 +903,14 @@ const App: React.FC = () => {
               >
                 <Icon name="proportions" size={20} />
               </button>
+              {gameState.activeTab === 'timers' && (
+                <button 
+                  onClick={cycleRoundCount}
+                  className="p-2 rounded-xl bg-zinc-800 text-cyan-400 active:bg-zinc-700 transition-transform active:scale-95"
+                >
+                  <Icon name="timer" size={20} />
+                </button>
+              )}
             </>
           ) : (
             <button 
@@ -913,16 +921,6 @@ const App: React.FC = () => {
             </button>
           )}
         </div>
-
-        {gameState.activeTab === 'timers' && (
-          <button 
-            onClick={cycleRoundCount}
-            className="flex items-center gap-2 bg-zinc-800 px-3 py-2 rounded-xl text-zinc-300 font-bold active:scale-95 transition-transform"
-          >
-            <Icon name="timer" size={18} className="text-cyan-400" />
-            <span>{gameState.roundCount === 'test' ? 'Test' : `${gameState.roundCount} Rounds`}</span>
-          </button>
-        )}
 
         <button 
           onClick={() => setShowSyncModal(true)}

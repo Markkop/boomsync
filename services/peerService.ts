@@ -275,6 +275,11 @@ class PeerService {
     return this.peer?.id;
   }
 
+  /** Peer IDs of connected remotes (does not include this device). */
+  getConnectedPeerIds(): string[] {
+    return Array.from(this.connections.keys());
+  }
+
   getIsHost() {
     return this.isHost;
   }

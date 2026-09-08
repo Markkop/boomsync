@@ -18,6 +18,15 @@ export interface Player {
   name: string;
 }
 
+export interface RoleDeal {
+  /** Unique per shuffle so reveal UI can reset. */
+  id: string;
+  /** playerId → role name from the active preset. */
+  assignments: Record<string, string>;
+  /** Roles from the preset that were not dealt to a player. */
+  buriedRoles: string[];
+}
+
 export interface GameState {
   timers: GameTimer[];
   players: Player[];
@@ -34,6 +43,10 @@ export interface GameState {
   selectedCharacterName: string | null;
   selectedRoles: string[];
   showRoleListModal: boolean;
+  /** Latest room+role deal. Null until the first shuffle with an active preset. */
+  roleDeal: RoleDeal | null;
+  /** peerId → playerId. Synced so every device has the map; UI only shows your own card. */
+  peerIdentities: Record<string, string>;
 }
 
 export interface CharacterPower {
@@ -71,7 +84,9 @@ export type SyncMessage =
   | { type: 'CONNECTION_COUNT'; count: number }
   | { type: 'ROOM_DELETED' }
   | { type: 'REQUEST_STATE' }
-  | { type: 'EXPLOSION' };
+  | { type: 'EXPLOSION' }
+  /** Joiner claims (or host assigns) which player a peer is. Unknown to old clients. */
+  | { type: 'SET_IDENTITY'; peerId: string; playerId: string };
 
 // Preset System Types
 export type RoleCategory = 

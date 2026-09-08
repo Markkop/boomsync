@@ -1,15 +1,31 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
+import { Player } from '../types';
 import { peerService } from '../services/peerService';
 import { Icon } from './Icon';
+import { TapSafeButton } from './TapSafeButton';
+import { getNamedPlayers } from '../services/dealService';
 
 interface SyncModalProps {
   onClose: () => void;
   onToggle: () => void;
   initialCode?: string;
+  players?: Player[];
+  peerIdentities?: Record<string, string>;
+  myPeerId?: string | null;
+  connectedPeerIds?: string[];
+  onAssignIdentity?: (peerId: string, playerId: string) => void;
 }
 
-export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = '' }) => {
+export const SyncModal: React.FC<SyncModalProps> = ({
+  onToggle,
+  initialCode = '',
+  players = [],
+  peerIdentities = {},
+  myPeerId = null,
+  connectedPeerIds = [],
+  onAssignIdentity,
+}) => {
   const [roomCode, setRoomCode] = useState('');
   const [targetId, setTargetId] = useState(initialCode);
   const [status, setStatus] = useState<'idle' | 'hosting' | 'connecting' | 'connected' | 'room_deleted'>('idle');
@@ -210,7 +226,7 @@ export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = ''
   if (status === 'room_deleted') {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-zinc-950/90 backdrop-blur-sm animate-in fade-in duration-200">
-        <div className="w-full max-w-sm bg-zinc-900 border border-zinc-800 rounded-[40px] p-8 shadow-2xl relative overflow-hidden">
+        <div className="w-full max-w-sm bg-zinc-900 border border-zinc-800 rounded-[40px] p-8 shadow-2xl relative overflow-y-auto max-h-[90vh]">
           <div className="text-center space-y-4">
             <div className="w-16 h-16 mx-auto bg-amber-500/20 rounded-full flex items-center justify-center">
               <Icon name="logout" size={32} className="text-amber-400" />
@@ -287,6 +303,17 @@ export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = ''
                   </span>
                 )}
               </button>
+
+              {myPeerId && onAssignIdentity && (
+                <IdentityAssignSection
+                  isHost={isHost}
+                  players={players}
+                  peerIdentities={peerIdentities}
+                  myPeerId={myPeerId}
+                  connectedPeerIds={connectedPeerIds}
+                  onAssignIdentity={onAssignIdentity}
+                />
+              )}
             </div>
           )}
 
@@ -368,3 +395,95 @@ export const SyncModal: React.FC<SyncModalProps> = ({ onToggle, initialCode = ''
     </div>
   );
 };
+
+function IdentityAssignSection({
+  isHost,
+  players,
+  peerIdentities,
+  myPeerId,
+  connectedPeerIds,
+  onAssignIdentity,
+}: {
+  isHost: boolean;
+  players: Player[];
+  peerIdentities: Record<string, string>;
+  myPeerId: string;
+  connectedPeerIds: string[];
+  onAssignIdentity: (peerId: string, playerId: string) => void;
+}) {
+  const namedPlayers = getNamedPlayers(players);
+  if (namedPlayers.length === 0) return null;
+
+  const myPlayerId = peerIdentities[myPeerId];
+  const myName = namedPlayers.find(p => p.id === myPlayerId)?.name;
+
+  if (!isHost) {
+    return (
+      <div className="space-y-2">
+        <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">Your name</h3>
+        <p className="text-zinc-300 text-sm">
+          {myName ? `You are ${myName}` : 'Pick who you are'}
+        </p>
+        <div className="flex flex-col gap-2">
+          {namedPlayers.map(player => {
+            const selected = myPlayerId === player.id;
+            return (
+              <TapSafeButton
+                key={player.id}
+                onTap={() => onAssignIdentity(myPeerId, player.id)}
+                className={`w-full text-left px-4 py-3 rounded-xl font-semibold active:scale-95 ${
+                  selected
+                    ? 'bg-cyan-500 text-zinc-950'
+                    : 'bg-zinc-800 text-zinc-200 border border-zinc-700'
+                }`}
+              >
+                {player.name}
+              </TapSafeButton>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  const rows: { peerId: string; label: string }[] = [
+    { peerId: myPeerId, label: 'You' },
+    ...connectedPeerIds.map(peerId => {
+      const claimedId = peerIdentities[peerId];
+      const claimed = namedPlayers.find(p => p.id === claimedId)?.name;
+      return {
+        peerId,
+        label: claimed ? `Guest · ${claimed}` : `Guest ${peerId.slice(0, 4).toUpperCase()}`,
+      };
+    }),
+  ];
+
+  return (
+    <div className="space-y-3">
+      <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">Who is who</h3>
+      {rows.map(row => (
+        <div key={row.peerId} className="space-y-1">
+          <div className="text-xs font-bold uppercase tracking-widest text-zinc-500">{row.label}</div>
+          <div className="flex flex-wrap gap-2">
+            {namedPlayers.map(player => {
+              const selected = peerIdentities[row.peerId] === player.id;
+              return (
+                <TapSafeButton
+                  key={player.id}
+                  onTap={() => onAssignIdentity(row.peerId, player.id)}
+                  className={`px-3 py-2 rounded-xl text-sm font-semibold active:scale-95 ${
+                    selected
+                      ? 'bg-cyan-500 text-zinc-950'
+                      : 'bg-zinc-800 text-zinc-300 border border-zinc-700'
+                  }`}
+                >
+                  {player.name}
+                </TapSafeButton>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}

@@ -43,7 +43,9 @@ import {
   List,
   AlertTriangle,
   Lock,
-  Unlock
+  Unlock,
+  CreditCard,
+  IdCard
 } from 'lucide-react';
 
 const icons = {
@@ -90,7 +92,9 @@ const icons = {
   list: List,
   alert: AlertTriangle,
   lock: Lock,
-  unlock: Unlock
+  unlock: Unlock,
+  card: CreditCard,
+  idCard: IdCard
 };
 
 interface IconProps {

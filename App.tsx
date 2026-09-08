@@ -4,7 +4,8 @@ import {
   TimerStatus, 
   GameTimer, 
   Player, 
-  SyncMessage 
+  SyncMessage,
+  RoleDeal
 } from './types';
 import { 
   ROUND_PRESETS, 
@@ -24,13 +25,117 @@ import { RequiresTooltip } from './components/RequiresTooltip';
 import { SyncModal } from './components/SyncModal';
 import { ConfigModal } from './components/ConfigModal';
 import { FullscreenTimer } from './components/FullscreenTimer';
+import { CardRevealModal, CardRevealRequest } from './components/CardRevealModal';
+import { IdentityModal } from './components/IdentityModal';
 import { Icon } from './components/Icon';
+import { TapSafeButton } from './components/TapSafeButton';
 import { peerService } from './services/peerService';
 import { wakeLockService } from './services/wakeLockService';
 import { getAllCharacters } from './services/characterService';
+import { dealRoles, prunePeerIdentities, shufflePlayersIntoRooms } from './services/dealService';
 
 const STORAGE_KEY = 'boomsync_state';
 const PREFS_STORAGE_KEY = 'boomsync_prefs';
+
+function normalizeGameState(parsed: GameState): GameState {
+  if (!parsed.usedTimerIds) {
+    parsed.usedTimerIds = [];
+  }
+  if (parsed.activeTab === undefined) {
+    parsed.activeTab = 'timers';
+  }
+  if (parsed.isEditingPlayers === undefined) {
+    parsed.isEditingPlayers = true;
+  }
+  if (parsed.isBombSoundOn === undefined) {
+    parsed.isBombSoundOn = true;
+  }
+  if (parsed.rolesSearchQuery === undefined) {
+    parsed.rolesSearchQuery = '';
+  }
+  if (parsed.rolesTeamFilter === undefined) {
+    parsed.rolesTeamFilter = null;
+  }
+  if (parsed.rolesTagFilter === undefined) {
+    parsed.rolesTagFilter = null;
+  }
+  if (parsed.selectedCharacterName === undefined) {
+    parsed.selectedCharacterName = null;
+  }
+  if (parsed.selectedRoles === undefined) {
+    parsed.selectedRoles = [];
+  }
+  if (parsed.showRoleListModal === undefined) {
+    parsed.showRoleListModal = false;
+  }
+  if (parsed.roleDeal === undefined) {
+    parsed.roleDeal = null;
+  }
+  if (!parsed.peerIdentities || typeof parsed.peerIdentities !== 'object') {
+    parsed.peerIdentities = {};
+  }
+
+  const validCharacterNames = new Set(getAllCharacters().map(c => c.name));
+  if (parsed.selectedCharacterName && !validCharacterNames.has(parsed.selectedCharacterName)) {
+    parsed.selectedCharacterName = null;
+  }
+  if (Array.isArray(parsed.selectedRoles)) {
+    parsed.selectedRoles = parsed.selectedRoles.filter((name: unknown) => {
+      return typeof name === 'string' && validCharacterNames.has(name);
+    });
+  } else {
+    parsed.selectedRoles = [];
+  }
+
+  if (parsed.roleDeal) {
+    const deal = parsed.roleDeal;
+    if (!deal.id || !deal.assignments || !Array.isArray(deal.buriedRoles)) {
+      parsed.roleDeal = null;
+    } else {
+      const cleanAssignments: Record<string, string> = {};
+      for (const [playerId, roleName] of Object.entries(deal.assignments)) {
+        if (typeof roleName === 'string' && validCharacterNames.has(roleName)) {
+          cleanAssignments[playerId] = roleName;
+        }
+      }
+      parsed.roleDeal = {
+        id: deal.id,
+        assignments: cleanAssignments,
+        buriedRoles: deal.buriedRoles.filter(name => validCharacterNames.has(name)),
+      };
+    }
+  }
+
+  delete (parsed as GameState & { isSoundOn?: unknown }).isSoundOn;
+  delete (parsed as GameState & { selectedSound?: unknown }).selectedSound;
+  return parsed;
+}
+
+function emptyGameState(): GameState {
+  return {
+    timers: [
+      { id: '3', initialSeconds: 180, remainingSeconds: 180, status: TimerStatus.IDLE },
+      { id: '2', initialSeconds: 120, remainingSeconds: 120, status: TimerStatus.IDLE },
+      { id: '1', initialSeconds: 60, remainingSeconds: 60, status: TimerStatus.IDLE },
+    ],
+    players: Array.from({ length: INITIAL_PLAYERS_COUNT }, (_, i) => ({ id: `${Date.now()}-${i}`, name: '' })),
+    roomA: [],
+    roomB: [],
+    roundCount: 3,
+    usedTimerIds: [],
+    activeTab: 'timers',
+    isEditingPlayers: true,
+    isBombSoundOn: true,
+    rolesSearchQuery: '',
+    rolesTeamFilter: null,
+    rolesTagFilter: null,
+    selectedCharacterName: null,
+    selectedRoles: [],
+    showRoleListModal: false,
+    roleDeal: null,
+    peerIdentities: {}
+  };
+}
 
 // Local preferences (not synced)
 interface LocalPreferences {
@@ -39,6 +144,7 @@ interface LocalPreferences {
   autoFullscreen: boolean;
   volume: number; // 0.0 to 1.0, defaults to 1.0
   keepScreenAwake: boolean; // Prevent screen from locking, defaults to true
+  myPlayerId: string | null;
 }
 
 const App: React.FC = () => {
@@ -48,86 +154,13 @@ const App: React.FC = () => {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        // Ensure usedTimerIds exists for backward compatibility
-        if (!parsed.usedTimerIds) {
-          parsed.usedTimerIds = [];
-        }
-        // Ensure activeTab exists for backward compatibility
-        if (parsed.activeTab === undefined) {
-          parsed.activeTab = 'timers';
-        }
-        // Ensure isEditingPlayers exists for backward compatibility
-        if (parsed.isEditingPlayers === undefined) {
-          parsed.isEditingPlayers = true;
-        }
-        // Ensure isBombSoundOn exists for backward compatibility
-        if (parsed.isBombSoundOn === undefined) {
-          parsed.isBombSoundOn = true;
-        }
-        // Ensure roles state exists for backward compatibility
-        if (parsed.rolesSearchQuery === undefined) {
-          parsed.rolesSearchQuery = '';
-        }
-        if (parsed.rolesTeamFilter === undefined) {
-          parsed.rolesTeamFilter = null;
-        }
-        if (parsed.rolesTagFilter === undefined) {
-          parsed.rolesTagFilter = null;
-        }
-        if (parsed.selectedCharacterName === undefined) {
-          parsed.selectedCharacterName = null;
-        }
-        if (parsed.selectedRoles === undefined) {
-          parsed.selectedRoles = [];
-        }
-        if (parsed.showRoleListModal === undefined) {
-          parsed.showRoleListModal = false;
-        }
-
-        // Sanitize persisted role/character selections so a bad string
-        // (e.g. "Privacy Promise variant") can't lock the UI on refresh.
-        const validCharacterNames = new Set(getAllCharacters().map(c => c.name));
-        if (parsed.selectedCharacterName && !validCharacterNames.has(parsed.selectedCharacterName)) {
-          parsed.selectedCharacterName = null;
-        }
-        if (Array.isArray(parsed.selectedRoles)) {
-          parsed.selectedRoles = parsed.selectedRoles.filter((name: unknown) => {
-            return typeof name === 'string' && validCharacterNames.has(name);
-          });
-        } else {
-          parsed.selectedRoles = [];
-        }
-
-        // Remove old isSoundOn and selectedSound if present (migration)
-        delete parsed.isSoundOn;
-        delete parsed.selectedSound;
-        return parsed;
+        return normalizeGameState(parsed);
       } catch (e) {
         console.warn('Failed to parse saved state, resetting:', e);
       }
     }
     
-    return {
-      timers: [
-        { id: '3', initialSeconds: 180, remainingSeconds: 180, status: TimerStatus.IDLE },
-        { id: '2', initialSeconds: 120, remainingSeconds: 120, status: TimerStatus.IDLE },
-        { id: '1', initialSeconds: 60, remainingSeconds: 60, status: TimerStatus.IDLE },
-      ],
-      players: Array.from({ length: INITIAL_PLAYERS_COUNT }, (_, i) => ({ id: `${Date.now()}-${i}`, name: '' })),
-      roomA: [],
-      roomB: [],
-      roundCount: 3,
-      usedTimerIds: [],
-      activeTab: 'timers',
-      isEditingPlayers: true,
-      isBombSoundOn: true,
-      rolesSearchQuery: '',
-      rolesTeamFilter: null,
-      rolesTagFilter: null,
-      selectedCharacterName: null,
-      selectedRoles: [],
-      showRoleListModal: false
-    };
+    return emptyGameState();
   });
 
   // Local preferences (NOT synced - individual per user)
@@ -143,6 +176,9 @@ const App: React.FC = () => {
       if (parsed.keepScreenAwake === undefined) {
         parsed.keepScreenAwake = true;
       }
+      if (parsed.myPlayerId === undefined) {
+        parsed.myPlayerId = null;
+      }
       return parsed;
     }
     return {
@@ -150,7 +186,8 @@ const App: React.FC = () => {
       selectedSound: ALARM_SOUNDS[0].url,
       autoFullscreen: true,
       volume: 1.0,
-      keepScreenAwake: true
+      keepScreenAwake: true,
+      myPlayerId: null
     };
   });
 
@@ -161,6 +198,12 @@ const App: React.FC = () => {
   const [roomCode, setRoomCode] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [connectionCount, setConnectionCount] = useState(0);
+  const [connectedPeerIds, setConnectedPeerIds] = useState<string[]>([]);
+  const [myPeerId, setMyPeerId] = useState<string | null>(null);
+  const [cardReveal, setCardReveal] = useState<CardRevealRequest | null>(null);
+  const [showIdentityModal, setShowIdentityModal] = useState(false);
+  const [identityDismissed, setIdentityDismissed] = useState(false);
+  const lastDealIdRef = useRef<string | null>(null);
   
   // Fullscreen state
   const [fullscreenTimerId, setFullscreenTimerId] = useState<string | null>(null);
@@ -259,6 +302,8 @@ const App: React.FC = () => {
       setRoomCode(code);
       setIsConnected(code !== null);
       setConnectionCount(peerService.getConnectionCount());
+      setConnectedPeerIds(peerService.getConnectedPeerIds());
+      setMyPeerId(peerService.getPeerId() ?? null);
     };
     
     peerService.onConnected(updateConnectionState);
@@ -289,13 +334,30 @@ const App: React.FC = () => {
   useEffect(() => {
     const unsubscribe = peerService.onMessage((msg: SyncMessage) => {
       if (msg.type === 'SYNC_STATE') {
-        setGameState(msg.state);
+        setGameState(normalizeGameState(msg.state));
       }
       
       // Handle REQUEST_STATE - send current state to newly connected joiner
       if (msg.type === 'REQUEST_STATE' && peerService.getIsHost()) {
         // Send current state to the requester
         peerService.send({ type: 'SYNC_STATE', state: gameStateRef.current });
+      }
+
+      if (msg.type === 'SET_IDENTITY') {
+        setGameState(prev => {
+          const nextIdentities = { ...prev.peerIdentities };
+          for (const [existingPeerId, assigned] of Object.entries(nextIdentities)) {
+            if (assigned === msg.playerId && existingPeerId !== msg.peerId) {
+              delete nextIdentities[existingPeerId];
+            }
+          }
+          nextIdentities[msg.peerId] = msg.playerId;
+          const newState = { ...prev, peerIdentities: nextIdentities };
+          if (peerService.getIsHost()) {
+            broadcastState(newState);
+          }
+          return newState;
+        });
       }
       
       // Handle EXPLOSION message - play explosion sound locally
@@ -320,7 +382,7 @@ const App: React.FC = () => {
     });
     
     return unsubscribe;
-  }, [localPrefs.isSoundOn, localPrefs.volume]);
+  }, [localPrefs.isSoundOn, localPrefs.volume, broadcastState]);
 
   // --- Countdown Beep Logic ---
   useEffect(() => {
@@ -604,28 +666,67 @@ const App: React.FC = () => {
 
   // --- Shuffle Logic ---
   const handleShuffle = (players: Player[]) => {
-    const validPlayers = players.filter(p => p.name.trim() !== '').map(p => p.name);
+    const validPlayers = players.filter(p => p.name.trim() !== '');
     if (validPlayers.length < 2) return;
 
-    const shuffled = [...validPlayers].sort(() => Math.random() - 0.5);
-    const mid = Math.ceil(shuffled.length / 2);
-    const roomA = shuffled.slice(0, mid);
-    const roomB = shuffled.slice(mid);
+    const { roomA, roomB } = shufflePlayersIntoRooms(players);
 
     setGameState(prev => {
-      const newState = { ...prev, players, roomA, roomB };
+      const roleDeal: RoleDeal | null = prev.selectedRoles.length > 0
+        ? dealRoles(players, prev.selectedRoles)
+        : null;
+      const newState = {
+        ...prev,
+        players,
+        roomA,
+        roomB,
+        roleDeal,
+        peerIdentities: prunePeerIdentities(prev.peerIdentities, players),
+      };
       broadcastState(newState);
       return newState;
     });
+    setCardReveal(null);
   };
 
   const updatePlayers = (players: Player[]) => {
     setGameState(prev => {
-      const newState = { ...prev, players };
+      const newState = {
+        ...prev,
+        players,
+        peerIdentities: prunePeerIdentities(prev.peerIdentities, players),
+      };
       broadcastState(newState);
       return newState;
     });
   };
+
+  const assignIdentity = useCallback((peerId: string, playerId: string) => {
+    setLocalPrefs(prev => (
+      peerId === (peerService.getPeerId() ?? myPeerId)
+        ? { ...prev, myPlayerId: playerId }
+        : prev
+    ));
+    setGameState(prev => {
+      const nextIdentities = { ...prev.peerIdentities };
+      for (const [existingPeerId, assigned] of Object.entries(nextIdentities)) {
+        if (assigned === playerId && existingPeerId !== peerId) {
+          delete nextIdentities[existingPeerId];
+        }
+      }
+      nextIdentities[peerId] = playerId;
+      const newState = {
+        ...prev,
+        peerIdentities: nextIdentities,
+      };
+      if (peerService.getIsHost()) {
+        broadcastState(newState);
+      } else {
+        peerService.send({ type: 'SET_IDENTITY', peerId, playerId });
+      }
+      return newState;
+    });
+  }, [broadcastState, myPeerId]);
 
   const setActiveTab = (tab: 'timers' | 'shuffle' | 'roles') => {
     setGameState(prev => {
@@ -810,6 +911,64 @@ const App: React.FC = () => {
     ? gameState.timers.find(t => t.id === fullscreenTimerId) 
     : null;
 
+  const isSyncRoomMode = isConnected && connectionCount > 1;
+  const myPlayerId = myPeerId ? gameState.peerIdentities[myPeerId] : undefined;
+  const myPlayer = myPlayerId
+    ? gameState.players.find(p => p.id === myPlayerId)
+    : undefined;
+  const myRoleName = myPlayerId && gameState.roleDeal
+    ? gameState.roleDeal.assignments[myPlayerId]
+    : undefined;
+  const showMyCardButton = isSyncRoomMode && Boolean(gameState.roleDeal && myPlayer && myRoleName);
+  const showWhoAmIButton = isSyncRoomMode && Boolean(gameState.roleDeal) && !myPlayerId;
+
+  useEffect(() => {
+    const dealId = gameState.roleDeal?.id ?? null;
+    if (lastDealIdRef.current && lastDealIdRef.current !== dealId) {
+      setCardReveal(null);
+    }
+    lastDealIdRef.current = dealId;
+  }, [gameState.roleDeal?.id]);
+
+  useEffect(() => {
+    const namedPlayers = gameState.players.filter(p => p.name.trim());
+    const identified = Boolean(myPeerId && gameState.peerIdentities[myPeerId]);
+    if (!isSyncRoomMode) {
+      setIdentityDismissed(false);
+      return;
+    }
+    if (myPeerId && namedPlayers.length > 0 && !identified && !identityDismissed) {
+      setShowIdentityModal(true);
+    }
+  }, [isSyncRoomMode, gameState.players, gameState.peerIdentities, myPeerId, identityDismissed]);
+
+  useEffect(() => {
+    if (!isSyncRoomMode || !myPeerId || !localPrefs.myPlayerId) return;
+    if (gameState.peerIdentities[myPeerId]) return;
+    const stillExists = gameState.players.some(p => p.id === localPrefs.myPlayerId);
+    if (stillExists) {
+      assignIdentity(myPeerId, localPrefs.myPlayerId);
+    }
+  }, [isSyncRoomMode, myPeerId, localPrefs.myPlayerId, gameState.peerIdentities, gameState.players, assignIdentity]);
+
+  const handleRevealPlayerCard = (playerId: string) => {
+    const player = gameState.players.find(p => p.id === playerId);
+    const roleName = gameState.roleDeal?.assignments[playerId];
+    if (!player || !roleName) return;
+    setCardReveal({ kind: 'player', playerId, playerName: player.name, roleName });
+  };
+
+  const handleRevealBuriedCard = (index: number) => {
+    const roleName = gameState.roleDeal?.buriedRoles[index];
+    if (!roleName) return;
+    setCardReveal({ kind: 'buried', index, roleName });
+  };
+
+  const handleRevealMyCard = () => {
+    if (!myPlayer || !myRoleName) return;
+    setCardReveal({ kind: 'mine', playerName: myPlayer.name, roleName: myRoleName });
+  };
+
   // Handle share button click - create new room and copy link, or disconnect if already connected
   const handleShare = async () => {
     // If already connected or hosting, disconnect instead
@@ -922,17 +1081,35 @@ const App: React.FC = () => {
           )}
         </div>
 
-        <button 
-          onClick={() => setShowSyncModal(true)}
-          className={`p-2 rounded-xl bg-zinc-800 active:bg-zinc-700 transition-colors relative ${isConnected ? 'text-green-400' : 'text-zinc-400'}`}
-        >
-          <Icon name="share" size={20} />
-          {isConnected && connectionCount > 1 && (
-            <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center">
-              {connectionCount}
-            </span>
+        <div className="flex items-center gap-2">
+          {showMyCardButton && (
+            <TapSafeButton
+              onTap={handleRevealMyCard}
+              className="px-3 py-2 rounded-xl bg-zinc-800 text-cyan-400 active:bg-zinc-700 text-xs font-black uppercase tracking-wide"
+            >
+              My card
+            </TapSafeButton>
           )}
-        </button>
+          {showWhoAmIButton && (
+            <TapSafeButton
+              onTap={() => setShowIdentityModal(true)}
+              className="px-3 py-2 rounded-xl bg-zinc-800 text-amber-400 active:bg-zinc-700 text-xs font-black uppercase tracking-wide"
+            >
+              Who am I?
+            </TapSafeButton>
+          )}
+          <button 
+            onClick={() => setShowSyncModal(true)}
+            className={`p-2 rounded-xl bg-zinc-800 active:bg-zinc-700 transition-colors relative ${isConnected ? 'text-green-400' : 'text-zinc-400'}`}
+          >
+            <Icon name="share" size={20} />
+            {isConnected && connectionCount > 1 && (
+              <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                {connectionCount}
+              </span>
+            )}
+          </button>
+        </div>
       </header>
 
       {/* Main Content */}
@@ -955,6 +1132,14 @@ const App: React.FC = () => {
               onShuffle={handleShuffle}
               isEditing={gameState.isEditingPlayers}
               onSetEditing={setIsEditingPlayers}
+              roleDeal={gameState.roleDeal}
+              selectedRoleCount={gameState.selectedRoles.length}
+              isPhonePassMode={!isSyncRoomMode}
+              canShuffle={!isSyncRoomMode || isHost}
+              myPlayerName={myPlayer?.name ?? null}
+              onRevealPlayerCard={handleRevealPlayerCard}
+              onRevealBuriedCard={handleRevealBuriedCard}
+              onOpenIdentity={isSyncRoomMode ? () => setShowIdentityModal(true) : undefined}
             />
           </div>
         ) : (
@@ -1028,6 +1213,33 @@ const App: React.FC = () => {
           initialCode={initialRoomCode}
           onClose={() => setShowSyncModal(false)} 
           onToggle={() => setShowSyncModal(false)}
+          players={gameState.players}
+          peerIdentities={gameState.peerIdentities}
+          myPeerId={myPeerId}
+          connectedPeerIds={connectedPeerIds}
+          onAssignIdentity={assignIdentity}
+        />
+      )}
+
+      {showIdentityModal && myPeerId && (
+        <IdentityModal
+          players={gameState.players}
+          peerIdentities={gameState.peerIdentities}
+          myPeerId={myPeerId}
+          isHost={isHost}
+          connectedPeerIds={connectedPeerIds}
+          onAssign={assignIdentity}
+          onClose={() => {
+            setShowIdentityModal(false);
+            setIdentityDismissed(true);
+          }}
+        />
+      )}
+
+      {cardReveal && (
+        <CardRevealModal
+          request={cardReveal}
+          onClose={() => setCardReveal(null)}
         />
       )}
 

@@ -15,6 +15,7 @@ interface ShuffleViewProps {
   onSetEditing: (editing: boolean) => void;
   roleDeal: RoleDeal | null;
   selectedRoleCount: number;
+  showRoleCards: boolean;
   isPhonePassMode: boolean;
   canShuffle: boolean;
   myPlayerName: string | null;
@@ -33,6 +34,7 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
   onSetEditing,
   roleDeal,
   selectedRoleCount,
+  showRoleCards,
   isPhonePassMode,
   canShuffle,
   myPlayerName,
@@ -113,7 +115,7 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
           <div className="text-lg font-semibold text-zinc-100 flex-1 min-w-0 truncate">
             {displayName}
           </div>
-          {isPhonePassMode && hasCard && playerId && (
+          {showRoleCards && isPhonePassMode && hasCard && playerId && (
             <TapSafeButton
               onTap={() => onRevealPlayerCard(playerId)}
               className="flex-shrink-0 p-2 rounded-xl bg-zinc-800 text-cyan-400 active:bg-zinc-700 active:scale-95"
@@ -163,7 +165,7 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
             </div>
           </div>
 
-          {buried.length > 0 && (
+          {showRoleCards && buried.length > 0 && (
             <div className="space-y-3">
               <h3 className="text-zinc-500 font-bold uppercase tracking-widest text-xs px-2">
                 Buried ({buried.length})
@@ -192,14 +194,14 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
             </div>
           )}
 
-          {roleDeal && selectedRoleCount > 0 && (
+          {showRoleCards && roleDeal && selectedRoleCount > 0 && (
             <p className="text-xs text-zinc-500 px-1">
               {Object.keys(roleDeal.assignments).length} cards dealt
               {buried.length > 0 ? ` · ${buried.length} buried` : ''}
             </p>
           )}
 
-          {selectedRoleCount === 0 && (
+          {showRoleCards && selectedRoleCount === 0 && (
             <p className="text-xs text-zinc-500 px-1">
               Apply a preset on Roles to deal character cards with shuffle.
             </p>
@@ -264,7 +266,7 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
           ADD PLAYER
         </button>
 
-        {selectedRoleCount === 0 && (
+        {showRoleCards && selectedRoleCount === 0 && (
           <p className="text-xs text-zinc-500 text-center">
             Apply a preset on Roles to deal character cards with shuffle.
           </p>

@@ -50,6 +50,9 @@ function normalizeGameState(parsed: GameState): GameState {
   if (parsed.isBombSoundOn === undefined) {
     parsed.isBombSoundOn = true;
   }
+  if (parsed.showRoleCards === undefined) {
+    parsed.showRoleCards = false;
+  }
   if (parsed.rolesSearchQuery === undefined) {
     parsed.rolesSearchQuery = '';
   }
@@ -126,6 +129,7 @@ function emptyGameState(): GameState {
     activeTab: 'timers',
     isEditingPlayers: true,
     isBombSoundOn: true,
+    showRoleCards: false,
     rolesSearchQuery: '',
     rolesTeamFilter: null,
     rolesTagFilter: null,
@@ -793,6 +797,15 @@ const App: React.FC = () => {
     });
   }, [broadcastState]);
 
+  // Toggle role-card UI (synced like bomb sound so phone-pass/sync rooms match)
+  const toggleShowRoleCards = useCallback(() => {
+    setGameState(prev => {
+      const newState = { ...prev, showRoleCards: !prev.showRoleCards };
+      broadcastState(newState);
+      return newState;
+    });
+  }, [broadcastState]);
+
   // Roles handlers
   const setRolesSearchQuery = (query: string) => {
     setGameState(prev => {
@@ -919,7 +932,9 @@ const App: React.FC = () => {
   const myRoleName = myPlayerId && gameState.roleDeal
     ? gameState.roleDeal.assignments[myPlayerId]
     : undefined;
-  const showMyCardButton = isSyncRoomMode && Boolean(gameState.roleDeal && myPlayer && myRoleName);
+  const showMyCardButton = gameState.showRoleCards
+    && isSyncRoomMode
+    && Boolean(gameState.roleDeal && myPlayer && myRoleName);
   const showWhoAmIButton = isSyncRoomMode && Boolean(gameState.roleDeal) && !myPlayerId;
 
   useEffect(() => {
@@ -929,6 +944,12 @@ const App: React.FC = () => {
     }
     lastDealIdRef.current = dealId;
   }, [gameState.roleDeal?.id]);
+
+  useEffect(() => {
+    if (!gameState.showRoleCards) {
+      setCardReveal(null);
+    }
+  }, [gameState.showRoleCards]);
 
   useEffect(() => {
     const namedPlayers = gameState.players.filter(p => p.name.trim());
@@ -1134,6 +1155,7 @@ const App: React.FC = () => {
               onSetEditing={setIsEditingPlayers}
               roleDeal={gameState.roleDeal}
               selectedRoleCount={gameState.selectedRoles.length}
+              showRoleCards={gameState.showRoleCards}
               isPhonePassMode={!isSyncRoomMode}
               canShuffle={!isSyncRoomMode || isHost}
               myPlayerName={myPlayer?.name ?? null}
@@ -1198,6 +1220,8 @@ const App: React.FC = () => {
           toggleAutoFullscreen={toggleAutoFullscreen}
           isBombSoundOn={gameState.isBombSoundOn}
           toggleBombSound={toggleBombSound}
+          showRoleCards={gameState.showRoleCards}
+          toggleShowRoleCards={toggleShowRoleCards}
           keepScreenAwake={localPrefs.keepScreenAwake}
           toggleKeepScreenAwake={toggleKeepScreenAwake}
           selectedSound={localPrefs.selectedSound}
@@ -1236,7 +1260,7 @@ const App: React.FC = () => {
         />
       )}
 
-      {cardReveal && (
+      {gameState.showRoleCards && cardReveal && (
         <CardRevealModal
           request={cardReveal}
           roleDeal={gameState.roleDeal}

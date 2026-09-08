@@ -9,6 +9,8 @@ interface ConfigModalProps {
   toggleAutoFullscreen: () => void;
   isBombSoundOn: boolean;
   toggleBombSound: () => void;
+  showRoleCards: boolean;
+  toggleShowRoleCards: () => void;
   keepScreenAwake: boolean;
   toggleKeepScreenAwake: () => void;
   selectedSound: string;
@@ -25,6 +27,8 @@ export const ConfigModal: React.FC<ConfigModalProps> = ({
   toggleAutoFullscreen,
   isBombSoundOn,
   toggleBombSound,
+  showRoleCards,
+  toggleShowRoleCards,
   keepScreenAwake,
   toggleKeepScreenAwake,
   selectedSound,
@@ -275,6 +279,24 @@ export const ConfigModal: React.FC<ConfigModalProps> = ({
             </div>
             <span className="font-bold text-xs tracking-widest uppercase text-center leading-tight">
               Screen Awake
+            </span>
+          </button>
+
+          {/* Show Role Cards Toggle Card */}
+          <button 
+            onClick={toggleShowRoleCards}
+            className={`
+              aspect-square rounded-3xl flex flex-col items-center justify-center gap-3 p-4 transition-all duration-300 active:scale-95 border-2
+              ${showRoleCards 
+                ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400' 
+                : 'bg-zinc-950 border-zinc-800 text-zinc-500'}
+            `}
+          >
+            <div className={`p-4 rounded-full ${showRoleCards ? 'bg-emerald-500 text-zinc-950' : 'bg-zinc-800 text-zinc-600'}`}>
+              <Icon name="idCard" size={24} />
+            </div>
+            <span className="font-bold text-xs tracking-widest uppercase text-center leading-tight">
+              Show Role Cards
             </span>
           </button>
 

@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { CharacterFull } from '../types';
+import { CharacterFull, RoleDeal } from '../types';
 import { Icon } from './Icon';
 import { TapSafeButton } from './TapSafeButton';
-import { getCharacter } from '../services/characterService';
+import { getAllCharacters, getCharacter } from '../services/characterService';
 import { getTeamBannerClasses, getTeamColorClasses, getTeamLabel } from '../utils/teamColors';
+import { getCatalogTeam, getPresentedTeam, resolvePairAllegiance } from '../utils/presentedTeam';
 import { safeModalClose } from '../utils/dismissGuard';
 
 export type CardRevealRequest =
   | { kind: 'player'; playerId: string; playerName: string; roleName: string }
   | { kind: 'buried'; index: number; roleName: string }
-  | { kind: 'mine'; playerName: string; roleName: string };
+  | { kind: 'mine'; playerId: string; playerName: string; roleName: string };
 
 interface CardRevealModalProps {
   request: CardRevealRequest;
+  roleDeal: RoleDeal | null;
   onClose: () => void;
 }
 
@@ -51,16 +53,23 @@ function confirmCopy(request: CardRevealRequest): { title: string; body: string 
   };
 }
 
-export const CardRevealModal: React.FC<CardRevealModalProps> = ({ request, onClose }) => {
+function slotFromRequest(request: CardRevealRequest): { playerId?: string; buriedIndex?: number } {
+  if (request.kind === 'buried') return { buriedIndex: request.index };
+  return { playerId: request.playerId };
+}
+
+export const CardRevealModal: React.FC<CardRevealModalProps> = ({ request, roleDeal, onClose }) => {
   const [confirmed, setConfirmed] = useState(false);
   const [character, setCharacter] = useState<CharacterFull | null>(null);
   const [loading, setLoading] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [textVisible, setTextVisible] = useState(false);
 
   useEffect(() => {
     setConfirmed(false);
     setCharacter(null);
     setLoadError(null);
+    setTextVisible(false);
   }, [request]);
 
   useEffect(() => {
@@ -118,93 +127,122 @@ export const CardRevealModal: React.FC<CardRevealModalProps> = ({ request, onClo
     );
   }
 
-  const team = character?.team ?? 'grey';
-  const banner = getTeamBannerClasses(team);
-  const badge = getTeamColorClasses(team);
+  const indexTeam = getAllCharacters().find(c => c.name === request.roleName)?.team;
+  const catalogTeam = getCatalogTeam(character, indexTeam);
+  const allegiance = resolvePairAllegiance(request.roleName, roleDeal, slotFromRequest(request));
+  const faceTeam = getPresentedTeam({
+    roleName: request.roleName,
+    catalogTeam,
+    allegiance,
+    notes: character?.notes,
+  });
+  const displayTeam = textVisible ? catalogTeam : faceTeam;
+  const banner = getTeamBannerClasses(displayTeam);
+  const badge = getTeamColorClasses(catalogTeam);
   const displayName = character?.name ?? request.roleName;
   const winCondition = character?.winCondition ?? '';
   const powers = character?.powers ?? [];
 
   return createPortal(
-    <div className="fixed inset-0 z-[80] bg-zinc-950 flex flex-col">
+    <div className={`fixed inset-0 z-[80] flex flex-col ${textVisible ? 'bg-zinc-950' : banner}`}>
       <div className="w-full max-w-md mx-auto flex flex-col h-full">
-        <div className={`${banner} px-6 pt-[max(1.5rem,env(safe-area-inset-top))] pb-8 flex-shrink-0`}>
+        <div className={`${banner} px-6 pt-[max(1.5rem,env(safe-area-inset-top))] pb-8 ${textVisible ? 'flex-shrink-0' : 'flex-1 flex flex-col'}`}>
           <div className="flex items-start justify-between gap-3">
-            <div className={`inline-flex px-3 py-1 rounded-lg border ${badge} font-semibold text-sm bg-zinc-950/40`}>
-              {getTeamLabel(team)}
+            {textVisible ? (
+              <div className={`inline-flex px-3 py-1 rounded-lg border ${badge} font-semibold text-sm bg-zinc-950/40`}>
+                {getTeamLabel(catalogTeam)}
+              </div>
+            ) : (
+              <div className="w-10" />
+            )}
+            <div className="flex items-center gap-2">
+              <TapSafeButton
+                onTap={() => setTextVisible(visible => !visible)}
+                className="p-2 rounded-xl bg-zinc-950/40 text-zinc-100 active:scale-95"
+                aria-label={textVisible ? 'Hide role text' : 'Show role text'}
+                aria-pressed={textVisible}
+              >
+                <Icon name={textVisible ? 'eye' : 'eyeOff'} size={24} />
+              </TapSafeButton>
+              <TapSafeButton
+                onTap={handleClose}
+                className="p-2 rounded-xl bg-zinc-950/40 text-zinc-100 active:scale-95"
+              >
+                <Icon name="close" size={24} />
+              </TapSafeButton>
             </div>
-            <TapSafeButton
-              onTap={handleClose}
-              className="p-2 rounded-xl bg-zinc-950/40 text-zinc-100 active:scale-95"
-            >
-              <Icon name="close" size={24} />
-            </TapSafeButton>
           </div>
-          <h1 className="text-4xl font-black text-white mt-6 leading-tight">{displayName}</h1>
-          {request.kind !== 'buried' && (
-            <p className="text-white/80 text-sm font-semibold mt-2 truncate">
-              {request.playerName}
-            </p>
-          )}
-        </div>
-
-        <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
-          {loading && (
-            <div className="text-zinc-400">Loading card…</div>
-          )}
-
-          {!loading && loadError && (
-            <p className="text-zinc-400">{loadError}</p>
-          )}
-
-          {!loading && (
+          {textVisible && (
             <>
-              <div>
-                <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-2">Win Condition</h3>
-                <p className="text-zinc-200 leading-relaxed text-lg">
-                  {winCondition || '—'}
+              <h1 className="text-4xl font-black text-white mt-6 leading-tight">{displayName}</h1>
+              {request.kind !== 'buried' && (
+                <p className="text-white/80 text-sm font-semibold mt-2 truncate">
+                  {request.playerName}
                 </p>
-              </div>
-
-              <div>
-                <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-3">Powers</h3>
-                {powers.length === 0 ? (
-                  <p className="text-zinc-500">No special powers.</p>
-                ) : (
-                  <div className="space-y-3">
-                    {powers.map((power, index) => {
-                      if (!power?.name) return null;
-                      const powerTypeIcon = power.type ? getPowerTypeIcon(power.type) : null;
-                      return (
-                        <div
-                          key={index}
-                          className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden"
-                        >
-                          <div className="p-4">
-                            <div className="flex items-center gap-2 mb-2">
-                              {power.type && (
-                                <span className="px-2 py-1 bg-zinc-800 rounded text-xs font-semibold text-zinc-300 flex items-center gap-1">
-                                  {powerTypeIcon && <Icon name={powerTypeIcon} size={12} className="flex-shrink-0" />}
-                                  {power.type.toUpperCase()}
-                                </span>
-                              )}
-                              <span className="font-semibold text-zinc-100">{power.name}</span>
-                            </div>
-                            {power.description && (
-                              <p className="text-zinc-300 text-sm leading-relaxed pt-2 border-t border-zinc-800">
-                                {power.description}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
+              )}
             </>
           )}
         </div>
+
+        {textVisible && (
+          <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+            {loading && (
+              <div className="text-zinc-400">Loading card…</div>
+            )}
+
+            {!loading && loadError && (
+              <p className="text-zinc-400">{loadError}</p>
+            )}
+
+            {!loading && (
+              <>
+                <div>
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-2">Win Condition</h3>
+                  <p className="text-zinc-200 leading-relaxed text-lg">
+                    {winCondition || '—'}
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-3">Powers</h3>
+                  {powers.length === 0 ? (
+                    <p className="text-zinc-500">No special powers.</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {powers.map((power, index) => {
+                        if (!power?.name) return null;
+                        const powerTypeIcon = power.type ? getPowerTypeIcon(power.type) : null;
+                        return (
+                          <div
+                            key={index}
+                            className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden"
+                          >
+                            <div className="p-4">
+                              <div className="flex items-center gap-2 mb-2">
+                                {power.type && (
+                                  <span className="px-2 py-1 bg-zinc-800 rounded text-xs font-semibold text-zinc-300 flex items-center gap-1">
+                                    {powerTypeIcon && <Icon name={powerTypeIcon} size={12} className="flex-shrink-0" />}
+                                    {power.type.toUpperCase()}
+                                  </span>
+                                )}
+                                <span className="font-semibold text-zinc-100">{power.name}</span>
+                              </div>
+                              {power.description && (
+                                <p className="text-zinc-300 text-sm leading-relaxed pt-2 border-t border-zinc-800">
+                                  {power.description}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+        )}
       </div>
     </div>,
     document.body

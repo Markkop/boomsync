@@ -5,6 +5,7 @@ import { Icon } from './Icon';
 import { TapSafeButton } from './TapSafeButton';
 import { getCharacter } from '../services/characterService';
 import { getTeamBannerClasses, getTeamColorClasses, getTeamLabel } from '../utils/teamColors';
+import { safeModalClose } from '../utils/dismissGuard';
 
 export type CardRevealRequest =
   | { kind: 'player'; playerId: string; playerName: string; roleName: string }
@@ -89,6 +90,7 @@ export const CardRevealModal: React.FC<CardRevealModalProps> = ({ request, onClo
   }, [confirmed, request.roleName]);
 
   const { title, body } = confirmCopy(request);
+  const handleClose = () => safeModalClose(onClose);
 
   if (!confirmed) {
     return createPortal(
@@ -98,7 +100,7 @@ export const CardRevealModal: React.FC<CardRevealModalProps> = ({ request, onClo
           <p className="text-zinc-400 text-sm mb-6">{body}</p>
           <div className="flex gap-3">
             <TapSafeButton
-              onTap={onClose}
+              onTap={handleClose}
               className="flex-1 py-4 bg-zinc-800 border border-zinc-700 text-zinc-300 font-bold rounded-2xl active:scale-95 transition-transform"
             >
               Cancel
@@ -132,7 +134,7 @@ export const CardRevealModal: React.FC<CardRevealModalProps> = ({ request, onClo
               {getTeamLabel(team)}
             </div>
             <TapSafeButton
-              onTap={onClose}
+              onTap={handleClose}
               className="p-2 rounded-xl bg-zinc-950/40 text-zinc-100 active:scale-95"
             >
               <Icon name="close" size={24} />

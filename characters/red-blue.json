@@ -421,6 +421,23 @@
       "notes": ["If the player you chose to remove from the room was the leader, the leader should immediately place the leader card on the ground. At this point, a new leader is nominated in the same method as in the first round."]
     },
     {
+      "name": "Loyalist",
+      "winCondition": "Standard team win condition",
+      "powers": [
+        {
+          "name": "LOYALIST",
+          "type": "card share",
+          "description": "You are immune to the \"traitor\" condition. Moreover, if anyone card shares with you they lose the \"traitor\" condition."
+        }
+      ],
+      "tags": ["card share power", "condition"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Conspirator"],
+      "requiresGroup": "Conspirator Mechanic",
+      "notes": ["Requires Conspirator to be any use.", "Pretty useless without the Conspirator."]
+    },
+    {
       "name": "Mayor",
       "winCondition": "Standard team win condition",
       "powers": [

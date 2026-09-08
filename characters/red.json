@@ -32,6 +32,22 @@
       "notes": ["It is possible that the Dragon receives the \"dead\" condition before the end of the game. If this happens, then the Dragon does not breathe, failing to provide the \"dead\" condition to everyone in the same room at the end of the game.", "Survivor, Victim, Moby, and Ahab are your natural grey allies."]
     },
     {
+      "name": "Dragon Egg",
+      "winCondition": "Standard team win condition",
+      "powers": [
+        {
+          "name": "DRAGON EGG",
+          "type": "backup",
+          "description": "You are a secondary character. You are the backup character for the Dragon. If the Dragon card is buried or the Dragon receives the \"dead\" condition before activating dragon breath, you must carry out all responsibilities associated with the Dragon (for example: ending the game in the same room as the King, card sharing with the Eggineer)."
+        }
+      ],
+      "tags": ["bury"],
+      "worksWellWith": [],
+      "doesntWorkWellWith": [],
+      "requires": ["Dragon"],
+      "requiresGroup": "Backup: Dragon"
+    },
+    {
       "name": "Dr. Boom",
       "winCondition": "Standard team win condition",
       "powers": [
@@ -181,6 +197,15 @@
       "requires": ["Red Fist"],
       "requiresGroup": "Backup: Red Fist",
       "notes": ["If burying a card, consider not burying the Informers or Judge."]
+    },
+    {
+      "name": "Red Team",
+      "winCondition": "If the President gains the \"Dead\" condition, you win",
+      "powers": [],
+      "tags": [],
+      "worksWellWith": ["first time players"],
+      "doesntWorkWellWith": [],
+      "notes": ["Any character card that does not have the white star icon on it is considered to be on the Red Team.", "Works well for first time players.", "Can bore experienced players."]
     },
     {
       "name": "Socialist",

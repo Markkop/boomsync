@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { Player } from '../types';
 import { Icon } from './Icon';
 import { TapSafeButton } from './TapSafeButton';
@@ -47,8 +48,8 @@ export const IdentityModal: React.FC<IdentityModalProps> = ({
     }),
   ];
 
-  return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center p-6 bg-zinc-950/90 backdrop-blur-sm animate-in fade-in duration-200">
+  return createPortal(
+    <div className="fixed inset-0 z-[70] flex items-center justify-center p-6 bg-zinc-950/90 backdrop-blur-sm">
       <div className="w-full max-w-sm bg-zinc-900 border border-zinc-800 rounded-[40px] p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex items-start justify-between gap-3 mb-4">
           <h2 className="text-2xl font-black text-zinc-100">
@@ -140,6 +141,7 @@ export const IdentityModal: React.FC<IdentityModalProps> = ({
           {myPlayerId ? 'Done' : 'Skip for now'}
         </TapSafeButton>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

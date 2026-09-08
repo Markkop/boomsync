@@ -14,6 +14,8 @@ export function getTeamColorClasses(team: string): string {
       return 'bg-yellow-500/20 border-yellow-500 text-yellow-400';
     case 'special':
       return 'bg-pink-500/20 border-pink-500 text-pink-400';
+    case 'black':
+      return 'bg-black/40 border-zinc-500 text-zinc-300';
     default:
       return 'bg-zinc-800/20 border-zinc-700 text-zinc-400';
   }
@@ -35,6 +37,8 @@ export function getTeamBannerClasses(team: string): string {
       return 'bg-yellow-500';
     case 'special':
       return 'bg-pink-600';
+    case 'black':
+      return 'bg-black';
     default:
       return 'bg-zinc-700';
   }

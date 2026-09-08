@@ -966,7 +966,7 @@ const App: React.FC = () => {
 
   const handleRevealMyCard = () => {
     if (!myPlayer || !myRoleName) return;
-    setCardReveal({ kind: 'mine', playerName: myPlayer.name, roleName: myRoleName });
+    setCardReveal({ kind: 'mine', playerId: myPlayer.id, playerName: myPlayer.name, roleName: myRoleName });
   };
 
   // Handle share button click - create new room and copy link, or disconnect if already connected
@@ -1239,6 +1239,7 @@ const App: React.FC = () => {
       {cardReveal && (
         <CardRevealModal
           request={cardReveal}
+          roleDeal={gameState.roleDeal}
           onClose={() => setCardReveal(null)}
         />
       )}

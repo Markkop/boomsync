@@ -37,6 +37,8 @@ export interface GameState {
   activeTab: 'timers' | 'shuffle' | 'roles';
   isEditingPlayers: boolean;
   isBombSoundOn: boolean;
+  /** When false (default), hide card-deal UI; shuffle still writes roleDeal. Synced like bomb sound. */
+  showRoleCards: boolean;
   rolesSearchQuery: string;
   rolesTeamFilter: string | null;
   rolesTagFilter: string | null;

@@ -29,7 +29,7 @@ export const pt: TranslationTree = {
   },
   nav: {
     timer: 'Timer',
-    shuffle: 'Embaralhar',
+    shuffle: 'Sorteio',
     roles: 'Papéis',
   },
   app: {
@@ -136,7 +136,7 @@ export const pt: TranslationTree = {
   identity: {
     whoIsWho: 'Quem é quem',
     whoAreYou: 'Quem é você?',
-    addNamesFirst: 'Adicione nomes de jogadores na aba Embaralhar primeiro.',
+    addNamesFirst: 'Adicione nomes de jogadores na aba Sorteio primeiro.',
     assignHint: 'Associe cada dispositivo conectado a um jogador. Você pode alterar depois.',
     pickName: 'Escolha seu nome na lista de jogadores.',
     skipForNow: 'Pular por agora',

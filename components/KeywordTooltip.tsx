@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Icon } from './Icon';
+import { useT } from '../i18n/I18nContext';
 
 interface KeywordTooltipProps {
   keyword: string;
@@ -16,7 +17,7 @@ export const KEYWORD_DEFINITIONS: Record<string, string> = {
   'contagious': 'A condition that spreads to other players when they interact (card share or color share).',
   'foolish': 'A condition that prevents a player from refusing card share or color share offers.',
   'cultist': 'A condition that links players to the Cult Leader. If the Cult Leader dies, all cultists lose.',
-  'zombie': 'A condition that changes a player\'s allegiance to Team Zombie.',
+  'zombie': "A condition that changes a player's allegiance to Team Zombie.",
   'in love': 'A condition that changes win conditions - players must end in the same room.',
   'in hate': 'A condition that changes win conditions - players must end in opposite rooms.',
   'traitor': 'A condition that can be removed by card sharing with the Loyalist.',
@@ -33,11 +34,8 @@ export const KEYWORD_DEFINITIONS: Record<string, string> = {
   'private reveal power': 'This character can privately reveal their card to another player.',
   'public reveal power': 'This character can publicly reveal their card to all players.',
   'condition': 'This character starts with or can apply conditions to players.',
-  'contagious': 'A condition that spreads to other players when they interact (card share or color share).',
   'acting': 'This character requires acting or roleplay to function properly.',
   'card swap': 'This character can swap cards with other players.',
-  'bury': 'A card that is removed from play and placed face-down. Backup characters activate when their primary is buried.',
-  'buried': 'A card that is removed from play and placed face-down. Backup characters activate when their primary is buried.',
   'primary character': 'Core character for team win conditions (e.g., President, Bomber).',
   'pause game': 'This character pauses the game for a specified duration when their power activates.',
   'odd player count': 'This character only works correctly with an odd number of players.',
@@ -45,6 +43,7 @@ export const KEYWORD_DEFINITIONS: Record<string, string> = {
 };
 
 export const KeywordTooltip: React.FC<KeywordTooltipProps> = ({ keyword, position, onClose }) => {
+  const t = useT();
   const popupRef = useRef<HTMLDivElement>(null);
   const lower = keyword.toLowerCase();
   
@@ -80,7 +79,7 @@ export const KeywordTooltip: React.FC<KeywordTooltipProps> = ({ keyword, positio
   }
   
   if (!definition) {
-    definition = 'No definition available for this keyword.';
+    definition = t('keyword.noDefinition');
   }
   const iconName =
     lower.includes('card share') ? 'share'

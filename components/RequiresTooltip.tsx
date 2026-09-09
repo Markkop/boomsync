@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Icon } from './Icon';
 import { getAllCharacters } from '../services/characterService';
 import { CharacterIndex } from '../types';
+import { useT } from '../i18n/I18nContext';
 
 interface RequiresTooltipProps {
   requires: string[];
@@ -38,6 +39,7 @@ export const RequiresTooltip: React.FC<RequiresTooltipProps> = ({
   position, 
   onClose 
 }) => {
+  const t = useT();
   const popupRef = useRef<HTMLDivElement>(null);
   const allCharacters = getAllCharacters();
   
@@ -114,7 +116,7 @@ export const RequiresTooltip: React.FC<RequiresTooltipProps> = ({
         <h3 className="text-base font-bold text-zinc-100 flex items-center gap-2 flex-1 min-w-0">
           <Icon name="alert" size={16} className="text-cyan-300 flex-shrink-0" />
           <span className="truncate">
-            {requiresGroup || `${characterName} Requires`}
+            {requiresGroup || t('requires.title', { name: characterName })}
           </span>
         </h3>
         <button
@@ -161,7 +163,7 @@ export const RequiresTooltip: React.FC<RequiresTooltipProps> = ({
           )}
           {requires.length > 0 && (
             <div>
-              <p className="text-sm text-zinc-300 mb-2">Required:</p>
+              <p className="text-sm text-zinc-300 mb-2">{t('common.required')}</p>
               <ul className="list-disc list-inside text-sm text-zinc-400 space-y-1">
                 {requires.map((req, idx) => (
                   <li key={idx}>{req}</li>

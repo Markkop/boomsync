@@ -4,7 +4,8 @@ import { CharacterCard } from './CharacterCard';
 import { Icon } from './Icon';
 import { getAllCharacters } from '../services/characterService';
 import { TapSafeButton } from './TapSafeButton';
-import { useT } from '../i18n/I18nContext';
+import { useLocale, useT } from '../i18n/I18nContext';
+import { translateRoleName } from '../i18n/display';
 
 interface RoleListModalProps {
   selectedRoles: string[];
@@ -26,6 +27,7 @@ export const RoleListModal: React.FC<RoleListModalProps> = ({
   onShowRequires
 }) => {
   const t = useT();
+  const locale = useLocale();
   const allCharacters = getAllCharacters();
   const selectedCharacters = useMemo(() => {
     return selectedRoles
@@ -76,12 +78,12 @@ export const RoleListModal: React.FC<RoleListModalProps> = ({
     selectedCharacters.forEach(char => {
       char.requires.forEach(req => {
         if (!selectedRoles.includes(req)) {
-          warnings.push(t('roles.requires', { name: char.name, req }));
+          warnings.push(t('roles.requires', { name: translateRoleName(locale, char.name), req: translateRoleName(locale, req) }));
         }
       });
     });
     return warnings;
-  }, [selectedCharacters, selectedRoles, t]);
+  }, [selectedCharacters, selectedRoles, t, locale]);
 
   // Group and sort roles for two-column display
   const groupedRoles = useMemo(() => {
@@ -197,7 +199,7 @@ export const RoleListModal: React.FC<RoleListModalProps> = ({
                           onTap={() => onCharacterTap(role)}
                           className={`text-xs ${colorClass} font-medium hover:opacity-80 transition-opacity active:scale-95`}
                         >
-                          {count > 1 ? `${count}x ` : ''}{role}
+                          {count > 1 ? `${count}x ` : ''}{translateRoleName(locale, role)}
                         </TapSafeButton>
                       );
                     })}

@@ -6,6 +6,20 @@ import { LOCALE_STORAGE_KEY, LOCALES } from './types';
 
 export type { Locale, TranslationParams, TranslationTree };
 export { LOCALE_NATIVE_NAMES, LOCALE_STORAGE_KEY, LOCALES } from './types';
+export {
+  characterMatchesQuery,
+  formatTagLabel,
+  getKeywordDefinition,
+  translateCharacter,
+  translateCharacterIndex,
+  translateKeywordLabel,
+  translatePowerType,
+  translatePresetMeta,
+  translatePresetName,
+  translateRelationLabel,
+  translateRoleName,
+  translateTag,
+} from './display';
 
 const dictionaries: Record<Locale, TranslationTree> = { en, pt, es };
 

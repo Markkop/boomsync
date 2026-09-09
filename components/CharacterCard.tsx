@@ -1,7 +1,8 @@
 import React, { useRef } from 'react';
 import { CharacterIndex } from '../types';
 import { Icon } from './Icon';
-import { useT } from '../i18n/I18nContext';
+import { useLocale, useT } from '../i18n/I18nContext';
+import { formatTagLabel, translateIndexDescription, translateRoleName, translateCharacterIndex } from '../i18n/display';
 
 interface CharacterCardProps {
   character: CharacterIndex;
@@ -64,14 +65,6 @@ const getTagIcon = (tag: string): IconName | null => {
   return null;
 };
 
-const formatTagLabel = (tag: string): string => {
-  // Capitalize first letter of each word
-  return tag
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-};
-
 export const CharacterCard: React.FC<CharacterCardProps> = ({
   character,
   isSelected,
@@ -91,6 +84,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   onRequiresClick
 }) => {
   const t = useT();
+  const locale = useLocale();
+  const displayName = translateRoleName(locale, character.name);
+  const displayDescription = translateIndexDescription(locale, character.name, character.description);
+  const displayRequiresGroup = translateCharacterIndex(locale, character).requiresGroup;
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isLongPressRef = useRef(false);
   const isPressedRef = useRef(false);
@@ -189,11 +186,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
       <div className="flex items-start justify-between gap-2">
         <div className="flex-1 min-w-0">
           <h3 className={`font-bold ${darkened ? 'text-zinc-400' : 'text-zinc-100'} truncate ${compact ? 'text-sm' : 'text-base'}`}>
-            {count && count > 1 ? `${count}x ` : ''}{character.name}{titleSuffix ? ` ${titleSuffix}` : ''}
+            {count && count > 1 ? `${count}x ` : ''}{displayName}{titleSuffix ? ` ${titleSuffix}` : ''}
           </h3>
-          {character.description && (
+          {displayDescription && (
             <p className={`${darkened ? 'text-zinc-500' : 'text-zinc-400'} mt-1 ${descriptionSize === 'sm' ? 'text-sm' : 'text-xs'}`}>
-              {character.description}
+              {displayDescription}
             </p>
           )}
         </div>
@@ -258,14 +255,14 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               onPointerUp={handleTagPointerUp}
               onPointerMove={handleTagPointerMove}
               className={`flex items-center gap-1 rounded-lg px-2 py-1 min-w-0 transition-colors ${darkened ? 'bg-zinc-800/30 hover:bg-zinc-800/50' : 'bg-zinc-800/50 hover:bg-zinc-800/70'} ${onTagClick ? 'cursor-pointer active:scale-95' : 'cursor-default'}`}
-              title={tag}
+              title={formatTagLabel(locale, tag)}
               type="button"
             >
               {iconName && (
                 <Icon name={iconName} size={12} className={`flex-shrink-0 ${darkened ? 'text-zinc-500' : 'text-zinc-400'}`} />
               )}
               <span className={`break-words ${compact ? 'text-xs' : 'text-xs'} ${darkened ? 'text-zinc-500' : 'text-zinc-300'}`}>
-                {formatTagLabel(tag)}
+                {formatTagLabel(locale, tag)}
               </span>
             </button>
           );
@@ -301,11 +298,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   onPointerUp={handleRequiresPointerUp}
                   onPointerMove={handleRequiresPointerMove}
                   className={`flex items-center gap-1 rounded-lg px-2 py-1 min-w-0 transition-colors cursor-pointer active:scale-95 ${darkened ? 'bg-zinc-800/30 hover:bg-zinc-800/50' : 'bg-zinc-800/50 hover:bg-zinc-800/70'}`}
-                  title={character.requiresGroup || t('character.requiresTitle', { list: character.requires.join(', ') })}
+                  title={displayRequiresGroup || t('character.requiresTitle', { list: character.requires.map(r => translateRoleName(locale, r)).join(', ') })}
                   type="button"
                 >
                   <span className={`break-words ${compact ? 'text-xs' : 'text-xs'} ${darkened ? 'text-zinc-500' : 'text-zinc-400'}`}>
-                    {character.requiresGroup || `+ ${character.requires.join(', ')}`}
+                    {displayRequiresGroup || `+ ${character.requires.map(r => translateRoleName(locale, r)).join(', ')}`}
                   </span>
                 </button>
               );
@@ -314,7 +311,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             return (
               <div className={`flex items-center gap-1 rounded-lg px-2 py-1 min-w-0 ${darkened ? 'bg-zinc-800/30' : 'bg-zinc-800/50'}`}>
                 <span className={`break-words ${compact ? 'text-xs' : 'text-xs'} ${darkened ? 'text-zinc-500' : 'text-zinc-400'}`}>
-                  {character.requiresGroup || `+ ${character.requires.join(', ')}`}
+                    {displayRequiresGroup || `+ ${character.requires.map(r => translateRoleName(locale, r)).join(', ')}`}
                 </span>
               </div>
             );

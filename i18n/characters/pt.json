@@ -1,0 +1,2086 @@
+{
+  "Agent": {
+    "name": "Agente",
+    "description": "Força jogadores a compartilhar carta com você uma vez por rodada.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "AGENTE",
+        "type": "private reveal",
+        "description": "Uma vez por rodada, você pode revelar sua carta em privado a um jogador e forçar esse jogador a compartilhar carta com você. Você deve dizer verbalmente ao jogador alvo: \"Estou usando meu poder de AGENTE. Você DEVE revelar sua carta para mim.\""
+      }
+    ],
+    "notes": []
+  },
+  "Alchemist": {
+    "name": "Alquimista",
+    "description": "O Rei deve compartilhar carta com você ou o Time Azul perde.",
+    "winCondition": "O Time Azul tem a seguinte condição de vitória adicional: o Rei deve compartilhar carta com o Alquimista antes do fim do jogo ou o Time Azul perde",
+    "powers": [
+      {
+        "name": "ALQUIMISTA",
+        "type": "card share",
+        "description": "Ao jogar com o Alquimista, o Time Azul tem a seguinte condição de vitória adicional: o Rei deve compartilhar carta com o Alquimista antes do fim do jogo ou o Time Azul perde. No fim do jogo, o Rei será perguntado se compartilhou carta com o Alquimista. Nesse momento, ambos os jogadores confirmarão ou negarão ter compartilhado carta."
+      }
+    ],
+    "notes": [
+      "Lembre-se de que, se o personagem Rei trocar de jogador (talvez por causa da Batata Quente), o novo Rei deve compartilhar carta com o Alquimista.",
+      "Jogos com o Alquimista e o Ovoengenheiro podem resultar em um jogo em que todos os jogadores perdem."
+    ]
+  },
+  "Alien": {
+    "name": "Alienígena",
+    "description": "Rouba cartas de quem compartilhar carta com você.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "ABDUÇÃO",
+        "type": "card share",
+        "description": "Você deve ficar com a carta de qualquer personagem que compartilhar carta com você. Você não pode fazer nada com as cartas adquiridas, incluindo mostrá-las a outros ou usar poderes associados à carta. Jogadores cujas cartas foram roubadas mantêm seus poderes e lealdade, mas obviamente perdem toda capacidade de compartilhar suas cartas com outros ou usar qualquer poder que exija revelação privada, pública, de cor ou compartilhamento de carta."
+      }
+    ],
+    "notes": [
+      "Pode ser difícil esconder todas as cartas adquiridas"
+    ]
+  },
+  "Ambassador": {
+    "name": "Embaixador",
+    "description": "Imune a todos os poderes; pode se mover livremente entre as salas.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "IMUNE",
+        "type": "condition",
+        "description": "Antes do jogo começar, mas depois que as cartas de personagem forem distribuídas, você deve anunciar publicamente \"Sou um Embaixador!\" e manter sua carta revelada publicamente pelo resto do jogo. Essa revelação pública é permanente. Embaixadores têm a condição \"imune\". Jogadores com a condição \"imune\" são imunes a todos os poderes e condições, sem exceção. Embaixadores podem andar livremente entre as duas salas. Embaixadores nunca podem participar de nenhuma votação (por exemplo, votar para nomear ou usurpar um líder). Embaixadores nunca podem ser escolhidos por líderes para serem transferidos para outra sala (ou por outros personagens com tais poderes), pois nunca são de fato contados como parte da população de uma sala."
+      }
+    ],
+    "notes": [
+      "Deve haver 2 Embaixadores para o equilíbrio adequado do jogo. Não enterre Embaixadores.",
+      "Como Embaixadores nunca são considerados parte da população de uma sala, eles não contam para a contagem de jogadores no jogo e não contam a favor ou contra o objetivo de vitória do Time Zumbi. Isso significa que, se você tem 18 jogadores incluindo os Embaixadores, deveria estar jogando um jogo de 16 jogadores."
+    ]
+  },
+  "Amnesiac": {
+    "name": "Amnésico",
+    "description": "Adivinhe o time da carta enterrada para vencer.",
+    "winCondition": "No fim da última rodada, antes de todos os jogadores revelarem suas cartas de personagem, você deve declarar de qual time está dizendo: \"Lembro de qual time estou. Estou no _________.\" Você deve escolher o Time Vermelho, o Time Azul ou nenhum time. Para vencer, você quer adivinhar a lealdade de time da carta enterrada",
+    "powers": [],
+    "notes": [
+      "Esta carta de personagem só pode ser usada com uma carta enterrada.",
+      "Se você escolher o time correto (o time da carta enterrada), mas seu time perder, você também perde. Se você disser \"Não estou no time de ninguém\" e a carta enterrada não estiver no Time Vermelho nem no Time Azul, você vence.",
+      "Funciona bem para dar sabor a um jogo com poucos jogadores.",
+      "Funciona mal com muitos cinzas, muitos jogadores, Ninjas e Conspiradores"
+    ],
+    "requiresGroup": "Mecânica de Carta Enterrada"
+  },
+  "Anarchist": {
+    "name": "Anarquista",
+    "description": "Vença ajudando a usurpar líderes na maioria das rodadas.",
+    "winCondition": "Você vence se seu voto ajudou a usurpar com sucesso um líder durante a maioria das rodadas",
+    "powers": [],
+    "notes": [
+      "Por exemplo, em um jogo de 3 rodadas, você deve ter usurpado um líder em 2 das 3 rodadas."
+    ]
+  },
+  "Angel": {
+    "name": "Anjo",
+    "description": "Deve sempre dizer a verdade verbalmente.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "HONESTO",
+        "type": "condition",
+        "description": "Você começa com a condição \"honesto\". Jogadores com a condição \"honesto\" devem sempre dizer a verdade verbalmente (a menos que estejam \"seduzidos\", \"hipnotizados\" ou sob qualquer outra condição que possa influenciar sua capacidade de dizer a verdade). Isso significa que você pode mentir, contanto que não seja verbalmente."
+      }
+    ],
+    "notes": [
+      "Se um jogador com a condição \"honesto\" adquirir a condição \"mentiroso\", as duas condições se cancelam, deixando o jogador sem nenhuma das duas."
+    ]
+  },
+  "Apprentice": {
+    "name": "Aprendiz",
+    "description": "Reserva do Alquimista se ele morrer ou for enterrado.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "APRENDIZ",
+        "type": "backup",
+        "description": "Você é o personagem reserva do Alquimista. Se a carta do Alquimista for enterrada ou o Alquimista receber a condição \"morto\" antes do fim do jogo, você deve assumir todas as responsabilidades associadas ao Alquimista (compartilhar carta com o Rei)."
+      }
+    ],
+    "notes": [],
+    "requiresGroup": "Reserva: Alquimista"
+  },
+  "Assassin": {
+    "name": "Assassino",
+    "description": "Termine com o Presidente (sem o Homem-Bomba) para vencer como Time Amarelo e derrotar o Azul.",
+    "winCondition": "Se o Presidente não receber a condição \"Morto\" e você estiver na mesma sala que o Presidente, o Time Amarelo vence, mas o Time Azul perde. Se o Presidente, o Homem-Bomba e você terminarem na mesma sala, então o Time Amarelo, o Time Azul e até o Time Vermelho perdem",
+    "powers": [
+      {
+        "name": "AMARELO",
+        "type": "card share",
+        "description": "Você está no Time Amarelo. Se o Presidente não receber a condição \"Morto\" e você estiver na mesma sala que o Presidente, o Time Amarelo vence, mas o Time Azul perde. Se o Presidente, o Homem-Bomba e você terminarem na mesma sala, então o Time Amarelo, o Time Azul e até o Time Vermelho perdem. Você também tem o poder AMARELO. Qualquer jogador que compartilhar carta ou cor com você entra no Time Amarelo. Novos membros do Time Amarelo mantêm seus poderes e condições, mas sua lealdade (e portanto condição de vitória) passa a ser do Time Amarelo. No entanto, o poder AMARELO não funciona em personagens primários (por exemplo, Presidente, Homem-Bomba, Punho Vermelho, etc.)."
+      }
+    ],
+    "notes": [
+      "Funciona bem para jogadores experientes.",
+      "Adiciona uma camada de complexidade. Muitas vezes pode levar a um jogo sem vencedores."
+    ]
+  },
+  "Beholder": {
+    "name": "Observador",
+    "description": "Vença ao ver qualquer parte da face da carta de um jogador.",
+    "winCondition": "Se você ver qualquer parte da face da carta de um jogador (cor ou personagem), declare em voz alta o que viu ali mesmo para vencer o jogo",
+    "powers": [
+      {
+        "name": "OBSERVADOR",
+        "type": "public reveal",
+        "description": "Antes do jogo começar, mas depois que as cartas de personagem forem distribuídas, você deve anunciar publicamente \"Sou o Observador!\" e manter sua carta permanentemente revelada publicamente pelo resto do jogo. Faça o possível para garantir que não haja conversas privadas. Você pode ser o mais intrusivo possível, incluindo olhar por cima do ombro dos jogadores para ver suas cartas e até se abaixar para ver a parte de baixo das cartas passadas entre jogadores. Você não pode manipular fisicamente outros jogadores, nem eles devem tentar manipular você fisicamente. Se estiver jogando com a variante Promessa de Privacidade, ignore a regra."
+      }
+    ],
+    "notes": [
+      "Você tem a condição \"imune\". Jogadores com a condição \"imune\" são imunes a todos os poderes e condições, sem exceção. O Observador pode andar livremente entre as duas salas. O Observador nunca pode participar de nenhuma votação (por exemplo, votar para nomear ou usurpar um líder). O Observador nunca pode ser escolhido por líderes para ser transferido para outra sala (ou por outros personagens com tais poderes), pois nunca é de fato contado como parte da população de uma sala.",
+      "Se você vencer, todos os outros jogadores perdem.",
+      "Adivinhar não é permitido. Se você declarar publicamente uma cor ou carta que viu e estiver errado, perde instantaneamente.",
+      "Como o Observador nunca é considerado parte da população de uma sala, ele não conta para a contagem de jogadores no jogo e não conta a favor ou contra o objetivo de vitória do Time Zumbi. Isso significa que, se você tem 18 jogadores incluindo o Observador, deveria estar jogando um jogo de 15 jogadores.",
+      "Boa sorte jogando com personagens que tenham poder de revelação pública (como o Embaixador)"
+    ]
+  },
+  "The Black": {
+    "name": "O Preto",
+    "description": "Vença se alguém compartilhar cor com você.",
+    "winCondition": "Se qualquer jogador compartilhar cor com você, você vence e todos os outros jogadores perdem",
+    "powers": [
+      {
+        "name": "O PRETO",
+        "type": "color share",
+        "description": "Sua carta de personagem é completamente preta. Se qualquer jogador compartilhar cor com você, você vence e todos os outros jogadores perdem."
+      }
+    ],
+    "notes": [
+      "Inútil com menos de 11 jogadores."
+    ]
+  },
+  "Blind": {
+    "name": "Cego",
+    "description": "Deve manter os olhos fechados durante todo o jogo.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "CEGO",
+        "type": "condition",
+        "description": "Você começa com a condição \"cego\". Jogadores com a condição \"cego\" devem fazer o possível para nunca abrir os olhos durante o jogo."
+      }
+    ],
+    "notes": [
+      "Jogadores cegos ainda podem adquirir condições e ter poderes usados sobre eles, mas não devem ser enganados sobre isso.",
+      "Requer alguma coordenação. Os designers não são responsáveis por lesões durante o jogo. Usar Cego em combinação com o personagem Múmia é fortemente desencorajado."
+    ]
+  },
+  "Blue Drone": {
+    "name": "Drone Azul",
+    "description": "O Azul vence se você estiver na mesma sala que o Punho Vermelho.",
+    "winCondition": "O Time Azul vence se você estiver na mesma sala que o Punho Vermelho no fim do jogo",
+    "powers": [],
+    "notes": [
+      "Deve ser jogado com o Punho Vermelho. Juiz ou Informante recomendado (não ambos).",
+      "As cartas Drone Azul e Punho Vermelho adicionam condições de vitória extras ao jogo, aumentando a complexidade e alterando bastante as condições de vitória padrão.",
+      "Pode causar um resultado confuso no fim do jogo. Este papel pode ser complexo demais para jogadores novos."
+    ],
+    "requiresGroup": "Par Soco/Drone"
+  },
+  "Blue Firecracker": {
+    "name": "Bombinha Azul",
+    "description": "Reserva do Drone Azul se ele morrer ou for enterrado.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "BOMBINHA AZUL",
+        "type": "backup",
+        "description": "Você é um personagem secundário. Você é o personagem reserva do Drone Azul. Se a carta do Drone Azul for enterrada ou o Drone Azul receber a condição \"morto\" antes do fim do jogo, você deve assumir todas as responsabilidades associadas ao Drone Azul."
+      }
+    ],
+    "notes": [
+      "Se for enterrar uma carta, considere não enterrar os Informantes ou o Juiz."
+    ],
+    "requiresGroup": "Reserva: Drone Azul"
+  },
+  "Blue Team": {
+    "name": "Time Azul",
+    "description": "Vença se o Presidente não receber a condição morto.",
+    "winCondition": "Se o Presidente não receber a condição \"Morto\", você vence",
+    "powers": [],
+    "notes": [
+      "Qualquer carta de personagem com o ícone de estrela branca é considerada do Time Azul.",
+      "Funciona bem para jogadores de primeira viagem.",
+      "Pode entediar jogadores experientes."
+    ]
+  },
+  "Bomber": {
+    "name": "Homem-Bomba",
+    "description": "Todos na sua sala recebem a condição morto no fim do jogo.",
+    "winCondition": "O Time Vermelho vence se o Presidente receber a condição \"morto\"",
+    "powers": [
+      {
+        "name": "BOMBA",
+        "type": "end game",
+        "description": "Todos na mesma sala que você no fim do jogo recebem a condição \"morto\". O Time Vermelho vence se o Presidente receber a condição \"morto\"."
+      }
+    ],
+    "notes": [
+      "É possível que o Homem-Bomba receba a condição \"morto\" antes do fim do jogo. Se isso acontecer, o Homem-Bomba não detona, deixando de fornecer a condição \"morto\" a todos na mesma sala no fim do jogo.",
+      "Sobrevivente, Vítima, Moby e Ahab são seus aliados cinzas naturais."
+    ]
+  },
+  "Body Snatcher": {
+    "name": "Ladrão de Corpos",
+    "description": "Rouba cartas e pode mostrá-las como cartas de face.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "LADRÃO DE CORPOS",
+        "type": "card share",
+        "description": "Se alguém compartilhar carta com sua carta de Ladrão de Corpos, essa pessoa deve entregar sua carta de personagem a você. Cartas capturadas dessa forma são consideradas suas cartas de face. Você pode mostrar qualquer carta de face que desejar em futuras revelações privadas, públicas, de cor e compartilhamentos de carta, enquanto ainda tiver uma carta de Ladrão de Corpos (mesmo que não seja a sua). No entanto, você não ganha nem a lealdade nem os poderes de nenhuma carta de face adquirida, incluindo personagens com poderes que ativam durante uma revelação. Jogadores cujas cartas foram roubadas mantêm seus poderes e lealdade, mas obviamente perdem toda capacidade de compartilhar suas cartas com outros ou usar qualquer poder que exija revelação privada, pública, de cor ou compartilhamento de carta."
+      }
+    ],
+    "notes": [
+      "Se uma carta de Ladrão de Corpos compartilhar com a outra, e ambos usaram sua carta de Ladrão de Corpos ao fazer isso, então ambos os jogadores perdem suas cartas de Ladrão de Corpos para o outro. No entanto, ambos podem continuar mostrando a outros jogadores as cartas de face que adquiriram, mas nenhum dos dois pode continuar coletando cartas.",
+      "Ao usar cartas de face que tenham poderes, você não deve deixar os jogadores acreditar que seu poder tem influência sobre eles.",
+      "Lembre-se de que os personagens ainda retêm suas habilidades e poderes. Isso significa que o Homem-Bomba ainda fornece a condição \"morto\" a todos no fim do jogo com ou sem sua carta. O Presidente continua sendo o Presidente com ou sem sua carta.",
+      "Pode ser difícil esconder todas as cartas adquiridas."
+    ]
+  },
+  "Born Leader": {
+    "name": "Líder Nato",
+    "description": "Vença se for o líder de uma sala no fim do jogo.",
+    "winCondition": "Você vence se for o líder de uma sala no fim do jogo",
+    "powers": [],
+    "notes": [
+      "Recomendado jogar com pelo menos 1 outro Líder Nato. O Anarquista também torna interessante.",
+      "3 Líderes Natos é divertido, mas traiçoeiro."
+    ]
+  },
+  "Bouncer": {
+    "name": "Segurança de Porta",
+    "description": "Impede jogadores de sair da sua sala (contagem ímpar de jogadores).",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "SEGURANÇA DE PORTA",
+        "type": "private reveal",
+        "description": "Se você estiver em uma sala com mais jogadores que a outra, pode revelar sua carta em privado a qualquer jogador e dizer verbalmente \"sai daqui!\" Ao fazer isso, esse jogador deve mudar de sala imediatamente. Você pode fazer isso a qualquer momento, EXCETO NA ÚLTIMA RODADA. Pode ser feito sem limite, mas nunca com o líder de uma sala."
+      }
+    ],
+    "notes": [
+      "Esta carta só deve ser incluída no conjunto de papéis se as duas salas não tiverem o mesmo número de jogadores.",
+      "Pode levar ao efeito \"pingue-pongue\" de ficar expulsando um jogador de um lado para o outro até o tempo acabar."
+    ]
+  },
+  "Bully": {
+    "name": "Valentão",
+    "description": "Força jogadores a revelar o personagem, não apenas a cor.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "VALENTÃO",
+        "type": "color share",
+        "description": "Quando um jogador concorda em compartilhar cor com você, faça revelação privada em vez disso. Ele também deve revelar sua carta em privado."
+      }
+    ],
+    "notes": [
+      "O Valentão força uma revelação privada, não um compartilhamento de carta."
+    ]
+  },
+  "Butler": {
+    "name": "Mordomo",
+    "description": "Vença se estiver com a Criada e o Presidente no fim do jogo.",
+    "winCondition": "Você vence se estiver na mesma sala que a Criada e o Presidente no fim do jogo",
+    "powers": [],
+    "notes": [
+      "Deve ser jogado com a Criada. Funciona bem com Romeu e Julieta",
+      "Não funciona bem com 10 jogadores ou menos."
+    ],
+    "requiresGroup": "Par Mordomo/Criada"
+  },
+  "Capitalist": {
+    "name": "Capitalista",
+    "description": "Recruta jogadores para o Time Azul; ajude seu time a proteger o Presidente.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "CAPITALISTA",
+        "type": "card share",
+        "description": "Qualquer jogador que compartilhar carta com você deve trocar sua carta de personagem por uma carta do Time Azul antes do início da próxima rodada e antes de revelar qualquer parte de sua carta a outro jogador. Seu poder não tem efeito sobre personagens primários, personagens secundários ou qualquer personagem que não esteja alinhado com vermelho ou azul."
+      }
+    ],
+    "notes": [
+      "Não funciona bem sem o Socialista."
+    ]
+  },
+  "Centipede": {
+    "name": "Centopéia",
+    "description": "Jogadores que compartilharem com você devem ficar com você ou revelar publicamente.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "CENTOPÉIA",
+        "type": "card share",
+        "description": "Qualquer jogador que compartilhar carta com você recebe a condição \"preso\". Qualquer jogador \"preso\" que se separar de você (ou seja, não estiver mais na mesma sala) perde a condição \"preso\" e a substitui pela condição \"rasgado\". Jogadores com a condição \"rasgado\" devem revelar permanentemente sua carta publicamente, independentemente de poderes ou condições adquiridas."
+      }
+    ],
+    "notes": [
+      "Se um jogador deixar de ser a Centopéia (por exemplo, após compartilhar carta com o Duende), jogadores com a condição \"preso\" permanecem \"presos\" a você."
+    ]
+  },
+  "Changer": {
+    "name": "Trocador",
+    "description": "Troque sua carta por uma carta aleatória do Baralho Divertido.",
+    "winCondition": "A qualquer momento antes do fim do jogo, você, o Trocador, deve trocar sua carta por uma carta aleatória do \"Baralho Divertido\". Isso só pode ser feito uma vez, a menos que a carta aleatória selecionada seja outra carta de Trocador. Se você esquecer de trocar sua carta até o fim do jogo ou não conseguir, falha em vencer seu objetivo",
+    "powers": [
+      {
+        "name": "TROCADOR",
+        "type": "card swap",
+        "description": "Ao jogar com o Trocador, crie um \"Baralho Divertido\". Pegue qualquer número de cartas de personagem que não estão sendo usadas no jogo atual e embaralhe-as para criar um \"Baralho Divertido\". A qualquer momento antes do fim do jogo, você, o Trocador, deve trocar sua carta por uma carta aleatória do \"Baralho Divertido\". Isso só pode ser feito uma vez, a menos que a carta aleatória selecionada seja outra carta de Trocador."
+      }
+    ],
+    "notes": [
+      "A carta retirada do \"Baralho Divertido\" é sempre purificada quando é puxada pela primeira vez, ou seja, não tem condições adquiridas.",
+      "Ah, o melhor Baralho Divertido de todos tem Batata Quente e Duende.",
+      "Funciona mal com um \"Baralho Divertido\" quebrado ou com o Mestre (v1)."
+    ]
+  },
+  "Cleaner": {
+    "name": "Purificador",
+    "description": "Remove condições de jogadores que compartilharem carta com você.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "PURIFICAR",
+        "type": "card share",
+        "description": "Você purifica qualquer jogador que compartilhar carta com você. Isso significa que qualquer jogador que compartilhar carta com você tem todas as suas condições adquiridas removidas."
+      }
+    ],
+    "notes": [
+      "Isso não torna você imune a adquirir condições, pois talvez precise encontrar o Purificador adversário.",
+      "Ao compartilhar carta, um Purificador com uma condição contagiosa (veja Lobisomem e Zumbi) primeiro usa seu poder PURIFICAR e depois transmite a condição contagiosa."
+    ]
+  },
+  "Clone": {
+    "name": "Clone",
+    "description": "Vença se a primeira pessoa com quem você compartilhar vencer.",
+    "winCondition": "Você vence se o primeiro jogador com quem compartilhar carta ou cor vencer, alcançando todos os seus objetivos de vitória",
+    "powers": [],
+    "notes": []
+  },
+  "Clown": {
+    "name": "Palhaço",
+    "description": "Mantenha o sorriso durante todo o jogo enquanto busca o objetivo do seu time.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [],
+    "notes": [
+      "Faça o possível para sorrir o tempo todo.",
+      "Pesquisas sugerem que é quase impossível sorrir e não estar feliz ao mesmo tempo.",
+      "Alguns jogadores não suportam ser este personagem."
+    ]
+  },
+  "Conspirator": {
+    "name": "Conspirador",
+    "description": "Vire jogadores inimigos para trabalhar secretamente pelo objetivo do seu time.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "CONSPIRADOR",
+        "type": "card share",
+        "description": "Qualquer jogador que compartilhar carta com você e tiver o objetivo de vitória do time oposto (exemplo: carta de Conspirador azul compartilhando com um personagem alinhado ao vermelho) recebe a condição \"traidor\". Um jogador com a condição \"traidor\" tem seu objetivo de vitória alterado para o do time adversário."
+      }
+    ],
+    "notes": [
+      "O poder CONSPIRADOR não funciona em jogadores que não estão alinhados ao vermelho ou azul, personagens primários e personagens secundários (por exemplo, personagem cinza, Presidente, Homem-Bomba, Filha do Presidente, Mártir, Drone Azul, etc.).",
+      "Um único jogador só pode receber uma condição \"traidor\"."
+    ]
+  },
+  "Coy Boy": {
+    "name": "Rapaz Coy",
+    "description": "Só pode compartilhar cor, nunca carta.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "COY",
+        "type": "condition",
+        "description": "Você começa com a condição \"coy\". Jogadores com a condição \"coy\" só podem compartilhar cor, mesmo quando o poder de um personagem possa forçar compartilhamento de carta. Um Coy não pode compartilhar carta, revelar em privado nem revelar publicamente sua carta ou sua cor."
+      }
+    ],
+    "notes": [
+      "Jogadores \"coy\" podem compartilhar suas cartas com Psicólogos depois que um jogador Psicólogo revelar sua carta em privado ao jogador \"coy\".",
+      "Se um jogador com a condição \"tolo\" adquirir a condição \"coy\", as duas condições se cancelam, deixando o jogador sem nenhuma das duas.",
+      "Não funciona bem com 10 jogadores ou menos, pois isso essencialmente torna o Coy tímido."
+    ]
+  },
+  "Criminal": {
+    "name": "Criminoso",
+    "description": "Silencia jogadores para impedir que compartilhem informações.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "CRIMINOSO",
+        "type": "card share",
+        "description": "Qualquer jogador que compartilhar carta com você recebe a condição \"tímido\". Jogadores com a condição \"tímido\" não podem revelar nenhuma parte de sua carta a nenhum jogador."
+      }
+    ],
+    "notes": [
+      "Se um jogador com a condição \"tolo\" adquirir a condição \"tímido\", as duas condições se cancelam, deixando o jogador sem nenhuma das duas."
+    ]
+  },
+  "Cult Leader": {
+    "name": "Líder de Culto",
+    "description": "Espalhe seu culto, mas permaneça vivo ou todos os seus cultistas também perdem.",
+    "winCondition": "Condição de vitória padrão mais: jogadores com a condição \"cultista\" perdem o jogo se o Líder de Culto receber a condição \"morto\"",
+    "powers": [
+      {
+        "name": "LÍDER DE CULTO",
+        "type": "card share",
+        "description": "Você começa com a condição \"cultista\". Qualquer jogador que compartilhar carta ou cor com um jogador com a condição \"cultista\" (ou seja, um jogador \"cultista\") também recebe a condição \"cultista\". Jogadores com a condição \"cultista\" perdem o jogo se o Líder de Culto receber a condição \"morto\". Este é um objetivo de vitória adicional e não substitui nem altera a condição de vitória original do jogador. Se o Líder de Culto receber a condição \"morto\", todos os jogadores com a condição \"cultista\" também perdem."
+      }
+    ],
+    "notes": [
+      "É importante que os jogadores indiquem que têm a condição \"cultista\" ao compartilhar carta ou cor com outro jogador. Isso geralmente é feito sussurrando algo como: \"Sou cultista. Certifique-se de que nosso líder _______ permaneça vivo.\"",
+      "Funciona com a variante Promessa de Privacidade.",
+      "Quase exige a variante Promessa de Privacidade."
+    ]
+  },
+  "Cupid": {
+    "name": "Cupido",
+    "description": "Faz dois jogadores se apaixonarem um pelo outro.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "CUPIDO",
+        "type": "card share",
+        "description": "Uma vez por jogo, você pode revelar sua carta em privado a dois jogadores. Você deve dizer verbalmente aos jogadores alvo: \"Vocês estão apaixonados um pelo outro.\" Esses dois jogadores recebem a condição \"apaixonado\". Jogadores com a condição \"apaixonado\" substituem seu objetivo de vitória original pela seguinte condição de vitória: estar na mesma sala que o jogador com quem está \"apaixonado\" no fim do jogo ou falhar em vencer seu objetivo. O poder CUPIDO não pode ser usado em você mesmo."
+      }
+    ],
+    "notes": [
+      "Se um jogador com a condição \"apaixonado\" adquirir a condição \"ódio\", as duas condições se cancelam, deixando o jogador sem nenhuma das duas."
+    ]
+  },
+  "Dealer": {
+    "name": "Traficante",
+    "description": "Torne jogadores tolos para que não possam recusar compartilhamentos arriscados.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "TRAFICANTE",
+        "type": "card share",
+        "description": "Qualquer jogador que compartilhar carta com você recebe a condição \"tolo\". Jogadores com a condição \"tolo\" nunca podem recusar uma oferta de compartilhar carta."
+      }
+    ],
+    "notes": [
+      "Se um jogador com a condição \"tolo\" adquirir a condição \"tímido\", as duas condições se cancelam, deixando o jogador sem nenhuma das duas.",
+      "Informações podem ficar muito públicas muito rápido."
+    ]
+  },
+  "Decoy": {
+    "name": "Chamariz",
+    "description": "Vença se o Atirador atirar em você no fim do jogo.",
+    "winCondition": "Você vence se o Atirador atirar em você no fim da última rodada",
+    "powers": [],
+    "notes": [],
+    "requiresGroup": "Grupo do Atirador"
+  },
+  "Demon": {
+    "name": "Demônio",
+    "description": "Deve sempre mentir verbalmente.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "MENTIROSO",
+        "type": "condition",
+        "description": "Você começa com a condição \"mentiroso\". Jogadores com a condição \"mentiroso\" devem sempre mentir verbalmente (a menos que estejam \"seduzidos\", \"hipnotizados\" ou sob qualquer outra condição que possa influenciar sua capacidade de dizer a verdade). Isso significa que você pode comunicar a verdade, contanto que não seja verbalmente."
+      }
+    ],
+    "notes": [
+      "Se um jogador com a condição \"honesto\" adquirir a condição \"mentiroso\", as duas condições se cancelam, deixando o jogador sem nenhuma das duas.",
+      "Fica confuso quando combinado com o Hipnotizador e o Vampiro. Difícil de executar."
+    ]
+  },
+  "Doctor": {
+    "name": "Médico",
+    "description": "O Presidente deve compartilhar carta com você ou o Time Azul perde.",
+    "winCondition": "O Time Azul tem a seguinte condição de vitória adicional: o Presidente deve compartilhar carta com o Médico antes do fim do jogo ou o Time Azul perde",
+    "powers": [
+      {
+        "name": "MÉDICO",
+        "type": "card share",
+        "description": "Ao jogar com o Médico, o Time Azul tem a seguinte condição de vitória adicional: o Presidente deve compartilhar carta com o Médico antes do fim do jogo ou o Time Azul perde. No fim do jogo, o Presidente será perguntado se compartilhou carta com o Médico. Nesse momento, ambos os jogadores confirmarão ou negarão ter compartilhado carta."
+      }
+    ],
+    "notes": [
+      "Veja a seção Médico/Engenheiro para mais esclarecimentos.",
+      "Lembre-se de que, se o personagem Presidente trocar de jogador (talvez por causa da Batata Quente), o novo Presidente deve compartilhar carta com o Médico.",
+      "Jogos com o Médico e o Engenheiro podem resultar em um jogo em que todos os jogadores perdem."
+    ]
+  },
+  "Dragon": {
+    "name": "Dragão",
+    "description": "Todos na sua sala recebem a condição torrado no fim do jogo.",
+    "winCondition": "O Time Vermelho vence se o Rei receber a condição \"morto\"",
+    "powers": [
+      {
+        "name": "SOPRO DO DRAGÃO",
+        "type": "end game",
+        "description": "Todos na mesma sala que você no fim do jogo recebem a condição \"torrado\". O Time Vermelho vence se o Rei receber a condição \"morto\"."
+      }
+    ],
+    "notes": [
+      "É possível que o Dragão receba a condição \"morto\" antes do fim do jogo. Se isso acontecer, o Dragão não sopra, deixando de fornecer a condição \"morto\" a todos na mesma sala no fim do jogo.",
+      "Sobrevivente, Vítima, Moby e Ahab são seus aliados cinzas naturais."
+    ]
+  },
+  "Dragon Egg": {
+    "name": "Ovo de Dragão",
+    "description": "Reserva do Dragão se ele morrer ou for enterrado.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "OVO DE DRAGÃO",
+        "type": "backup",
+        "description": "Você é um personagem secundário. Você é o personagem reserva do Dragão. Se a carta do Dragão for enterrada ou o Dragão receber a condição \"morto\" antes de ativar a respiração de dragão, você deve assumir todas as responsabilidades associadas ao Dragão (por exemplo: terminar o jogo na mesma sala que o Rei, compartilhar carta com o Ovoengenheiro)."
+      }
+    ],
+    "notes": [],
+    "requiresGroup": "Reserva: Dragão"
+  },
+  "Dr. Boom": {
+    "name": "Dr. Boom",
+    "description": "O jogo termina imediatamente se você compartilhar carta com o Presidente.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "BOOM",
+        "type": "card share",
+        "description": "Se você compartilhar carta com o Presidente, o jogo termina imediatamente. O Time Vermelho vence."
+      }
+    ],
+    "notes": [
+      "O poder BOOM nunca funciona na Filha do Presidente. Se o Presidente for enterrado, o poder BOOM nunca é usado.",
+      "Jogos podem durar menos de 30 segundos, limitando bastante o tempo de jogo."
+    ]
+  },
+  "Drunk": {
+    "name": "Bêbado",
+    "description": "Comece como Bêbado e torne-se o personagem sóbrio na última rodada.",
+    "winCondition": "Condição de vitória padrão da carta de personagem sóbrio",
+    "powers": [
+      {
+        "name": "BÊBADO",
+        "type": "card swap",
+        "description": "Esta carta de personagem requer a seguinte configuração: antes das cartas de personagem serem distribuídas, mas depois de serem embaralhadas, remova aleatoriamente uma carta de personagem. Esta é a carta de personagem sóbrio. A carta sóbria deve ser colocada virada para baixo em um local facilmente acessível a todos os jogadores, independentemente das salas (geralmente entre as 2 áreas de jogo). A carta de Bêbado é então colocada no baralho de cartas de personagem. Reembaralhe as cartas de personagem. No início da última rodada do jogo, o jogador Bêbado deve substituir sua carta de Bêbado pela carta sóbria. Se perdeu sua carta de Bêbado (por exemplo, o Ladrão de Corpos a roubou), a carta sóbria ainda deve ser recuperada. O jogador assume todos os poderes e responsabilidades associados à carta de personagem sóbrio."
+      }
+    ],
+    "notes": [
+      "A carta \"sóbria\" é sempre purificada quando é recuperada pela primeira vez, ou seja, não tem condições adquiridas."
+    ]
+  },
+  "Easter Bunny": {
+    "name": "Coelho da Páscoa",
+    "description": "Esconde cartas de personagem para os jogadores encontrarem.",
+    "winCondition": "Se todos os jogadores encontrarem suas cartas de personagem, o Coelho da Páscoa perde. Para cada jogador que não encontrar uma carta, o jogador Coelho da Páscoa deve encontrar as cartas perdidas. Se o Coelho da Páscoa não conseguir encontrar essas cartas perdidas, ele perde",
+    "powers": [
+      {
+        "name": "COELHO DA PÁSCOA",
+        "type": "setup",
+        "description": "Isso é complicado, mas divertido. Todos os jogadores devem formar um círculo. Gire a carta do Coelho da Páscoa no centro do círculo. Para qualquer jogador para quem a orelha do Coelho da Páscoa apontar, esse é o Coelho da Páscoa. Prepare um jogo típico com um baralho de personagens embaralhado. Todos os jogadores, exceto o Coelho da Páscoa, devem fechar os olhos. O Coelho da Páscoa então esconde metade das cartas em uma das salas e a outra metade na outra sala, sempre com cuidado para manter as cartas viradas para baixo. Depois disso, o Coelho da Páscoa corre de volta e se junta aos outros jogadores. No início do jogo, os jogadores se dividem igualmente nas duas salas como de costume. Porém, agora os jogadores precisam encontrar uma carta de personagem. Uma vez que um jogador encontra uma carta de personagem, ele reivindica essa carta e somente essa carta. Essa é sua personagem para o jogo. Se um jogador não encontrar uma carta de personagem até o fim do jogo, ele perde."
+      }
+    ],
+    "notes": [
+      "O jogador que foi o Coelho da Páscoa tem um objetivo de vitória adicional além do incluído em seu personagem que não é o Coelho da Páscoa."
+    ]
+  },
+  "Eggineer": {
+    "name": "Ovoengenheiro",
+    "description": "O Dragão deve compartilhar carta com você ou o Time Vermelho perde.",
+    "winCondition": "O Time Vermelho tem a seguinte condição de vitória adicional: o Dragão deve compartilhar carta com o Ovoengenheiro antes do fim do jogo ou o Time Vermelho perde",
+    "powers": [
+      {
+        "name": "OVOENGENHEIRO",
+        "type": "card share",
+        "description": "Ao jogar com o Ovoengenheiro, o Time Vermelho tem a seguinte condição de vitória adicional: o Dragão deve compartilhar carta com o Ovoengenheiro antes do fim do jogo ou o Time Vermelho perde. No fim do jogo, o Homem-Bomba será perguntado se compartilhou carta com o Ovoengenheiro. Nesse momento, ambos os jogadores confirmarão ou negarão ter compartilhado carta."
+      }
+    ],
+    "notes": [
+      "Lembre-se de que, se o personagem Dragão trocar de jogador (talvez por causa da Batata Quente), o novo Dragão deve compartilhar carta com o Ovoengenheiro.",
+      "Jogos com o Médico e o Engenheiro podem resultar em um jogo em que todos os jogadores perdem."
+    ]
+  },
+  "Engineer": {
+    "name": "Engenheiro",
+    "description": "O Homem-Bomba deve compartilhar carta com você ou o Time Vermelho perde.",
+    "winCondition": "O Time Vermelho tem a seguinte condição de vitória adicional: o Homem-Bomba deve compartilhar carta com o Engenheiro antes do fim do jogo ou o Time Vermelho perde",
+    "powers": [
+      {
+        "name": "ENGENHEIRO",
+        "type": "card share",
+        "description": "Ao jogar com o Engenheiro, o Time Vermelho tem a seguinte condição de vitória adicional: o Homem-Bomba deve compartilhar carta com o Engenheiro antes do fim do jogo ou o Time Vermelho perde. No fim do jogo, o Homem-Bomba será perguntado se compartilhou carta com o Engenheiro. Nesse momento, ambos os jogadores confirmarão ou negarão ter compartilhado carta."
+      }
+    ],
+    "notes": [
+      "Veja a seção Médico/Engenheiro para mais esclarecimentos.",
+      "Lembre-se de que, se o personagem Homem-Bomba trocar de jogador (talvez por causa da Batata Quente), o novo Homem-Bomba deve compartilhar carta com o Engenheiro.",
+      "Jogos com o Médico e o Engenheiro podem resultar em um jogo em que todos os jogadores perdem."
+    ]
+  },
+  "Enforcer": {
+    "name": "Executor",
+    "description": "Força dois jogadores a compartilhar carta entre si.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "EXECUTOR",
+        "type": "private reveal",
+        "description": "Uma vez por rodada, você pode revelar sua carta em privado a dois jogadores. Você deve dizer verbalmente aos jogadores alvo: \"Vocês devem revelar suas cartas um ao outro.\" Esses dois jogadores devem compartilhar carta entre si (não com você). Você não pode usar este poder em si mesmo, mas outro Executor pode usar seu poder em você."
+      }
+    ],
+    "notes": [
+      "Se usado em um personagem incapaz de compartilhar carta (por exemplo, com a condição \"tímido\"), o poder é desperdiçado. O alvo deve provar que não pode compartilhar carta dizendo verbalmente (mesmo se \"amaldiçoado\"): \"Não posso porque estou (nome da condição específica).\""
+    ]
+  },
+  "Enlisted": {
+    "name": "Recruta",
+    "description": "Revele publicamente para se tornar refém automaticamente.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "ALISTAR",
+        "type": "public reveal",
+        "description": "Durante qualquer rodada exceto a última, você pode revelar sua carta publicamente e automaticamente se tornar um dos reféns no fim dessa rodada. Porém, sua carta deve permanecer permanentemente revelada publicamente pelo resto do jogo. Isso significa que você só pode usar este poder uma vez. O Recruta deve ser refém na mesma rodada em que o poder RECRUTAR foi usado."
+      }
+    ],
+    "notes": [
+      "Se 2 personagens Recruta usarem seu poder na mesma sala durante a mesma rodada e houver apenas 1 posição de refém disponível, o Recruta que usou o poder primeiro será o refém; o outro Recruta desperdiçou seu poder RECRUTAR.",
+      "Depois de usar o poder RECRUTAR, compartilhamento e revelação tradicionais de carta não podem ser feitos."
+    ]
+  },
+  "Eris": {
+    "name": "Eris",
+    "description": "Faz dois jogadores se odiarem.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "ERIS",
+        "type": "card share",
+        "description": "Uma vez por jogo, você pode revelar sua carta em privado a dois jogadores. Você deve dizer verbalmente aos jogadores alvo: \"Vocês se odeiam.\" Esses dois jogadores recebem a condição \"ódio\". Jogadores com a condição \"ódio\" substituem seu objetivo de vitória original pelo seguinte objetivo: estar na sala oposta ao jogador com quem está em \"ódio\" no fim do jogo ou falhar neste objetivo. Você não pode usar este poder em si mesmo."
+      }
+    ],
+    "notes": [
+      "Se um jogador com a condição \"ódio\" adquirir a condição \"apaixonado\", as duas condições se cancelam, deixando o jogador sem nenhuma das duas.",
+      "Cupido fortemente recomendado."
+    ]
+  },
+  "Exhibitionist": {
+    "name": "Exibicionista",
+    "description": "Só pode revelar publicamente, nunca compartilhar carta ou cor.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "EXIBIÇÃO",
+        "type": "condition",
+        "description": "Você começa com a condição \"exibicionista\". Jogadores com a condição \"exibicionista\" só podem revelar publicamente, mesmo quando o poder de um personagem possa forçar compartilhamento de carta. Um Exibicionista não pode compartilhar carta nem revelar em privado sua carta ou sua cor."
+      }
+    ],
+    "notes": [
+      "Faz parte do conjunto \"parafilia\" (Voyeur, Frotteur e Puritana)"
+    ]
+  },
+  "Fanatic": {
+    "name": "Fanático",
+    "description": "Reserva do Ovoengenheiro se ele morrer ou for enterrado.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "FANÁTICO",
+        "type": "backup",
+        "description": "Você é o personagem reserva do Ovoengenheiro. Se a carta do Ovoengenheiro for enterrada ou o Ovoengenheiro receber a condição \"morto\" antes do fim do jogo, você deve assumir todas as responsabilidades associadas ao Ovoengenheiro (compartilhar carta com o Dragão)."
+      }
+    ],
+    "notes": [],
+    "requiresGroup": "Reserva: Ovoengenheiro"
+  },
+  "Father": {
+    "name": "Pai",
+    "description": "Escolha dois filhos; vença se terminarem com o Presidente.",
+    "winCondition": "Você vence se esses 2 jogadores alvo terminarem na mesma sala que o Presidente",
+    "powers": [
+      {
+        "name": "PAI",
+        "type": "private reveal",
+        "description": "Durante a primeira rodada do jogo, você deve revelar sua carta em privado a 2 jogadores e dizer verbalmente a esses 2 jogadores alvo: \"Vocês são meus filhos.\" Você não precisa revelar sua carta em privado aos 2 jogadores alvo simultaneamente."
+      }
+    ],
+    "notes": [
+      "Sinta o orgulho que um pai sentiria."
+    ]
+  },
+  "Fat Princess": {
+    "name": "Princesa Gorda",
+    "description": "Reserva do Rei se ele morrer ou for enterrado.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "PRINCESA GORDA",
+        "type": "backup",
+        "description": "Você é um personagem secundário. Você é o personagem reserva do Rei. Se a carta do Rei for enterrada ou o Rei receber a condição \"torrado\" antes do fim do jogo, você deve assumir todas as responsabilidades associadas ao Rei (por exemplo: terminar o jogo na mesma sala que o Rei, compartilhar carta com o Alquimista)."
+      }
+    ],
+    "notes": [],
+    "requiresGroup": "Reserva: Rei"
+  },
+  "Firefighter": {
+    "name": "Bombeiro",
+    "description": "Concede a condição à prova de fogo ao Presidente.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "BOMBEIRO",
+        "type": "card share",
+        "description": "Compartilhar carta com o Presidente concede ao Presidente a condição \"à prova de fogo\". Se o Presidente tiver a condição \"à prova de fogo\", então, no fim do jogo, todos os jogadores na mesma sala que o Presidente também recebem a condição \"à prova de fogo\". Jogadores com a condição \"à prova de fogo\" não recebem a condição \"morto\" da condição \"bomba de fogo\"."
+      }
+    ],
+    "notes": [
+      "Quase exige o Pirotécnico."
+    ]
+  },
+  "Fool": {
+    "name": "Tolo",
+    "description": "Nunca pode recusar uma oferta de compartilhar carta ou cor.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "TOLICE",
+        "type": "condition",
+        "description": "Você começa com a condição \"tolo\". Jogadores com a condição \"tolo\" nunca podem recusar uma oferta de compartilhar carta ou cor."
+      }
+    ],
+    "notes": [
+      "Se um jogador com a condição \"tolo\" adquirir a condição \"tímido\", as duas condições se cancelam, deixando o jogador sem nenhuma das duas.",
+      "Você é presa fácil para Zumbis. Nunca deve ser jogado com Batata Quente."
+    ]
+  },
+  "Frotteur": {
+    "name": "Frotteur",
+    "description": "Deve tocar todos os jogadores até o fim do jogo sem ser pego pela Puritana.",
+    "winCondition": "Se você não tocar todos os jogadores até o fim do jogo, perde. Se a Puritana agarrar seu pulso, você perde",
+    "powers": [],
+    "notes": [
+      "Também conhecido como: \"O Apalpador\"",
+      "Faz parte do conjunto \"parafilia\" (Voyeur, Exibicionista).",
+      "Não funciona bem com 10 jogadores ou menos."
+    ],
+    "requiresGroup": "Par Frotteur/Puritana"
+  },
+  "Fugitive": {
+    "name": "Fugitivo",
+    "description": "O jogo termina imediatamente se você compartilhar carta com o Homem de Um Braço.",
+    "winCondition": "Se você compartilhar carta com o Homem de Um Braço, o jogo termina imediatamente. O Time Vermelho vence",
+    "powers": [
+      {
+        "name": "FUGITIVO",
+        "type": "card share",
+        "description": "Se você compartilhar carta com o Homem de Um Braço, o jogo termina imediatamente. O Time Vermelho vence."
+      }
+    ],
+    "notes": [],
+    "requiresGroup": "Grupo do Fugitivo"
+  },
+  "Gambler": {
+    "name": "Apostador",
+    "description": "Adivinhe publicamente qual time venceu no fim do jogo para vencer.",
+    "winCondition": "No fim da última rodada (a rodada de 1 minuto), antes de todos os jogadores revelarem suas cartas, você, o Apostador, deve anunciar publicamente qual time (Time Vermelho, Time Azul ou nenhum) acha que venceu o jogo. Se estiver correto, você vence. Se estiver incorreto, você perde",
+    "powers": [],
+    "notes": []
+  },
+  "Gargoyle": {
+    "name": "Gárgula",
+    "description": "Revele publicamente para evitar ser selecionado para sair da sala.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "GÁRGULA",
+        "type": "public reveal",
+        "description": "Sempre que for selecionado para sair de uma sala (via seleção de refém ou poder de um personagem), você pode revelar sua carta publicamente e dizer verbalmente \"Pedra\" para evitar sair da sala. Isso significa que qualquer personagem que tente forçá-lo a sair da sala (incluindo o líder) deve imediatamente escolher outro jogador para sair. O poder GÁRGULA pode ser usado repetidamente a qualquer momento."
+      }
+    ],
+    "notes": [
+      "O poder GÁRGULA não pode ser usado enquanto o líder está fora da sala durante a negociação.",
+      "Gárgula faz parte do conjunto \"monstro\"."
+    ]
+  },
+  "Gorgon": {
+    "name": "Górgon",
+    "description": "Petrifica jogadores para impedir que votem ou usurpem.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "GÓRGON",
+        "type": "card share",
+        "description": "Qualquer jogador que compartilhar carta com você recebe a condição \"petrificado\". Jogadores com a condição \"petrificado\" não podem mais votar. Em vez disso, sempre que uma votação for convocada (por exemplo, ao nomear/usurpar um líder), jogadores \"petrificados\" devem ficar rígidos com os braços retos para baixo."
+      }
+    ],
+    "notes": [
+      "Górgon faz parte do conjunto \"monstro\"."
+    ]
+  },
+  "Grey Team": {
+    "name": "Time Cinza",
+    "description": "Deve escolher entrar no Time Vermelho ou Azul antes do fim do jogo.",
+    "winCondition": "Em algum momento durante o jogo, antes do tempo expirar na rodada final, você deve trocar sua carta por uma carta do Time Vermelho ou do Time Azul (feito com as cartas extras de time não usadas). Você agora assume a lealdade do time que escolheu. Se esquecer de trocar sua carta até o fim do jogo ou não conseguir, falha em vencer seu objetivo",
+    "powers": [
+      {
+        "name": "TIME CINZA",
+        "type": "card swap",
+        "description": "Em algum momento durante o jogo, antes do tempo expirar na rodada final, você deve trocar sua carta por uma carta do Time Vermelho ou do Time Azul (feito com as cartas extras de time não usadas). Você agora assume a lealdade do time que escolheu."
+      }
+    ],
+    "notes": []
+  },
+  "Hero": {
+    "name": "Herói",
+    "description": "Vença se estiver com o Presidente e o Homem-Bomba quando a bomba explodir.",
+    "winCondition": "Você vence se estiver na mesma sala que o Presidente e o Homem-Bomba no fim do jogo. Se você vencer, tanto o Time Vermelho quanto o Time Azul perdem",
+    "powers": [],
+    "notes": [
+      "Você tem a chance de salvar o Presidente! Vilão fortemente recomendado",
+      "Se você vencer, o Presidente ficará envergonhado."
+    ]
+  },
+  "Hot Potato": {
+    "name": "Batata Quente",
+    "description": "Troca cartas com quem compartilhar carta ou cor com você.",
+    "winCondition": "No fim do jogo, a Batata Quente perde",
+    "powers": [
+      {
+        "name": "BATATA QUENTE",
+        "type": "card share",
+        "description": "Qualquer jogador que compartilhar carta ou até cor com você troca cartas imediatamente com você. Tanto você quanto o outro jogador assumem os poderes e a lealdade das cartas recém-adquiridas. No fim do jogo, a Batata Quente perde."
+      }
+    ],
+    "notes": [
+      "Personagens que podem infligir um status a outros (por exemplo, Vampiro, Centopéia Humana, Hipnotizador, etc.) perdem sua identidade, mas não o poder já estabelecido sobre outros ao se tornar a Batata Quente. Por exemplo, jogadores previamente \"seduzidos\" continuam \"seduzidos\" pelo antigo Vampiro que virou Batata Quente.",
+      "Devido à purificação (veja a regra Purificar na página #), se a carta do Presidente, por qualquer motivo, passar para um novo jogador, o novo Presidente deve agora compartilhar carta com o Médico para vencer, INDEPENDENTEMENTE do histórico de compartilhamento de carta do antigo Presidente. Este conceito também se aplica ao Homem-Bomba e ao Engenheiro.",
+      "Funciona bem com mais jogadores e com a variante Promessa de Privacidade.",
+      "Não funciona bem com personagens que não podem recusar uma revelação (Tolo, Tirano Nuclear)",
+      "Lembre-se de que personagens recém-adquiridos são purificados."
+    ]
+  },
+  "Hunter": {
+    "name": "Caçador",
+    "description": "Rouba cartas de jogadores que usarem poderes de compartilhamento de carta em você.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "CAÇADOR",
+        "type": "card share",
+        "description": "Pegue a carta de personagem de um jogador sempre que ele tentar usar um poder de compartilhamento de carta em você. Você, o Caçador, não é afetado pelo poder de compartilhamento de carta desse jogador. Você não pode fazer nada com as cartas adquiridas, incluindo mostrá-las a outros ou usar poderes associados à carta."
+      }
+    ],
+    "notes": [
+      "Se uma carta de Vampiro compartilhar com você, o Vampiro não tem efeito sobre você, mas você fica com a carta de Vampiro do jogador. Se 2 Caçadores compartilharem carta, nada acontece. Jogadores cujas cartas foram roubadas mantêm seus poderes e lealdade, mas obviamente perdem toda capacidade de compartilhar suas cartas com outros.",
+      "O poder CLONE do Clone ainda funciona mesmo ao encontrar o Caçador.",
+      "Caçador faz parte do conjunto \"monstro\".",
+      "Pode ser difícil esconder todas as cartas adquiridas."
+    ]
+  },
+  "Hypnotist": {
+    "name": "Hipnotizador",
+    "description": "Faça jogadores acreditarem que são personagens diferentes para criar caos.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "HIPNOTIZADOR",
+        "type": "card share",
+        "description": "Qualquer jogador que compartilhar carta com você recebe a condição \"hipnotizado\". Jogadores \"hipnotizados\" devem agir como se fossem o personagem que você sugerir. Você inicia a hipnose dizendo: \"Você acha que é o ________.\" Você só pode fazer uma sugestão de personagem no momento da hipnose (o compartilhamento de carta). Jogadores \"hipnotizados\" não ganham nem perdem seu poder ou lealdade."
+      }
+    ],
+    "notes": [
+      "Isso exige um pouco de atuação do jogador \"hipnotizado\", pois ele agora deve acreditar que sua carta de personagem é na verdade a carta que o Hipnotizador sugere.",
+      "Pode confundir os jogadores rapidamente. Este papel pode ser complexo demais para jogadores novos."
+    ]
+  },
+  "Identity Thief": {
+    "name": "Ladrão de Identidade",
+    "description": "Troca cartas e recebe a condição tímido ao compartilhar carta.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "LADRÃO DE IDENTIDADE",
+        "type": "card share",
+        "description": "Qualquer jogador que compartilhar carta com você troca cartas com você e então adquire a condição \"tímido\". Jogadores com a condição \"tímido\" não podem revelar nenhuma parte de sua carta a nenhum jogador. O jogador com quem você trocou cartas agora é considerado o \"Ladrão de Identidade Tímido\" e assume a lealdade da carta de Ladrão de Identidade. Você, porém, assume os poderes, lealdade, objetivos de vitória e todas as condições iniciais da carta recém-roubada como se tivesse recebido essa carta de personagem no início do jogo."
+      }
+    ],
+    "notes": [
+      "Se os 2 personagens Ladrão de Identidade compartilharem carta entre si, eles trocam cartas, ambos recebem a condição \"tímido\" e ambos trocam suas lealdades (vermelho vira azul e azul vira vermelho).",
+      "Jogadores \"tímidos\" podem compartilhar suas cartas com psicólogos depois que um jogador psicólogo revelar sua carta em privado ao jogador \"tímido\".",
+      "Se um jogador com a condição \"tímido\" adquirir a condição \"tolo\", as duas condições se cancelam, deixando o jogador sem nenhuma das duas.",
+      "Não funciona bem com Psicólogo, pois os 2 jogadores podem trocar infinitamente.",
+      "Lembre-se de que personagens recém-adquiridos são purificados."
+    ]
+  },
+  "Illuminati": {
+    "name": "Illuminati",
+    "description": "Vença se alguém compartilhar carta com você.",
+    "winCondition": "Se qualquer jogador compartilhar carta com você, você vence e todos os outros jogadores perdem",
+    "powers": [
+      {
+        "name": "ILLUMINATI",
+        "type": "card share",
+        "description": "Sua carta de personagem tem um lado vermelho e um lado azul. Você pode mostrar qualquer lado ao compartilhar cor ou revelar. Se qualquer jogador compartilhar carta com você, você vence e todos os outros jogadores perdem."
+      }
+    ],
+    "notes": [
+      "Isso torna o jogo muito tenso e potencialmente curto. Não funciona bem com a condição \"tolo\" (veja Tolo)."
+    ]
+  },
+  "Immunologist": {
+    "name": "Imunologista",
+    "description": "Imune a todos os poderes e condições.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "IMUNE",
+        "type": "condition",
+        "description": "Você começa com a condição \"imune\". Jogadores com a condição \"imune\" são imunes a todos os poderes e condições, sem exceção."
+      }
+    ],
+    "notes": [
+      "Jogadores nunca devem mentir sobre ter a condição \"imune\". Se isso se tornar um problema, um Imunologista pode ter que fazer uma revelação privada para provar que é de fato imune a um poder ou condição — e você deveria arranjar amigos melhores.",
+      "Não funciona bem com Zumbi, pois o Time Zumbi agora tem uma grande desvantagem."
+    ]
+  },
+  "Informer": {
+    "name": "Informante",
+    "description": "Coleta cartas do time adversário e desempata.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "INFORMANTE",
+        "type": "private reveal",
+        "description": "Quando um jogador da cor adversária (ou seja, vermelho quando você é azul, ou azul quando você é do time vermelho) revelar sua carta em privado a você e dizer verbalmente \"Pegue minha carta\", você DEVE pegar a carta desse jogador. Você não pode fazer nada com as cartas adquiridas, incluindo mostrá-las a outros ou usar poderes associados à carta. Se, no fim da última rodada, os times vermelho e azul empatarem (ambos vencem ou ambos perdem), o time cujo Informante tem mais cartas perde."
+      }
+    ],
+    "notes": [
+      "Incompatível com Juiz. Não deve ser enterrado."
+    ],
+    "requiresGroup": "Mecânica de Empate"
+  },
+  "Interrogator": {
+    "name": "Interrogador",
+    "description": "Faça uma pergunta de sim/não por rodada a qualquer jogador.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "INTERROGAR",
+        "type": "private reveal",
+        "description": "Uma vez por rodada, você pode revelar em privado a qualquer jogador na sala e fazer uma única pergunta de sim/não à qual ele deve responder honestamente. Se sinceramente não souber a resposta, deve indicar isso. A resposta não precisa ser verbal (mas pode ser). O destinatário do poder INTERROGAR pode responder com um simples aceno de cabeça, balançar a cabeça ou encolher os ombros. Ao usar a habilidade Interrogar, você deve anunciar verbalmente ao jogador alvo: \"Estou usando minha habilidade de Interrogar\", enquanto revela sua carta em privado a ele."
+      }
+    ],
+    "notes": [
+      "Perguntar aos jogadores o que planejam fazer no futuro é desperdício de pergunta. Mudar seus planos não te torna desonesto. Te torna volúvel.",
+      "Ótimo se você sabe o que é uma pergunta de sim/não.",
+      "É fácil trapacear usando seu poder mais de uma vez por rodada, então não faça isso."
+    ]
+  },
+  "Intern": {
+    "name": "Estagiário",
+    "description": "Vença se estiver na mesma sala que o Presidente no fim do jogo.",
+    "winCondition": "Você vence se estiver na mesma sala que o Presidente no fim do jogo",
+    "powers": [],
+    "notes": [
+      "Funciona bem com o Rival, Sobrevivente e Vítima.",
+      "Sem a Vítima, o Estagiário pode dar vantagem ao Time Azul."
+    ]
+  },
+  "Judge": {
+    "name": "Juiz",
+    "description": "Desempata contando cartas vermelhas vs azuis coletadas.",
+    "winCondition": "No fim da última rodada, se os times Vermelho e Azul vencerem ou perderem (empate), conte a quantidade de cartas vermelhas e azuis que você acumulou. O time que te deu mais cartas da sua cor vence o jogo. Você vence se conseguir usar seu poder JULGAMENTO",
+    "powers": [
+      {
+        "name": "JULGAMENTO",
+        "type": "private reveal",
+        "description": "Quando qualquer jogador revelar sua carta em privado a você e disser \"Pegue minha carta\", você DEVE pegar a carta desse jogador. Você não pode fazer nada com as cartas adquiridas, incluindo mostrá-las a outros ou usar poderes associados às cartas."
+      }
+    ],
+    "notes": [
+      "Requer Drone Azul e Punho Vermelho ou Engenheiro e Médico.",
+      "Não funciona com Informante.",
+      "Porém, se o jogo ainda terminar em empate (por ter número igual de cartas vermelhas e azuis), você ainda vence, mas os times Vermelho e Azul ambos perdem."
+    ],
+    "requiresGroup": "Mecânica do Juiz"
+  },
+  "Juliet": {
+    "name": "Julieta",
+    "description": "Vença se estiver com Romeu e o Homem-Bomba no fim do jogo.",
+    "winCondition": "Você vence se estiver na mesma sala que Romeu e o Homem-Bomba no fim do jogo",
+    "powers": [],
+    "notes": [
+      "Deve ser jogada com Romeu. Funciona bem com Criada e Mordomo.",
+      "Não funciona bem com 10 jogadores ou menos."
+    ],
+    "requiresGroup": "Par Romeu/Julieta"
+  },
+  "Kangaroo": {
+    "name": "Canguru",
+    "description": "Troca de sala e expulsa um jogador.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "TROCA-TROCA",
+        "type": "public reveal",
+        "description": "Durante qualquer rodada exceto a última, você pode revelar sua carta publicamente. Você deve então sair imediatamente da sala atual. Ao entrar na sala oposta, deve IMEDIATAMENTE escolher qualquer jogador, mostrar sua carta revelada publicamente e dizer verbalmente \"Estou te expulsando.\" Você permanece, mas o jogador alvo deve sair imediatamente da sala atual e ir para a sala oposta. Depois de usar o poder TROCA-CANGURU, sua carta deve permanecer permanentemente revelada publicamente pelo resto do jogo. Isso significa que você só pode usar este poder uma vez."
+      }
+    ],
+    "notes": [
+      "Se o jogador que você escolheu remover da sala era o líder, o líder deve imediatamente colocar a carta de líder no chão. Nesse ponto, um novo líder é nomeado pelo mesmo método da primeira rodada."
+    ]
+  },
+  "King": {
+    "name": "Rei",
+    "description": "O Azul vence se você não receber a condição torrado.",
+    "winCondition": "O Time Azul vence se você não receber a condição \"torrado\"",
+    "powers": [],
+    "notes": []
+  },
+  "Leprechaun": {
+    "name": "Duende",
+    "description": "Troca cartas com qualquer um; o Duende sempre vence.",
+    "winCondition": "No fim do jogo, o Duende vence",
+    "powers": [
+      {
+        "name": "DUENDE",
+        "type": "card share",
+        "description": "Você começa com a condição \"tolo\". Jogadores com a condição \"tolo\" nunca podem recusar uma oferta de compartilhar carta ou cor. Você também tem o poder DUENDE: qualquer jogador que compartilhar carta ou até cor com você troca cartas imediatamente com você. Tanto você quanto o outro jogador assumem os poderes e a lealdade das cartas recém-adquiridas. No fim do jogo, o Duende vence. Um único jogador só pode ser o Duende uma vez por jogo."
+      }
+    ],
+    "notes": [
+      "Se um jogador estiver prestes a se tornar o personagem Duende pela segunda vez, deve comunicar que não pode receber a carta de Duende. Essa comunicação pode ser feita verbalmente ou não verbalmente.",
+      "Personagens que podem infligir um status a outros (por exemplo, Vampiro, Centopéia Humana, Hipnotizador, etc.) perdem sua identidade, mas não o poder já estabelecido sobre outros ao se tornar o Duende. Por exemplo, jogadores previamente \"seduzidos\" continuam \"seduzidos\" pelo antigo Vampiro que virou Duende.",
+      "Devido à purificação (veja a regra Purificar na página #), se a carta do Presidente, por qualquer motivo, passar para um novo jogador, o novo Presidente deve agora compartilhar carta com o Médico para vencer, INDEPENDENTEMENTE do histórico de compartilhamento de carta do antigo Presidente. Este conceito também se aplica ao Homem-Bomba e ao Engenheiro.",
+      "Funciona bem com mais jogadores e com a variante Promessa de Privacidade.",
+      "Não funciona bem com personagens que não podem recusar uma revelação (Tolo, Tirano Nuclear)",
+      "Lembre-se de que personagens recém-adquiridos são purificados."
+    ]
+  },
+  "Loyalist": {
+    "name": "Lealista",
+    "description": "Imune à condição traidor; remove-a de outros.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "LEALISTA",
+        "type": "card share",
+        "description": "Você é imune à condição \"traidor\". Além disso, se alguém compartilhar carta com você, perde a condição \"traidor\"."
+      }
+    ],
+    "notes": [
+      "Requer Conspirador para ter alguma utilidade.",
+      "Praticamente inútil sem o Conspirador."
+    ],
+    "requiresGroup": "Mecânica do Conspirador"
+  },
+  "Mad Scientist": {
+    "name": "Cientista Louco",
+    "description": "Força dois jogadores a trocar cartas uma vez por jogo.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "CIENTISTA LOUCO",
+        "type": "private reveal",
+        "description": "Uma vez por jogo, você pode revelar sua carta em privado a dois jogadores. Você deve dizer verbalmente aos jogadores alvo: \"Vocês DEVEM trocar cartas.\" Esses dois jogadores devem trocar cartas de personagem. Você não pode usar este poder em si mesmo, mas outro Cientista Louco pode usar seu poder CIENTISTA LOUCO em você."
+      }
+    ],
+    "notes": [
+      "Muhahaha!",
+      "Não funciona bem com 10 jogadores ou menos.",
+      "Lembre-se de que personagens recém-adquiridos são purificados."
+    ]
+  },
+  "Maid": {
+    "name": "Criada",
+    "description": "Vença se estiver com o Mordomo e o Presidente no fim do jogo.",
+    "winCondition": "Você vence se estiver na mesma sala que o Mordomo e o Presidente no fim do jogo",
+    "powers": [],
+    "notes": [
+      "Deve ser jogada com o Mordomo. Funciona bem com Romeu e Julieta.",
+      "Não funciona bem com 10 jogadores ou menos."
+    ],
+    "requiresGroup": "Par Mordomo/Criada"
+  },
+  "Marshal": {
+    "name": "Delegado",
+    "description": "O jogo termina imediatamente se você compartilhar carta com o Fugitivo.",
+    "winCondition": "Se você compartilhar carta com o Fugitivo, o jogo termina imediatamente. O Time Azul vence",
+    "powers": [
+      {
+        "name": "DELEGADO",
+        "type": "card share",
+        "description": "Se você compartilhar carta com o Fugitivo, o jogo termina imediatamente. O Time Azul vence."
+      }
+    ],
+    "notes": [],
+    "requiresGroup": "Grupo do Fugitivo"
+  },
+  "Martyr": {
+    "name": "Mártir",
+    "description": "Reserva do Homem-Bomba se ele morrer ou for enterrado.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "MÁRTIR",
+        "type": "backup",
+        "description": "Você é um personagem secundário. Você é o personagem reserva do Homem-Bomba. Se a carta do Homem-Bomba for enterrada ou o Homem-Bomba receber a condição \"morto\" antes de ativar a bomba, você deve assumir todas as responsabilidades associadas ao Homem-Bomba (por exemplo: terminar o jogo na mesma sala que o Presidente, compartilhar carta com o Engenheiro)."
+      }
+    ],
+    "notes": [],
+    "requiresGroup": "Reserva: Homem-Bomba"
+  },
+  "Mastermind": {
+    "name": "Mente-Mestra",
+    "description": "Adivinhe a cor de cada jogador no fim do jogo para vencer.",
+    "winCondition": "No fim da última rodada (a rodada de 1 minuto), antes de todos os jogadores revelarem suas cartas, você, o Mestre, deve anunciar publicamente a cor de TODOS os jogadores. Se conseguir nomear corretamente a cor da carta de personagem de cada jogador, você vence e todos os outros jogadores perdem",
+    "powers": [
+      {
+        "name": "MENTE-MESTRA",
+        "type": "pause game",
+        "description": "No fim da última rodada (a rodada de 1 minuto), antes de todos os jogadores revelarem suas cartas, você, o Mestre, deve anunciar publicamente a cor de TODOS os jogadores. Tradicionalmente, isso é feito com o Mestre apontando, um a um, para cada jogador e nomeando verbalmente uma cor ao fazer isso (Vermelho, Azul, Cinza, Verde ou Roxo)."
+      }
+    ],
+    "notes": [
+      "Sua carta de personagem tem um lado vermelho e um lado azul. Você pode mostrar qualquer lado ao compartilhar cor ou revelar.",
+      "Se errar a cor de apenas 1 jogador, você perde o jogo.",
+      "Vencer como Mestre é uma sensação incrível.",
+      "Quanto mais jogadores, mais difícil. Adicione um personagem que pode trocar identidades e você terá um pesadelo."
+    ]
+  },
+  "Mastermind (version 2)": {
+    "name": "Mente-Mestra (versão 2)",
+    "description": "Vença se for líder e já foi líder da sala oposta.",
+    "winCondition": "Você vence se terminar o jogo como líder de uma sala E foi líder da sala oposta em algum momento durante o jogo",
+    "powers": [],
+    "notes": []
+  },
+  "Mayor": {
+    "name": "Prefeito",
+    "description": "Seu voto conta como dois votos quando revelado publicamente.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "PREFEITO",
+        "type": "public reveal",
+        "description": "Quando você revela sua carta publicamente, seu voto conta como dois votos. Isso significa que você pode revelar sua carta publicamente para contar como duas pessoas A FAVOR ou CONTRA a nomeação de um novo líder."
+      }
+    ],
+    "notes": []
+  },
+  "Medic": {
+    "name": "Socorrista",
+    "description": "Remove todas as condições de jogadores que compartilharem carta.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "SOCORRISTA",
+        "type": "card share",
+        "description": "Qualquer jogador que compartilhar carta com você tem todas as \"condições\" removidas. Por exemplo, um jogador que foi \"amaldiçoado\" por uma Múmia não teria mais a condição \"amaldiçoado\" após compartilhar carta com você."
+      }
+    ],
+    "notes": [
+      "Isso não torna você imune a adquirir condições, pois talvez precise encontrar o Paramédico adversário.",
+      "Ao compartilhar carta, um Paramédico com uma condição contagiosa (veja Lobisomem e Zumbi) primeiro usa seu poder PARAMÉDICO e depois transmite a condição contagiosa."
+    ]
+  },
+  "MI6": {
+    "name": "MI6",
+    "description": "Vença se compartilhar carta com o Homem-Bomba e o Presidente.",
+    "winCondition": "Você vence se compartilhar carta com o Homem-Bomba e o Presidente antes do fim do jogo",
+    "powers": [],
+    "notes": []
+  },
+  "Mime": {
+    "name": "Mímico",
+    "description": "Deve permanecer completamente silencioso durante todo o jogo.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [],
+    "notes": [
+      "Faça o possível para não fazer nenhum barulho.",
+      "Alguns jogadores não suportam ser este personagem."
+    ]
+  },
+  "Minion": {
+    "name": "Lacaio",
+    "description": "Vença se nenhum líder for usurpado na sua sala.",
+    "winCondition": "Você vence se um líder nunca for usurpado na mesma sala que você",
+    "powers": [],
+    "notes": [
+      "Pode ficar entediante com um líder estável; difícil vencer com o Usurpador."
+    ]
+  },
+  "Mistress": {
+    "name": "Amante",
+    "description": "Vença se estiver com o Presidente e a Esposa não estiver.",
+    "winCondition": "Você vence se estiver na mesma sala que o Presidente no fim do jogo e a Esposa não estiver",
+    "powers": [],
+    "notes": [
+      "Requer Esposa. Ahab e Moby fortemente recomendados.",
+      "Sem Ahab e Moby, o Time Azul pode ter vantagem."
+    ],
+    "requiresGroup": "Par Esposa/Amante"
+  },
+  "Moby": {
+    "name": "Moby",
+    "description": "Vença se Ahab receber a condição morto e você não.",
+    "winCondition": "Você vence se Ahab receber a condição \"morto\" e você não",
+    "powers": [],
+    "notes": [
+      "Requer Ahab. Esposa e Amante fortemente recomendadas.",
+      "Sem Esposa e Amante, o Time Vermelho pode ter vantagem."
+    ],
+    "requiresGroup": "Par Ahab/Moby"
+  },
+  "Mother": {
+    "name": "Mãe",
+    "description": "Escolha dois filhos; vença se não morrerem (exceto se for o Homem-Bomba).",
+    "winCondition": "Você vence se esses 2 jogadores alvo não receberem a condição \"morto\", a menos que 1 dos 2 jogadores seja o Homem-Bomba. Se o Homem-Bomba for um dos 2 jogadores alvo, então você só precisa que o outro jogador alvo que considerou seu filho não receba a condição \"morto\"",
+    "powers": [
+      {
+        "name": "MÃE",
+        "type": "private reveal",
+        "description": "Durante a primeira rodada do jogo, você deve revelar sua carta em privado a 2 jogadores e dizer verbalmente a esses 2 jogadores alvo: \"Vocês são meus filhos.\" Você não precisa revelar sua carta em privado aos 2 jogadores alvo simultaneamente."
+      }
+    ],
+    "notes": [
+      "Sinta a preocupação que uma mãe sentiria."
+    ]
+  },
+  "Mummy": {
+    "name": "Múmia",
+    "description": "Concede a condição amaldiçoado e impede de fazer barulho.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "MÚMIA",
+        "type": "card share",
+        "description": "Qualquer jogador que compartilhar carta com você recebe a condição \"amaldiçoado\". Jogadores \"amaldiçoados\" devem daí em diante fazer o possível para não fazer nenhum barulho."
+      }
+    ],
+    "notes": [
+      "Por causa do poder MÚMIA, jogadores \"amaldiçoados\" são impedidos de usar quaisquer poderes ou habilidades que exijam verbalização (por exemplo, Agente, Furioso e até Zumbi).",
+      "Múmia faz parte do conjunto \"monstro\"."
+    ]
+  },
+  "Negotiator": {
+    "name": "Negociador",
+    "description": "Só pode compartilhar carta, nunca outros tipos de revelação.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "ESPERTO",
+        "type": "condition",
+        "description": "Você começa com a condição \"experiente\". Jogadores com a condição \"experiente\" só podem compartilhar carta. Você não pode revelar publicamente, em privado nem compartilhar cor."
+      }
+    ],
+    "notes": [
+      "É possível que jogadores \"experientes\" adquiram condições que impedem compartilhamento de carta (por exemplo, \"coy\"). Se isso acontecer, o jogador \"experiente\" não pode mais realizar nenhum dos 4 tipos de revelação (compartilhamento de carta, compartilhamento de cor, revelação privada ou revelação pública).",
+      "Não funciona bem com 10 jogadores ou menos, pois o papel de Negociador é redundante."
+    ]
+  },
+  "Ninja": {
+    "name": "Ninja",
+    "description": "Remove você e um jogador do jogo.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "NINJA",
+        "type": "public reveal",
+        "description": "Durante qualquer rodada exceto a última, você pode revelar sua carta publicamente. Você deve então sair imediatamente da sala atual. Ao entrar na sala oposta, deve IMEDIATAMENTE agarrar qualquer jogador que escolher naquela sala. Tanto você quanto o jogador escolhido são removidos do jogo (mas NÃO recebem a condição \"morto\")."
+      }
+    ],
+    "notes": [
+      "No caso em que o jogador escolhido é um personagem não afetado por poderes (exemplo: o Imunologista), o poder do Ninja foi desperdiçado e o Ninja sai do jogo sozinho.",
+      "Personagens removidos ainda vencem ou perdem conforme o objetivo de vitória do seu time ou personagem.",
+      "Personagens reserva tornam-se ativos se seus personagens correspondentes forem removidos do jogo (por exemplo, a Enfermeira torna-se o Médico se o Ninja remover o Médico do jogo).",
+      "Se o Ninja usar o poder NINJA no líder de uma sala, o líder deve imediatamente colocar a carta de líder no chão. Nesse ponto, um novo líder é nomeado pelo mesmo método da primeira rodada.",
+      "Se um personagem primário (Presidente ou Homem-Bomba) e seu personagem reserva correspondente (Filha do Presidente ou Mártir) forem ambos removidos do jogo, o time adversário vence automaticamente.",
+      "Se o líder de uma sala for removido, a sala deve nomear um novo líder como na primeira rodada.",
+      "Como Ninjas e os alvos de seu poder NINJA são removidos da população de uma sala, a contagem de jogadores para fins de reféns deve ser sempre 4 a menos que a quantidade de jogadores iniciais. Isso significa que, se você tem 18 jogadores incluindo os Ninjas, deveria estar jogando um jogo de 14 jogadores.",
+      "Não recomendado com cartas com personagens vinculados (por exemplo, Frotteur e Puritana). Nunca deve ser jogado com o Amnésico."
+    ]
+  },
+  "Nuclear Tyrant": {
+    "name": "Tirano Nuclear",
+    "description": "Vença se nem o Presidente nem o Homem-Bomba compartilharem carta com você; não pode recusar compartilhamentos.",
+    "winCondition": "No fim do jogo, você é perguntado se compartilhou sua carta com o Presidente e o Homem-Bomba. Você vence se o Presidente e o Homem-Bomba não compartilharem carta com você até o fim do jogo. Se você vencer, todos os outros jogadores perdem",
+    "powers": [
+      {
+        "name": "TOLICE",
+        "type": "condition",
+        "description": "O Tirano Nuclear começa com a condição \"tolo\". Jogadores com a condição \"tolo\" nunca podem recusar uma oferta de compartilhar carta."
+      }
+    ],
+    "notes": [
+      "Se um jogador com a condição \"tolo\" adquirir a condição \"tímido\", as duas condições se cancelam, deixando o jogador sem nenhuma das duas.",
+      "Não combina bem com personagens que têm habilidades de troca de carta (por exemplo, Batata Quente, Duende, etc.)"
+    ]
+  },
+  "Nurse": {
+    "name": "Enfermeira",
+    "description": "Reserva do Médico se ele morrer ou for enterrado.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "ENFERMEIRA",
+        "type": "backup",
+        "description": "Você é o personagem reserva do Médico. Se a carta do Médico for enterrada ou o Médico receber a condição \"morto\" antes do fim do jogo, você deve assumir todas as responsabilidades associadas ao Médico (compartilhar carta com o Presidente)."
+      }
+    ],
+    "notes": [],
+    "requiresGroup": "Reserva: Médico"
+  },
+  "One-Armed Man": {
+    "name": "Homem de Um Braço",
+    "description": "O jogo termina imediatamente se você compartilhar carta com a Testemunha.",
+    "winCondition": "Se você compartilhar carta com a Testemunha, o jogo termina imediatamente. O Time Azul vence",
+    "powers": [
+      {
+        "name": "HOMEM DE UM BRAÇO",
+        "type": "card share",
+        "description": "Se você compartilhar carta com a Testemunha, o jogo termina imediatamente. O Time Azul vence."
+      }
+    ],
+    "notes": [],
+    "requiresGroup": "Grupo do Fugitivo"
+  },
+  "Paparazzo": {
+    "name": "Paparazzo",
+    "description": "Deve ser intrusivo e impedir conversas privadas.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [],
+    "notes": [
+      "Faça o possível para garantir que não haja conversas privadas. Você deve tentar ser o mais intrusivo possível, incluindo olhar por cima do ombro dos jogadores para ver suas cartas e até se abaixar para ver a parte de baixo das cartas passadas entre jogadores. Você não pode manipular fisicamente outros jogadores — isso é falta de educação. Se estiver jogando com a variante Promessa de Privacidade, ignore a regra, contanto que revele sua carta publicamente para provar aos outros que tem permissão para ser invasivo.",
+      "Funciona bem com a variante Promessa de Privacidade."
+    ]
+  },
+  "Paper": {
+    "name": "Papel",
+    "description": "Vença se estiver com a Pedra, mas não com a Tesoura.",
+    "winCondition": "Você vence se estiver na mesma sala que a Pedra, mas não na mesma sala que a Tesoura",
+    "powers": [],
+    "notes": [],
+    "requiresGroup": "Pedra Papel Tesoura"
+  },
+  "Paranoid": {
+    "name": "Paranoico",
+    "description": "Só pode compartilhar carta uma vez por jogo.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "PARANOICO",
+        "type": "condition",
+        "description": "Você começa com a condição \"paranoico\". Jogadores com a condição \"paranoico\" só podem compartilhar carta. Além disso, só podem compartilhar carta uma vez por jogo."
+      }
+    ],
+    "notes": []
+  },
+  "Piper": {
+    "name": "Flautista",
+    "description": "Jogadores que compartilharem carta devem ficar na mesma sala que você.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "FLAUTISTA",
+        "type": "card share",
+        "description": "Qualquer jogador que compartilhar carta com você recebe a condição \"encantado\". Personagens com a condição \"encantado\" têm uma condição de vitória adicional. Jogadores com a condição \"encantado\" perdem se não estiverem na mesma sala que o jogador Flautista que lhes concedeu a condição \"encantado\"."
+      }
+    ],
+    "notes": [
+      "Um jogador só pode ter uma única condição \"encantado\".",
+      "É possível que ambos os personagens Flautista recebam a condição \"encantado\"."
+    ]
+  },
+  "Pirate": {
+    "name": "Pirata",
+    "description": "Força um jogador a ser refém nesta rodada.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "PIRATA",
+        "type": "public reveal",
+        "description": "Você pode revelar sua carta de Pirata publicamente, escolher qualquer jogador na sala (exceto você mesmo) e dizer verbalmente e em voz alta: \"Argh, anda na prancha.\" Porém, sua carta deve permanecer permanentemente revelada publicamente pelo resto do jogo. Isso significa que você só pode usar este poder uma vez. Seu jogador alvo recebe a condição \"afundado\". Um jogador com a condição \"afundado\" deve ser um dos reféns trocados no fim da rodada. Se o poder PIRATA for usado durante a última rodada, então esse jogador é o único refém."
+      }
+    ],
+    "notes": [
+      "Se um jogador com a condição \"afundado\" adquirir a condição \"derrubado\", as duas condições se cancelam, deixando o jogador sem nenhuma das duas.",
+      "Jogadores provavelmente não precisarão adivinhar o refém da outra sala. Recomenda-se jogar apenas o Pirata vermelho com apenas a Segurança azul."
+    ]
+  },
+  "President": {
+    "name": "Presidente",
+    "description": "O Azul vence se você não receber a condição morto.",
+    "winCondition": "O Time Azul vence se você não receber a condição \"morto\"",
+    "powers": [],
+    "notes": [
+      "Rival, Estagiário, Esposa e Amante são seus aliados naturais."
+    ]
+  },
+  "President's Daughter": {
+    "name": "Filha do Presidente",
+    "description": "Reserva do Presidente se ele morrer ou for enterrado.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "FILHA DO PRESIDENTE",
+        "type": "backup",
+        "description": "Você é um personagem secundário. Você é o personagem reserva do Presidente. Se a carta do Presidente for enterrada ou o Presidente receber a condição \"morto\" antes da bomba ser ativada, você deve assumir todas as responsabilidades associadas ao Presidente (por exemplo: terminar o jogo na sala oposta ao Homem-Bomba, compartilhar carta com o Médico)."
+      }
+    ],
+    "notes": [
+      "Não, este personagem não deve ser a \"Vice-Presidente\". Cale a boca e ria."
+    ],
+    "requiresGroup": "Reserva: Presidente"
+  },
+  "Private Investigator": {
+    "name": "Detetive Particular",
+    "description": "Adivinhe a identidade da carta enterrada para vencer.",
+    "winCondition": "No fim da última rodada, antes de todos os jogadores revelarem suas cartas de personagem, você deve anunciar publicamente a identidade da carta enterrada. Se estiver correto, você vence. Se estiver incorreto, você perde",
+    "powers": [],
+    "notes": [
+      "Funciona muito bem com 10 jogadores ou menos.",
+      "Detetive Particular não funciona bem com o Criminoso, Trocador ou Negociante.",
+      "Nota: se o Detetive Particular estiver em jogo com quaisquer outros personagens que tenham um anúncio público no fim do jogo (por exemplo, Amnésico, Apostador, etc.), o Detetive Particular deve anunciar seu palpite primeiro."
+    ]
+  },
+  "Professor": {
+    "name": "Professor",
+    "description": "Força jogadores a só compartilhar carta, impedindo outros tipos de revelação.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "PROFESSOR",
+        "type": "card share",
+        "description": "Qualquer jogador que compartilhar carta com você adquire a condição \"experiente\". Jogadores com a condição \"experiente\" só podem compartilhar carta. A condição \"experiente\" impede o uso de poderes de revelação privada e compartilhamento de cor."
+      }
+    ],
+    "notes": [
+      "É possível que jogadores \"experientes\" adquiram condições que impedem compartilhamento de carta (por exemplo, \"coy\"). Se isso acontecer, o jogador \"experiente\" não pode mais realizar nenhum dos 4 tipos de revelação (compartilhamento de carta, compartilhamento de cor, revelação privada ou revelação pública)."
+    ]
+  },
+  "Prude": {
+    "name": "Puritana",
+    "description": "Vença se agarrar o pulso do Frotteur até o fim do jogo.",
+    "winCondition": "Você vence se agarrar um dos pulsos do Frotteur até o fim do jogo",
+    "powers": [],
+    "notes": [
+      "Você só pode agarrar o pulso de um jogador durante o jogo. Uma vez que agarrar o pulso de um jogador, não pode soltar até o fim do jogo. Isso também significa que nem você nem o jogador cujo pulso você agarrou podem ser reféns sem o outro. A única forma de um dos dois sair da sala é se o outro também puder sair.",
+      "Um personagem que remove outro personagem do jogo (por exemplo, Ninja, Xenocaçador, etc.) não pode remover a Puritana nem o jogador cujo pulso a Puritana agarrou.",
+      "Faz parte do conjunto \"parafilia\".",
+      "Não funciona bem com 10 jogadores ou menos. Requer toque."
+    ],
+    "requiresGroup": "Par Frotteur/Puritana"
+  },
+  "Psychologist": {
+    "name": "Psicólogo",
+    "description": "Pode compartilhar carta com jogadores tímidos/coy/paranoicos.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "PSICÓLOGO",
+        "type": "card share",
+        "description": "Quando você revela sua carta em privado a um personagem com a condição \"tímido\" ou a condição \"coy\", esse personagem \"tímido\" ou \"coy\" pode então imediatamente compartilhar carta com você, o Psicólogo. Se isso for feito, a condição \"tímido\" e/ou \"coy\" é removida. Além disso, se alguém com a condição \"paranoico\" compartilhar carta com você, a condição \"paranoico\" é removida."
+      }
+    ],
+    "notes": []
+  },
+  "Pyrotech": {
+    "name": "Pirotécnico",
+    "description": "Concede a condição bomba de fogo ao Homem-Bomba.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "PIROTÉCNICO",
+        "type": "card share",
+        "description": "Compartilhar carta com o Homem-Bomba concede a condição \"bomba de fogo\". Se o Homem-Bomba tiver a condição \"bomba de fogo\" no fim do jogo, todos os jogadores recebem a condição \"morto\" (independentemente da sala em que estiverem)."
+      }
+    ],
+    "notes": [
+      "Quase exige o Bombeiro."
+    ]
+  },
+  "Queen": {
+    "name": "Rainha",
+    "description": "Vença se o Presidente receber a condição morto e você não.",
+    "winCondition": "Você vence se o Presidente receber a condição \"morto\" e você não",
+    "powers": [],
+    "notes": []
+  },
+  "Rageaholic": {
+    "name": "Furioso",
+    "description": "Vença contando até dez durante a negociação como líder.",
+    "winCondition": "Objetivo de vitória alternativo",
+    "powers": [
+      {
+        "name": "FURIOSO",
+        "type": "alternative win",
+        "description": "Você tem um objetivo de vitória alternativo. Se você... 1) é o líder de uma sala 2) já selecionou seus reféns 3) está entre rodadas (o tempo entre o fim de uma rodada e o início da próxima) 4) e está esperando o líder da outra sala durante a negociação ... então você pode começar a gritar \"Estou furioso um! Estou furioso dois! Estou furioso três!...\" e assim por diante até que o outro líder apareça para a negociação ou você chegue a \"Estou furioso dez!\" Se você chegar e completar o grito \"Estou furioso dez!\", você vence e todos os outros jogadores perdem (incluindo o outro personagem Furioso)."
+      }
+    ],
+    "notes": [
+      "Ao gritar durante a negociação, você deve ser alto o suficiente para que ambas as salas ouçam.",
+      "Isso é ótimo para irritar líderes que não escolhem seus reféns rapidamente.",
+      "Este personagem é péssimo se você é aquele líder irritante que não seleciona reféns a tempo."
+    ]
+  },
+  "Rat": {
+    "name": "Rato",
+    "description": "Revele publicamente para espionar na sala oposta; deve retornar.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "RATO",
+        "type": "public reveal",
+        "description": "Uma vez por jogo, você pode revelar sua carta publicamente para toda a sala e então ir para a sala oposta. Porém, sua carta deve permanecer permanentemente revelada publicamente pelo resto do jogo. Enquanto estiver na outra sala, você tem a condição \"imune\". Jogadores com a condição \"imune\" são imunes a todos os poderes e condições, sem exceção. Enquanto estiver na outra sala, Ratos nunca podem participar de nenhuma votação (por exemplo, votar para nomear ou usurpar um líder) e nunca podem ser escolhidos por líderes para serem transferidos para outra sala (ou por outros personagens com tais poderes), pois nunca são de fato contados como parte da população de uma sala. Você deve retornar à sua sala original antes do fim da rodada ou perde automaticamente."
+      }
+    ],
+    "notes": [
+      "Funciona muito bem na última rodada.",
+      "Não esqueça de retornar antes do fim da rodada!"
+    ]
+  },
+  "Red Fist": {
+    "name": "Punho Vermelho",
+    "description": "O Vermelho vence se você não estiver na mesma sala que o Drone Azul.",
+    "winCondition": "O Time Vermelho vence se você não estiver na mesma sala que o Drone Azul no fim do jogo",
+    "powers": [],
+    "notes": [
+      "Deve ser jogado com o Drone Azul. Juiz ou Informante recomendado (não ambos).",
+      "Pode causar um resultado confuso no fim do jogo."
+    ],
+    "requiresGroup": "Par Soco/Drone"
+  },
+  "Red Foot": {
+    "name": "Pé Vermelho",
+    "description": "Reserva do Punho Vermelho se ele morrer ou for enterrado.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "PÉ VERMELHO",
+        "type": "backup",
+        "description": "Você é um personagem secundário. Você é o personagem reserva do Punho Vermelho. Se a carta do Punho Vermelho for enterrada ou o Punho Vermelho receber a condição \"morto\" antes da bomba ser ativada, você deve assumir todas as responsabilidades associadas ao Punho Vermelho."
+      }
+    ],
+    "notes": [
+      "Se for enterrar uma carta, considere não enterrar os Informantes ou o Juiz."
+    ],
+    "requiresGroup": "Reserva: Punho Vermelho"
+  },
+  "Red Team": {
+    "name": "Time Vermelho",
+    "description": "Vença se o Presidente receber a condição morto.",
+    "winCondition": "Se o Presidente receber a condição \"Morto\", você vence",
+    "powers": [],
+    "notes": [
+      "Qualquer carta de personagem que não tenha o ícone de estrela branca é considerada do Time Vermelho.",
+      "Funciona bem para jogadores de primeira viagem.",
+      "Pode entediar jogadores experientes."
+    ]
+  },
+  "Rival": {
+    "name": "Rival",
+    "description": "Vença se NÃO estiver na mesma sala que o Presidente.",
+    "winCondition": "Você vence se NÃO estiver na mesma sala que o Presidente no fim do jogo",
+    "powers": [],
+    "notes": [
+      "Funciona bem com o Estagiário, Sobrevivente e Vítima.",
+      "Sem o Sobrevivente, o Rival pode dar vantagem ao Time Azul."
+    ]
+  },
+  "Robot": {
+    "name": "Robô",
+    "description": "Vença se a primeira pessoa com quem você compartilhar falhar em vencer.",
+    "winCondition": "Você vence se o primeiro jogador com quem compartilhar carta ou cor falhar em alcançar todos os seus objetivos de vitória. Se você não compartilhar carta ou cor com nenhum jogador, você perde",
+    "powers": [],
+    "notes": [
+      "Funciona bem em combinação com o Clone."
+    ]
+  },
+  "Rock": {
+    "name": "Pedra",
+    "description": "Vença se estiver com a Tesoura, mas não com o Papel.",
+    "winCondition": "Você vence se estiver na mesma sala que a Tesoura, mas não na mesma sala que o Papel",
+    "powers": [],
+    "notes": [],
+    "requiresGroup": "Pedra Papel Tesoura"
+  },
+  "Romeo": {
+    "name": "Romeu",
+    "description": "Vença se estiver com Julieta e o Homem-Bomba no fim do jogo.",
+    "winCondition": "Você vence se estiver na mesma sala que Julieta e o Homem-Bomba no fim do jogo",
+    "powers": [],
+    "notes": [
+      "Funciona bem com Criada e Mordomo.",
+      "Não funciona bem com 10 jogadores ou menos."
+    ],
+    "requiresGroup": "Par Romeu/Julieta"
+  },
+  "Scissors": {
+    "name": "Tesoura",
+    "description": "Vença se estiver com o Papel, mas não com a Pedra.",
+    "winCondition": "Você vence se estiver na mesma sala que o Papel, mas não na mesma sala que a Pedra",
+    "powers": [],
+    "notes": [],
+    "requiresGroup": "Pedra Papel Tesoura"
+  },
+  "Secret Police": {
+    "name": "Polícia Secreta",
+    "description": "Vença se pegar jogadores jogando entre rodadas.",
+    "winCondition": "Objetivo de vitória alternativo",
+    "powers": [
+      {
+        "name": "POLÍCIA SECRETA",
+        "type": "public reveal",
+        "description": "Enquanto a Polícia Secreta estiver em jogo, fazer qualquer ação que possa ser considerada jogo entre rodadas é estritamente proibido. Se algum jogador discutir o jogo ou tentar fazer qualquer forma de compartilhamento ou revelação de carta, você (a Polícia Secreta) pode apontar para o jogador que está jogando entre rodadas, revelar sua carta publicamente (como se fosse um distintivo) e gritar: \"Polícia Secreta! Você está preso!\" Contanto que 1 outro jogador no jogo possa verificar que o jogo de fato estava ocorrendo entre rodadas, você vence e todos os outros jogadores perdem (incluindo o outro personagem Polícia Secreta)."
+      }
+    ],
+    "notes": [
+      "Ao jogar com a Polícia Secreta, é importante que todos os jogadores entendam quando uma rodada começa e quando termina. Se os jogadores tiverem dificuldade em entender isso, lembre-se de que declarar \"A rodada acabou!\" não é considerado jogo.",
+      "Entre rodadas é o tempo entre o fim de uma rodada e o início da próxima. Este é o tempo em que os líderes negociam, trocam reféns e iniciam a próxima rodada.",
+      "Dica: a forma mais fácil de garantir que a Polícia Secreta não vença é permanecer em silêncio e imóvel entre rodadas.",
+      "Aviso: um líder selecionando reféns depois que o tempo de uma rodada expirou É CONSIDERADO JOGO! Líderes devem estar bem preparados.",
+      "Um ótimo personagem para usar em grupos que desperdiçam muito tempo entre rodadas.",
+      "Alguns jogadores dizem que este personagem é \"maldoso\" e estraga a diversão. Isso exige um grupo disciplinado."
+    ]
+  },
+  "Security": {
+    "name": "Segurança",
+    "description": "Impede um jogador de sair ou força revelação pública.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "IMOBILIZAR",
+        "type": "public reveal",
+        "description": "Você pode revelar sua carta de Segurança publicamente, escolher qualquer jogador na sala (exceto você mesmo) e dizer verbalmente: \"Você não vai a lugar nenhum.\" Porém, sua carta deve permanecer permanentemente revelada publicamente pelo resto do jogo. Isso significa que você só pode usar este poder uma vez. Se o alvo do seu poder DERRUBAR não estiver no mesmo time que você, ele recebe a condição \"derrubado\". Jogadores \"derrubados\" não podem sair como refém nesta rodada. Se a Segurança usar o poder DERRUBAR em um membro do próprio time, então esse companheiro de time recebe a condição \"rasgado\". Um jogador com a condição \"rasgado\" deve revelar permanentemente sua carta publicamente, independentemente de poderes ou condições adquiridas."
+      }
+    ],
+    "notes": [
+      "Se um jogador com a condição \"derrubado\" adquirir a condição \"afundado\", as duas condições se cancelam, deixando o jogador sem nenhuma das duas.",
+      "Jogadores provavelmente não precisarão adivinhar o refém da outra sala. Recomenda-se jogar apenas o Pirata vermelho com apenas a Segurança azul."
+    ]
+  },
+  "Seer": {
+    "name": "Vidente",
+    "description": "Vê todas as cartas no início do jogo e recebe a condição tímido.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "VIDENTE",
+        "type": "setup",
+        "description": "Antes do jogo começar, mas depois que as cartas de personagem forem distribuídas, todos devem fechar os olhos e revelar publicamente suas cartas por cerca de 30 segundos. Todos os jogadores devem fazer isso independentemente das habilidades, poderes e condições iniciais de sua carta de personagem. Apenas os personagens Vidente podem abrir os olhos e se mover livremente pelas áreas de jogo. Personagens Vidente começam o jogo com a condição \"tímido\"."
+      }
+    ],
+    "notes": [
+      "Jogadores com a condição \"tímido\" não podem revelar nenhuma parte de sua carta a nenhum jogador.",
+      "Jogadores \"tímidos\" podem compartilhar suas cartas com psicólogos depois que um jogador psicólogo revelar sua carta em privado ao jogador \"tímido\".",
+      "Se um jogador com a condição \"tolo\" adquirir a condição \"tímido\", as duas condições se cancelam, deixando o jogador sem nenhuma das duas.",
+      "Dica: a melhor forma de lidar com jogadores Vidente vendo todas as cartas é distribuir as cartas de personagem a todos os jogadores antes de se separarem nas 2 salas. Então faça a revelação pública em massa de 30 segundos e depois se separem em salas distintas.",
+      "Deve haver 2 Videntes para o equilíbrio adequado do jogo. Não enterre Videntes.",
+      "Não recomendado com Cientistas Loucos ou Zumbis."
+    ]
+  },
+  "Shy Guy": {
+    "name": "Rapaz Tímido",
+    "description": "Não pode revelar nenhuma parte de sua carta a ninguém.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "TÍMIDO",
+        "type": "condition",
+        "description": "Você começa com a condição \"tímido\". Jogadores com a condição \"tímido\" não podem revelar nenhuma parte de sua carta a nenhum jogador."
+      }
+    ],
+    "notes": [
+      "Jogadores \"tímidos\" podem compartilhar suas cartas com psicólogos depois que um jogador psicólogo revelar sua carta em privado ao jogador \"tímido\".",
+      "Se um jogador com a condição \"tolo\" adquirir a condição \"tímido\", as duas condições se cancelam, deixando o jogador sem nenhuma das duas."
+    ]
+  },
+  "Sniper": {
+    "name": "Atirador",
+    "description": "Atire em um jogador no fim do jogo; vença se for o Alvo.",
+    "winCondition": "No fim da última rodada, antes de todos os jogadores revelarem suas cartas de personagem, você deve anunciar publicamente em qual jogador está atirando. Você vence se o jogador selecionado for o Alvo",
+    "powers": [],
+    "notes": [
+      "O jogador selecionado não precisa estar na mesma sala que você.",
+      "Se o jogador escolhido não for o Alvo nem o Chamariz, então o jogador selecionado recebe a condição \"morto\".",
+      "Nota: um Homem-Bomba \"morto\" não detona."
+    ],
+    "requiresGroup": "Grupo do Atirador"
+  },
+  "Socialist": {
+    "name": "Socialista",
+    "description": "Recruta jogadores para o Time Vermelho; ajude seu time a encontrar o Presidente.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "SOCIALISTA",
+        "type": "card share",
+        "description": "Qualquer jogador que compartilhar carta com você deve trocar sua carta de personagem por uma carta do Time Vermelho antes do início da próxima rodada e antes de revelar qualquer parte de sua carta a outro jogador. Seu poder não tem efeito sobre personagens primários (Presidente, Homem-Bomba, Punho Vermelho, etc.), personagens reserva de primários (Filha do Presidente, Mártir, Fogos, etc.) ou qualquer personagem que não esteja alinhado com vermelho ou azul."
+      }
+    ],
+    "notes": [
+      "Não funciona bem sem o Capitalista."
+    ]
+  },
+  "Spy": {
+    "name": "Espião",
+    "description": "Sua carta mostra a cor do time adversário.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [],
+    "notes": [
+      "Esta é uma carta de personagem especial que tem a cor do time adversário. Isso significa, por exemplo, que o Espião vermelho tem lealdade ao Time Vermelho, mas sua carta é azul.",
+      "Não funciona muito bem sem o Coy ou com menos de 10 jogadores."
+    ]
+  },
+  "Stunt Double": {
+    "name": "Dublê",
+    "description": "Vença se estiver na sala oposta ao Presidente e receber a condição morto.",
+    "winCondition": "Você vence se terminar na sala oposta ao Presidente e se receber a condição \"morto\"",
+    "powers": [],
+    "notes": []
+  },
+  "Survivor": {
+    "name": "Sobrevivente",
+    "description": "Vença se NÃO estiver na mesma sala que o Homem-Bomba.",
+    "winCondition": "Você vence se NÃO estiver na mesma sala que o Homem-Bomba no fim do jogo",
+    "powers": [],
+    "notes": [
+      "Funciona bem com a Vítima, o Rival e o Estagiário.",
+      "Sem o Rival, o Sobrevivente pode dar vantagem ao Time Vermelho."
+    ]
+  },
+  "Target": {
+    "name": "Alvo",
+    "description": "Vença se o Atirador não atirar em você no fim do jogo.",
+    "winCondition": "Você vence se o Atirador não atirar em você no fim da última rodada",
+    "powers": [],
+    "notes": [],
+    "requiresGroup": "Grupo do Atirador"
+  },
+  "Telepath": {
+    "name": "Telepata",
+    "description": "Preveja qual refém entrará na sua sala no fim do jogo.",
+    "winCondition": "Você vence se prever corretamente o jogador (não o personagem) que será o refém que entrará na sua sala no fim da última rodada",
+    "powers": [
+      {
+        "name": "TELEPATA",
+        "type": "public reveal",
+        "description": "Para formalizar sua previsão, você deve revelar sua carta publicamente durante a última rodada do jogo e nomear verbalmente (ou descrever adequadamente) sua previsão."
+      }
+    ],
+    "notes": [
+      "Sua previsão não pode ser o refém que está saindo da sua sala atual. Você deve prever o refém que entrará NA sua sala."
+    ]
+  },
+  "Tentaclese": {
+    "name": "Tentáculo",
+    "description": "Agarra um jogador e o traz para a sua sala (contagem ímpar).",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "TENTÁCULO",
+        "type": "public reveal",
+        "description": "Se você estiver em uma sala com menos jogadores que a outra, pode sair da sala atual. Você nunca conta como membro da sala oposta ao usar o poder TENTÁCULO. Ao entrar na sala oposta, deve IMEDIATAMENTE agarrar qualquer jogador de sua escolha. Tanto você quanto o jogador agarrado retornam à sala de onde você acabou de sair. No caso em que o jogador escolhido é um personagem não afetado por poderes (exemplo: o Imunologista), o poder de Tentaclese foi desperdiçado e você deve IMEDIATAMENTE agarrar um jogador diferente."
+      }
+    ],
+    "notes": [
+      "Se Tentaclese usar o poder TENTÁCULO no líder de uma sala, o líder deve imediatamente colocar a carta de líder no chão. Nesse ponto, um novo líder é nomeado pelo mesmo método da primeira rodada.",
+      "Você pode usar o poder TENTÁCULO a qualquer momento, EXCETO NA ÚLTIMA RODADA. Pode ser feito sem limite.",
+      "Esta carta só deve ser incluída no conjunto de papéis se as duas salas não tiverem o mesmo número de jogadores.",
+      "Pode causar disputas de cabo de guerra, especialmente com os Seguranças de Porta"
+    ]
+  },
+  "Thug": {
+    "name": "Bandido",
+    "description": "Força jogadores a só compartilhar cor, limitando o compartilhamento de informações.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "BANDIDO",
+        "type": "card share",
+        "description": "Qualquer jogador que compartilhar carta com você adquire a condição \"coy\". Jogadores com a condição \"coy\" só podem compartilhar cor, mesmo quando o poder de um personagem possa forçar compartilhamento de carta."
+      }
+    ],
+    "notes": [
+      "Se um jogador com a condição \"tolo\" adquirir a condição \"coy\", as duas condições se cancelam, deixando o jogador sem nenhuma das duas."
+    ]
+  },
+  "Time Lord": {
+    "name": "Senhor do Tempo",
+    "description": "Pode encerrar qualquer rodada mais cedo ao revelar publicamente.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "TEMPO",
+        "type": "public reveal",
+        "description": "Revele sua carta publicamente a qualquer momento e anuncie verbalmente: \"O tempo acabou!\" Ao encerrar a rodada, certifique-se de que ambas as salas ouçam o chamado para encerrar a rodada. Porém, se você demorar mais de 5 minutos para encerrar uma rodada, perde seu poder TEMPO."
+      }
+    ],
+    "notes": [
+      "Não há necessidade de cronometrar um jogo se os personagens Senhor do Tempo estiverem em jogo, exceto para provar que excederam 5 minutos e perderam seu poder TEMPO."
+    ]
+  },
+  "Tinkerer": {
+    "name": "Reparador",
+    "description": "Reserva do Engenheiro se ele morrer ou for enterrado.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "REPARADOR",
+        "type": "backup",
+        "description": "Você é o personagem reserva do Engenheiro. Se a carta do Engenheiro for enterrada ou o Engenheiro receber a condição \"morto\" antes de ativar a bomba, você deve assumir todas as responsabilidades associadas ao Engenheiro (compartilhar carta com o Homem-Bomba)."
+      }
+    ],
+    "notes": [],
+    "requiresGroup": "Reserva: Engenheiro"
+  },
+  "Trader": {
+    "name": "Negociante",
+    "description": "Troque sua carta pela carta enterrada uma vez por rodada.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "TROCA",
+        "type": "card swap",
+        "description": "Você pode trocar sua carta pela carta enterrada. Você não pode espiar a carta enterrada, apenas trocar com ela. Você agora assume todos os poderes e a lealdade da carta recém-adquirida. Um único jogador só pode usar o poder TROCAR uma vez por rodada."
+      }
+    ],
+    "notes": [
+      "Isso significa que, mesmo se um Negociante trocar sua carta pela carta do outro Negociante, ele não pode usar o poder TROCAR novamente até a próxima rodada.",
+      "Lembre-se de que personagens recém-adquiridos são purificados."
+    ]
+  },
+  "Tuesday Knight": {
+    "name": "Cavaleiro de Terça",
+    "description": "O jogo termina imediatamente se você compartilhar carta com o Homem-Bomba.",
+    "winCondition": "Se você compartilhar carta com o Homem-Bomba, o jogo termina imediatamente. O Time Azul vence",
+    "powers": [
+      {
+        "name": "ABRAÇO",
+        "type": "card share",
+        "description": "Se você compartilhar carta com o Homem-Bomba, o jogo termina imediatamente. O Time Azul vence."
+      }
+    ],
+    "notes": [
+      "O poder ABRAÇO nunca funciona no Mártir. Se o Homem-Bomba for enterrado, o poder ABRAÇO nunca é usado.",
+      "Jogos podem durar menos de 30 segundos, limitando bastante o tempo de jogo."
+    ]
+  },
+  "Usurper": {
+    "name": "Usurpador",
+    "description": "Revele publicamente para usurpar automaticamente o líder.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "USURPADOR",
+        "type": "public reveal",
+        "description": "Durante qualquer rodada exceto a última, você pode revelar sua carta publicamente e automaticamente se tornar o líder. Porém, sua carta deve permanecer permanentemente revelada publicamente pelo resto do jogo. Isso significa que você só pode usar este poder uma vez. O Usurpador não pode ser usurpado na mesma rodada em que roubou a liderança, nem mesmo por outro Usurpador."
+      }
+    ],
+    "notes": [
+      "Se 2 Usurpadores usarem seu poder na mesma sala durante a mesma rodada, o Usurpador que usou o poder primeiro permanece líder; o outro Usurpador desperdiçou seu poder.",
+      "Depois de usar o poder USURPADOR, compartilhamento e revelação tradicionais de carta não podem ser feitos."
+    ]
+  },
+  "Vampire": {
+    "name": "Vampiro",
+    "description": "Seduz jogadores para controlar suas ações e votos.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "SEDUÇÃO",
+        "type": "card share",
+        "description": "Qualquer jogador que compartilhar carta com você e tiver uma cor diferente da sua recebe a condição \"seduzido\". Todos os jogadores \"seduzidos\" devem fazer qualquer coisa com sua carta que você pedir e devem votar a favor ou contra líderes como você. Isso significa que um jogador \"seduzido\" deve compartilhar cor com quem você pedir, revelar sua carta publicamente se você solicitar e até votar para usurpar o líder atual se você fizer isso."
+      }
+    ],
+    "notes": [
+      "Vampiro faz parte do conjunto \"monstro\"."
+    ]
+  },
+  "Victim": {
+    "name": "Vítima",
+    "description": "Vença se estiver na mesma sala que o Homem-Bomba no fim do jogo.",
+    "winCondition": "Você vence se estiver na mesma sala que o Homem-Bomba no fim do jogo",
+    "powers": [],
+    "notes": [
+      "Funciona bem com o Sobrevivente, o Rival e o Estagiário",
+      "Sem o Estagiário, a Vítima pode dar vantagem ao Time Vermelho."
+    ]
+  },
+  "Villain": {
+    "name": "Vilão",
+    "description": "Vença se estiver com o Presidente e na sala oposta ao Homem-Bomba.",
+    "winCondition": "Você vence se estiver na mesma sala que o Presidente e na sala oposta ao Homem-Bomba. Se você vencer, tanto o Time Vermelho quanto o Time Azul perdem",
+    "powers": [],
+    "notes": [
+      "Você tem a chance de assumir a presidência!",
+      "Se você vencer, o Presidente ficará envergonhado."
+    ]
+  },
+  "Voyeur": {
+    "name": "Voyeur",
+    "description": "Pode espiar a carta enterrada a qualquer momento durante o jogo.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "VOYEUR",
+        "type": "special",
+        "description": "A qualquer momento, você pode olhar a carta enterrada."
+      }
+    ],
+    "notes": [
+      "Personagens Voyeur não devem ter que provar que são Voyeur. Se alguém espiar a carta enterrada e não for o Voyeur, está trapaceando e deve ser apedrejado imediatamente.",
+      "Faz parte do conjunto \"parafilia\" (Exibicionista, Frotteur e Puritana)"
+    ]
+  },
+  "Werewolf": {
+    "name": "Lobisomem",
+    "description": "Morde jogadores para que respondam suas perguntas honestamente.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "LOBISOMEM",
+        "type": "card share",
+        "description": "Você é considerado um dos 2 lobos alfa e tem o poder LOBISOMEM: qualquer jogador que compartilhar carta ou cor com você recebe a condição \"mordido\". Qualquer jogador que compartilhar carta ou cor com um jogador \"mordido\" também é \"mordido\". Todos os jogadores \"mordidos\" devem responder a qualquer pergunta que QUALQUER UM dos lobos alfa fizer da forma mais honesta e informativa possível."
+      }
+    ],
+    "notes": [
+      "Jogadores recém-\"mordidos\" não recebem cartas ou indicadores especiais de \"mordido\". Portanto, é importante que os jogadores indiquem que estão \"mordidos\" ao compartilhar carta ou cor com outro. Os jogadores também precisam indicar qual jogador é o lobo alfa conhecido. Assim, um jogador recém-\"mordido\" sabe de quem deve responder perguntas honestamente. Isso geralmente é feito sussurrando algo como: \"Estou mordido e agora você também. Ted é um dos lobos alfa, então se ele te fizer alguma pergunta, responda o melhor que puder.\"",
+      "Se você tiver a condição \"mordido\" e acreditar que está sendo feita uma pergunta por QUALQUER UM dos jogadores que, ao seu conhecimento, são lobos alfa, deve fazer o possível para responder honestamente. Portanto, há benefício em não saber quem é o lobo alfa do outro time.",
+      "Perguntar aos jogadores o que planejam fazer no futuro é desperdício de pergunta. Mudar seus planos não te torna desonesto. Te torna volúvel.",
+      "Faz parte do conjunto \"monstro\" e funciona bem com a variante Promessa de Privacidade.",
+      "Fica confuso com o Paramédico e personagens com habilidades de troca de carta (por exemplo, Duende)."
+    ]
+  },
+  "Wife": {
+    "name": "Esposa",
+    "description": "Vença se estiver com o Presidente e a Amante não estiver.",
+    "winCondition": "Você vence se estiver na mesma sala que o Presidente no fim do jogo e a Amante não estiver",
+    "powers": [],
+    "notes": [
+      "Requer Amante. Ahab e Moby são fortemente recomendados.",
+      "Sem Ahab e Moby, o Time Azul pode ter vantagem."
+    ],
+    "requiresGroup": "Par Esposa/Amante"
+  },
+  "Witness": {
+    "name": "Testemunha",
+    "description": "O jogo termina imediatamente se você compartilhar carta com o Delegado.",
+    "winCondition": "Se você compartilhar carta com o Delegado, o jogo termina imediatamente. O Time Vermelho vence",
+    "powers": [
+      {
+        "name": "TESTEMUNHA",
+        "type": "card share",
+        "description": "Se você compartilhar carta com o Delegado, o jogo termina imediatamente. O Time Vermelho vence."
+      }
+    ],
+    "notes": [],
+    "requiresGroup": "Grupo do Fugitivo"
+  },
+  "Xenohunter": {
+    "name": "Xenocaçador",
+    "description": "Remove um jogador azul que revelar publicamente.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "XENOCAÇADOR",
+        "type": "public reveal",
+        "description": "Depois que qualquer membro do time azul revelar sua carta publicamente para toda a sala, você pode entregar sua carta de Xenocaçador a ele. O jogador a quem você entregar sua carta de Xenocaçador é removido do jogo com sua carta. Isso significa que usar seu poder XENOCAÇADOR removerá permanentemente sua carta do jogo, não você."
+      }
+    ],
+    "notes": [
+      "Xenomorph fortemente recomendado para equilíbrio do jogo.",
+      "Não combina bem com Espião, Conspirador, Capitalista ou Socialista."
+    ]
+  },
+  "Xenomorph": {
+    "name": "Xenomorfo",
+    "description": "Impregna o primeiro jogador azul que compartilhar com você.",
+    "winCondition": "Condição de vitória padrão do time",
+    "powers": [
+      {
+        "name": "XENOMORFO",
+        "type": "card share",
+        "description": "O primeiro membro do time azul que compartilhar cor ou carta com você recebe a condição \"impregnado\" e você deve entregar sua carta de personagem Xenomorph a ele. Isso significa que usar seu poder XENOMORPH removerá permanentemente sua carta do jogo, não você. Um jogador com a condição \"impregnado\" não deve fazer nada com a carta Xenomorph que segura, incluindo mostrar a carta a outros ou usar poderes associados à carta. Ele só precisa segurá-la. No entanto, um jogador com a condição \"impregnado\" ainda pode usar sua própria carta normalmente. No fim do jogo, todos na mesma sala que o jogador azul com a condição \"impregnado\" recebem a condição \"morto\"."
+      }
+    ],
+    "notes": [
+      "Xenocaçador fortemente recomendado para equilíbrio do jogo.",
+      "Não combina bem com Espião, Conspirador, Capitalista ou Socialista."
+    ]
+  },
+  "Yog Sothoth": {
+    "name": "Yog Sothoth",
+    "description": "Vença se alguém compartilhar carta ou cor com você.",
+    "winCondition": "Você vence se qualquer jogador compartilhar cor ou carta com você. Se você vencer, todos os outros jogadores perdem",
+    "powers": [
+      {
+        "name": "YOG SOTHOTH",
+        "type": "card share",
+        "description": "Você vence se qualquer jogador compartilhar cor ou carta com você. Se você vencer, todos os outros jogadores perdem."
+      }
+    ],
+    "notes": [
+      "Mantém os jogadores atentos ao compartilhar informações.",
+      "Não recomendado com o Observador, o Duende ou jogos com a condição \"tolo\"."
+    ]
+  },
+  "Zombie": {
+    "name": "Zumbi",
+    "description": "Converta todos os jogadores vivos ao Time Zumbi até o fim do jogo para vencer.",
+    "winCondition": "O Time Zumbi vence se todos os jogadores sem a condição \"morto\" no fim do jogo estiverem no Time Zumbi",
+    "powers": [
+      {
+        "name": "ZUMBI",
+        "type": "card share",
+        "description": "Você começa com a condição \"zumbi\". A condição \"zumbi\" altera a lealdade de um jogador para o Time Zumbi. O Time Zumbi vence se todos os jogadores sem a condição \"morto\" no fim do jogo estiverem no Time Zumbi. Qualquer jogador que compartilhar carta ou cor com um membro do Time Zumbi recebe a condição \"zumbi\". Novos membros do Time Zumbi mantêm seus poderes e condições, mas sua lealdade (e portanto condição de vitória) passa a ser do Time Zumbi. Isso significa que quaisquer condições de vitória anteriores de um jogador são substituídas pela condição de vitória do Time Zumbi."
+      }
+    ],
+    "notes": [
+      "Jogadores recém-transformados em Zumbi não trocam suas cartas de personagem atuais por cartas de Zumbi. Portanto, é importante que os jogadores indiquem que estão no Time Zumbi ao compartilhar carta ou cor com outro jogador. Isso geralmente é feito sussurrando algo como: \"Sou um Zumbi, e agora você também. Fica de boa, cara. Vamos ganhar essa parada.\"",
+      "Funciona bem com Médico e Engenheiro, faz parte do conjunto \"monstro\" e funciona com a variante Promessa de Privacidade.",
+      "Fica confuso com o Paramédico, o Purificador e a Batata Quente. Jogar com personagens que têm revelações públicas permanentes é difícil, pois eles não podem receber a condição \"zumbi\"."
+    ]
+  },
+  "Agoraphobe": {
+    "name": "Agorafóbico",
+    "description": "Vença se nunca for enviado para uma sala diferente por ninguém.",
+    "winCondition": "Você vence se nunca for enviado para uma sala diferente por ninguém",
+    "powers": [],
+    "notes": []
+  },
+  "Ahab": {
+    "name": "Ahab",
+    "description": "Vença se Moby receber a condição morto e você não.",
+    "winCondition": "Você vence se Moby receber a condição \"morto\" e você não",
+    "powers": [],
+    "notes": [
+      "Deve ser jogado com Moby. Fortemente recomendado jogar com Esposa e Amante.",
+      "Sem Esposa e Amante, o Time Vermelho pode ter vantagem."
+    ],
+    "requiresGroup": "Par Ahab/Moby"
+  },
+  "Traveler": {
+    "name": "Viajante",
+    "description": "Vença se for enviado para uma sala diferente como refém no fim da MAIORIA das rodadas.",
+    "winCondition": "Você vence se for enviado para uma sala diferente como refém no fim da MAIORIA das rodadas",
+    "powers": [],
+    "notes": [
+      "Isso significa que, em um jogo de 5 rodadas, você deve mudar de sala 3 vezes para vencer. Em um jogo de 3 rodadas, deve mudar de sala duas vezes para vencer.",
+      "Funciona bem com o Agorafóbico.",
+      "Cuidado ao jogar com Zumbi. Zumbi Viajante tem 2 objetivos de vitória."
+    ]
+  }
+}

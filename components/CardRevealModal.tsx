@@ -8,6 +8,7 @@ import { getTeamBannerClasses, getTeamColorClasses, getTeamLabel } from '../util
 import { getCatalogTeam, getPresentedTeam, resolvePairAllegiance } from '../utils/presentedTeam';
 import { safeModalClose } from '../utils/dismissGuard';
 import { useLocale, useT } from '../i18n/I18nContext';
+import { translateCharacter, translatePowerType, translateRoleName } from '../i18n/display';
 
 export type CardRevealRequest =
   | { kind: 'player'; playerId: string; playerName: string; roleName: string }
@@ -142,9 +143,10 @@ export const CardRevealModal: React.FC<CardRevealModalProps> = ({ request, roleD
   const displayTeam = textVisible ? catalogTeam : faceTeam;
   const banner = getTeamBannerClasses(displayTeam);
   const badge = getTeamColorClasses(catalogTeam);
-  const displayName = character?.name ?? request.roleName;
-  const winCondition = character?.winCondition ?? '';
-  const powers = character?.powers ?? [];
+  const display = character ? translateCharacter(locale, character) : null;
+  const displayName = display?.name ?? translateRoleName(locale, request.roleName);
+  const winCondition = display?.winCondition ?? '';
+  const powers = display?.powers ?? [];
 
   return createPortal(
     <div className={`fixed inset-0 z-[80] flex flex-col ${textVisible ? 'bg-zinc-950' : banner}`}>
@@ -225,7 +227,7 @@ export const CardRevealModal: React.FC<CardRevealModalProps> = ({ request, roleD
                                 {power.type && (
                                   <span className="px-2 py-1 bg-zinc-800 rounded text-xs font-semibold text-zinc-300 flex items-center gap-1">
                                     {powerTypeIcon && <Icon name={powerTypeIcon} size={12} className="flex-shrink-0" />}
-                                    {power.type.toUpperCase()}
+                                    {translatePowerType(locale, power.type).toUpperCase()}
                                   </span>
                                 )}
                                 <span className="font-semibold text-zinc-100">{power.name}</span>

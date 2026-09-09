@@ -6,6 +6,7 @@ import { getPresetsForPlayerCount } from '../data/presets';
 import { getCustomPresets, saveCustomPreset, deleteCustomPreset, createPresetFromRoles } from '../services/presetService';
 import { generatePreset, shufflePreset } from '../services/presetGenerator';
 import { getAllCharacters } from '../services/characterService';
+import { useT } from '../i18n/I18nContext';
 
 interface PresetPanelProps {
   selectedRoles: string[];
@@ -34,6 +35,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
   onShowKeyword,
   onShowRequires,
 }) => {
+  const t = useT();
   const [activeSection, setActiveSection] = useState<'presets' | 'custom' | 'generator'>('presets');
   
   // Notify parent when generator section becomes active/inactive
@@ -260,7 +262,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
   const handleSaveCurrent = () => {
     if (selectedRoles.length === 0) return;
     setShowSaveDialog(true);
-    setPresetName(`Custom Preset (${selectedRoles.length} roles)`);
+    setPresetName(t('presets.customPresetName', { n: selectedRoles.length }));
   };
   
   const handleConfirmSave = () => {
@@ -283,7 +285,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
   };
   
   const handleDeleteCustom = (id: string) => {
-    if (confirm('Delete this custom preset?')) {
+    if (confirm(t('presets.deleteConfirm'))) {
       deleteCustomPreset(id);
     }
   };
@@ -300,7 +302,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
               : 'text-zinc-500 hover:text-zinc-300'
           }`}
         >
-          Quick Presets
+          {t('presets.quickPresets')}
           {activeSection === 'presets' && (
             <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-cyan-400" />
           )}
@@ -313,7 +315,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
               : 'text-zinc-500 hover:text-zinc-300'
           }`}
         >
-          Custom ({customPresets.length})
+          {t('presets.custom', { n: customPresets.length })}
           {activeSection === 'custom' && (
             <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-cyan-400" />
           )}
@@ -326,7 +328,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
               : 'text-zinc-500 hover:text-zinc-300'
           }`}
         >
-          Generator
+          {t('presets.generator')}
           {activeSection === 'generator' && (
             <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-cyan-400" />
           )}
@@ -339,7 +341,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
           {/* Player Count Selector */}
           <div>
             <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-2 block">
-              Player Count
+              {t('presets.playerCount')}
             </label>
             <div className="flex flex-wrap gap-2">
               {[8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20].map(count => (
@@ -362,7 +364,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
           {presetsForCount.length > 0 ? (
             <div className="space-y-3">
               {presetsForCount.map(preset => {
-                const difficultyLabel = preset.difficulty === 1 ? 'Easy' : preset.difficulty === 2 ? 'Medium' : 'Hard';
+                const difficultyLabel = preset.difficulty === 1 ? t('common.easy') : preset.difficulty === 2 ? t('common.medium') : t('common.hard');
                 return (
                   <div key={preset.id} className="bg-zinc-800/50 rounded-xl p-4 space-y-3">
                     <div>
@@ -420,7 +422,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
                         onClick={() => handleApplyPreset(preset)}
                         className="px-3 py-1.5 bg-cyan-500 text-zinc-950 font-semibold rounded-lg hover:bg-cyan-400 transition-colors text-sm"
                       >
-                        Apply
+                        {t('common.apply')}
                       </button>
                     </div>
                   </div>
@@ -429,7 +431,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
             </div>
           ) : (
             <div className="text-center py-8 text-zinc-500 text-sm">
-              No presets available for {selectedPlayerCount} players
+              {t('presets.noPresetsForCount', { n: selectedPlayerCount })}
             </div>
           )}
         </div>
@@ -439,20 +441,20 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
       {activeSection === 'custom' && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-zinc-300">Saved Presets</h3>
+            <h3 className="text-sm font-semibold text-zinc-300">{t('presets.savedPresets')}</h3>
             {selectedRoles.length > 0 && (
               <button
                 onClick={handleSaveCurrent}
                 className="px-3 py-1.5 bg-cyan-500/20 border border-cyan-500 text-cyan-400 rounded-lg text-sm font-semibold hover:bg-cyan-500/30 transition-colors"
               >
-                Save Current
+                {t('presets.saveCurrent')}
               </button>
             )}
           </div>
           
           {customPresets.length === 0 ? (
             <div className="text-center py-8 text-zinc-500 text-sm">
-              No custom presets saved yet
+              {t('presets.noCustomYet')}
             </div>
           ) : (
             <div className="space-y-2">
@@ -476,7 +478,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
                         }}
                         className="px-3 py-1 bg-cyan-500/20 border border-cyan-500 text-cyan-400 rounded-lg text-xs font-semibold hover:bg-cyan-500/30"
                       >
-                        Load
+                        {t('common.load')}
                       </button>
                       <button
                         onClick={() => handleDeleteCustom(preset.id)}
@@ -499,7 +501,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
           {/* Player Count */}
           <div>
             <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-2 block">
-              Player Count
+              {t('presets.playerCount')}
             </label>
             <input
               type="number"
@@ -524,13 +526,13 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
           {/* Difficulty */}
           <div>
             <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-2 block">
-              Difficulty
+              {t('common.difficulty')}
             </label>
             <div className="flex gap-2">
               {[
-                { value: 1 as const, label: 'Easy' },
-                { value: 2 as const, label: 'Medium' },
-                { value: 3 as const, label: 'Hard' },
+                { value: 1 as const, label: t('common.easy') },
+                { value: 2 as const, label: t('common.medium') },
+                { value: 3 as const, label: t('common.hard') },
               ].map(({ value, label }) => (
                 <button
                   key={value}
@@ -550,7 +552,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
           {/* Options */}
           <div>
             <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-2 block">
-              Options
+              {t('common.options')}
             </label>
             <div className="space-y-2">
               <label className="flex items-center gap-2 text-sm text-zinc-300">
@@ -560,7 +562,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
                   onChange={(e) => setAllowBury(e.target.checked)}
                   className="w-4 h-4 rounded border-zinc-700 bg-zinc-800 text-cyan-500 focus:ring-cyan-500"
                 />
-                Allow Burying
+                {t('presets.allowBurying')}
               </label>
               <label className="flex items-center gap-2 text-sm text-zinc-300">
                 <input
@@ -569,7 +571,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
                   onChange={(e) => setAllowGreys(e.target.checked)}
                   className="w-4 h-4 rounded border-zinc-700 bg-zinc-800 text-cyan-500 focus:ring-cyan-500"
                 />
-                Allow Grey Roles
+                {t('presets.allowGreyRoles')}
               </label>
               <label className="flex items-center gap-2 text-sm text-zinc-300">
                 <input
@@ -578,7 +580,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
                   onChange={(e) => setAllowConditions(e.target.checked)}
                   className="w-4 h-4 rounded border-zinc-700 bg-zinc-800 text-cyan-500 focus:ring-cyan-500"
                 />
-                Allow Condition Roles
+                {t('presets.allowConditionRoles')}
               </label>
             </div>
           </div>
@@ -587,7 +589,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
           {selectedRoles.length > 0 && (
             <div className="bg-zinc-800/50 rounded-xl p-3">
               <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-2 block">
-                Current Roles ({selectedRoles.length})
+                {t('presets.currentRoles', { n: selectedRoles.length })}
               </label>
               <RoleListDisplay roles={selectedRoles} />
             </div>
@@ -600,7 +602,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
                 onClick={handleGenerate}
                 className="flex-1 px-4 py-2 bg-cyan-500 text-zinc-950 font-semibold rounded-lg hover:bg-cyan-400 transition-colors"
               >
-                Generate
+                {t('common.generate')}
               </button>
               <button
                 onClick={handleShuffleAgain}
@@ -618,7 +620,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
                 onClick={handleGenerate}
                 className="flex-1 px-4 py-2 bg-cyan-500 text-zinc-950 font-semibold rounded-lg hover:bg-cyan-400 transition-colors"
               >
-                Generate
+                {t('common.generate')}
               </button>
             </div>
           )}
@@ -628,7 +630,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
             <div className="bg-zinc-800/50 rounded-xl p-4 space-y-3 border border-cyan-500/30">
               <div>
                 <label className="text-xs font-bold uppercase tracking-widest text-cyan-400 mb-2 block">
-                  Generated Suggestion ({generatedRoles.length} roles)
+                  {t('presets.generatedSuggestion', { n: generatedRoles.length })}
                 </label>
                 <RoleListDisplay roles={generatedRoles} />
               </div>
@@ -671,7 +673,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
                   onClick={handleApplyGenerated}
                   className="px-4 py-2 bg-cyan-500 text-zinc-950 font-semibold rounded-lg hover:bg-cyan-400 transition-colors"
                 >
-                  Apply
+                  {t('common.apply')}
                 </button>
               </div>
             </div>
@@ -684,7 +686,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
                 onClick={handleGenerate}
                 className="flex-1 px-4 py-2 bg-cyan-500 text-zinc-950 font-semibold rounded-lg hover:bg-cyan-400 transition-colors"
               >
-                Generate
+                {t('common.generate')}
               </button>
               <button
                 onClick={handleShuffleAgain}
@@ -701,30 +703,30 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
       {showSaveDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-zinc-950/80 backdrop-blur-sm">
           <div className="w-full max-w-sm bg-zinc-900 border border-zinc-800 rounded-[40px] p-6 shadow-2xl">
-            <h3 className="text-xl font-black text-zinc-100 mb-4">Save Preset</h3>
+            <h3 className="text-xl font-black text-zinc-100 mb-4">{t('presets.savePreset')}</h3>
             <div className="space-y-4">
               <div>
                 <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-2 block">
-                  Name
+                  {t('common.name')}
                 </label>
                 <input
                   type="text"
                   value={presetName}
                   onChange={(e) => setPresetName(e.target.value)}
-                  placeholder="Preset name"
+                  placeholder={t('presets.presetName')}
                   className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-cyan-500/50"
                   autoFocus
                 />
               </div>
               <div>
                 <label className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-2 block">
-                  Difficulty
+                  {t('common.difficulty')}
                 </label>
                 <div className="flex gap-2">
                   {[
-                    { value: 1 as const, label: 'Easy' },
-                    { value: 2 as const, label: 'Medium' },
-                    { value: 3 as const, label: 'Hard' },
+                    { value: 1 as const, label: t('common.easy') },
+                    { value: 2 as const, label: t('common.medium') },
+                    { value: 3 as const, label: t('common.hard') },
                   ].map(({ value, label }) => (
                     <button
                       key={value}
@@ -745,14 +747,14 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
                   onClick={() => setShowSaveDialog(false)}
                   className="flex-1 px-4 py-2 bg-zinc-800 border border-zinc-700 text-zinc-300 font-semibold rounded-lg hover:bg-zinc-700 transition-colors"
                 >
-                  Cancel
+                  {t('common.cancel')}
                 </button>
                 <button
                   onClick={handleConfirmSave}
                   disabled={!presetName.trim()}
                   className="flex-1 px-4 py-2 bg-cyan-500 text-zinc-950 font-semibold rounded-lg hover:bg-cyan-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Save
+                  {t('common.save')}
                 </button>
               </div>
             </div>

@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { CharacterIndex } from '../types';
 import { Icon } from './Icon';
+import { useT } from '../i18n/I18nContext';
 
 interface CharacterCardProps {
   character: CharacterIndex;
@@ -89,6 +90,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   onTagClick,
   onRequiresClick
 }) => {
+  const t = useT();
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isLongPressRef = useRef(false);
   const isPressedRef = useRef(false);
@@ -196,7 +198,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           )}
         </div>
         {isLocked && (
-          <div className="p-1.5 rounded-lg bg-cyan-500/20 text-cyan-400" title="Locked for Generator">
+          <div className="p-1.5 rounded-lg bg-cyan-500/20 text-cyan-400" title={t('character.lockedForGenerator')}>
             <Icon name="lock" size={14} />
           </div>
         )}
@@ -208,7 +210,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             }}
             onPointerDown={(e) => e.stopPropagation()}
             className="p-1.5 rounded-lg transition-colors bg-zinc-800/50 text-zinc-500 hover:bg-zinc-700/50"
-            title="Lock role"
+            title={t('character.lockRole')}
           >
             <Icon name="unlock" size={14} />
           </button>
@@ -221,7 +223,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             }}
             onPointerDown={(e) => e.stopPropagation()}
             className="p-1.5 rounded-lg transition-colors bg-cyan-500/20 text-cyan-400 hover:bg-cyan-500/30"
-            title="Unlock role"
+            title={t('character.unlockRole')}
           >
             <Icon name="lock" size={14} />
           </button>
@@ -299,7 +301,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   onPointerUp={handleRequiresPointerUp}
                   onPointerMove={handleRequiresPointerMove}
                   className={`flex items-center gap-1 rounded-lg px-2 py-1 min-w-0 transition-colors cursor-pointer active:scale-95 ${darkened ? 'bg-zinc-800/30 hover:bg-zinc-800/50' : 'bg-zinc-800/50 hover:bg-zinc-800/70'}`}
-                  title={character.requiresGroup || `Requires: ${character.requires.join(', ')}`}
+                  title={character.requiresGroup || t('character.requiresTitle', { list: character.requires.join(', ') })}
                   type="button"
                 >
                   <span className={`break-words ${compact ? 'text-xs' : 'text-xs'} ${darkened ? 'text-zinc-500' : 'text-zinc-400'}`}>

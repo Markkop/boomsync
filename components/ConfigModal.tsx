@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ALARM_SOUNDS } from '../constants';
 import { Icon } from './Icon';
+import { useI18n, LOCALE_NATIVE_NAMES, LOCALES } from '../i18n/I18nContext';
 
 interface ConfigModalProps {
   isSoundOn: boolean;
@@ -37,6 +38,7 @@ export const ConfigModal: React.FC<ConfigModalProps> = ({
   onVolumeChange,
   onClose
 }) => {
+  const { locale, setLocale, t } = useI18n();
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const volumePreviewTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -200,13 +202,39 @@ export const ConfigModal: React.FC<ConfigModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-zinc-950/80 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="w-full max-w-sm bg-zinc-900 border border-zinc-800 rounded-[40px] p-6 shadow-2xl relative max-h-[85vh] overflow-y-auto no-scrollbar">
         <div className="flex items-center justify-between mb-6 px-2">
-          <h2 className="text-2xl font-black text-zinc-100 tracking-tight">SETTINGS</h2>
+          <h2 className="text-2xl font-black text-zinc-100 tracking-tight">{t('settings.title')}</h2>
           <button 
             onClick={onClose}
             className="p-2 -mr-2 text-zinc-500 hover:text-zinc-300 active:scale-95 transition-transform"
           >
             <Icon name="close" size={24} />
           </button>
+        </div>
+
+        <div className="mb-4 px-1">
+          <div className="flex items-center gap-2 text-zinc-400 mb-2">
+            <span className="text-xs font-bold uppercase tracking-widest">{t('settings.language')}</span>
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            {LOCALES.map((code) => {
+              const active = locale === code;
+              return (
+                <button
+                  key={code}
+                  type="button"
+                  onClick={() => setLocale(code)}
+                  className={`
+                    py-3 rounded-2xl text-sm font-bold transition-all active:scale-95 border-2
+                    ${active
+                      ? 'bg-cyan-500/10 border-cyan-500/50 text-cyan-400'
+                      : 'bg-zinc-950 border-zinc-800 text-zinc-500 hover:border-zinc-700 hover:text-zinc-300'}
+                  `}
+                >
+                  {LOCALE_NATIVE_NAMES[code]}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
@@ -224,7 +252,7 @@ export const ConfigModal: React.FC<ConfigModalProps> = ({
               <Icon name={isSoundOn ? 'volumeOn' : 'volumeOff'} size={24} />
             </div>
             <span className="font-bold text-xs tracking-widest uppercase">
-              Sound {isSoundOn ? 'On' : 'Off'}
+              {isSoundOn ? t('settings.soundOn') : t('settings.soundOff')}
             </span>
           </button>
 
@@ -242,7 +270,7 @@ export const ConfigModal: React.FC<ConfigModalProps> = ({
               <Icon name="proportions" size={24} />
             </div>
              <span className="font-bold text-xs tracking-widest uppercase text-center leading-tight">
-              Auto Fullscreen
+              {t('settings.autoFullscreen')}
             </span>
           </button>
 
@@ -260,7 +288,7 @@ export const ConfigModal: React.FC<ConfigModalProps> = ({
               <Icon name="bomb" size={24} />
             </div>
             <span className="font-bold text-xs tracking-widest uppercase text-center leading-tight">
-              Bomb Sound
+              {t('settings.bombSound')}
             </span>
           </button>
 
@@ -278,7 +306,7 @@ export const ConfigModal: React.FC<ConfigModalProps> = ({
               <Icon name="sun" size={24} />
             </div>
             <span className="font-bold text-xs tracking-widest uppercase text-center leading-tight">
-              Screen Awake
+              {t('settings.screenAwake')}
             </span>
           </button>
 
@@ -296,7 +324,7 @@ export const ConfigModal: React.FC<ConfigModalProps> = ({
               <Icon name="idCard" size={24} />
             </div>
             <span className="font-bold text-xs tracking-widest uppercase text-center leading-tight">
-              Show Role Cards
+              {t('settings.showRoleCards')}
             </span>
           </button>
 
@@ -304,7 +332,7 @@ export const ConfigModal: React.FC<ConfigModalProps> = ({
           <div className="col-span-2 bg-zinc-950 border border-zinc-800 rounded-3xl p-4 space-y-3 mt-2">
             <div className="flex items-center gap-2 text-zinc-400 px-1">
               <Icon name={getVolumeIcon()} size={16} />
-              <span className="text-xs font-bold uppercase tracking-widest">Volume</span>
+              <span className="text-xs font-bold uppercase tracking-widest">{t('settings.volume')}</span>
             </div>
             
             <div className="flex items-center gap-3 px-1">
@@ -330,7 +358,7 @@ export const ConfigModal: React.FC<ConfigModalProps> = ({
           <div className="col-span-2 bg-zinc-950 border border-zinc-800 rounded-3xl p-4 space-y-4 mt-2">
             <div className="flex items-center gap-2 text-zinc-400 px-1">
               <Icon name="music" size={16} />
-              <span className="text-xs font-bold uppercase tracking-widest">Alarm Tone</span>
+              <span className="text-xs font-bold uppercase tracking-widest">{t('settings.alarmTone')}</span>
             </div>
             
             <div className="space-y-1">
@@ -389,7 +417,7 @@ export const ConfigModal: React.FC<ConfigModalProps> = ({
               <Icon name="github" size={20} />
             </div>
             <span className="font-bold text-xs tracking-widest uppercase">
-              Github Repository
+              {t('settings.githubRepo')}
             </span>
           </a>
         </div>

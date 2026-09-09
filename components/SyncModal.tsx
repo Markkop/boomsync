@@ -5,6 +5,7 @@ import { peerService } from '../services/peerService';
 import { Icon } from './Icon';
 import { TapSafeButton } from './TapSafeButton';
 import { getNamedPlayers } from '../services/dealService';
+import { useT } from '../i18n/I18nContext';
 
 interface SyncModalProps {
   onClose: () => void;
@@ -26,6 +27,7 @@ export const SyncModal: React.FC<SyncModalProps> = ({
   connectedPeerIds = [],
   onAssignIdentity,
 }) => {
+  const t = useT();
   const [roomCode, setRoomCode] = useState('');
   const [targetId, setTargetId] = useState(initialCode);
   const [status, setStatus] = useState<'idle' | 'hosting' | 'connecting' | 'connected' | 'room_deleted'>('idle');
@@ -134,7 +136,7 @@ export const SyncModal: React.FC<SyncModalProps> = ({
         setConnectionCount(peerService.getConnectionCount());
       });
     }).catch(e => {
-        alert("Connection failed: " + e);
+        alert(t('sync.connectionFailed', { error: String(e) }));
         setStatus('idle');
     });
   }, []);
@@ -163,7 +165,7 @@ export const SyncModal: React.FC<SyncModalProps> = ({
         setConnectionCount(peerService.getConnectionCount());
       });
     } catch (e) {
-      alert("Failed to initialize sync: " + e);
+      alert(t('sync.initFailed', { error: String(e) }));
       setStatus('idle');
     }
   };
@@ -231,15 +233,15 @@ export const SyncModal: React.FC<SyncModalProps> = ({
             <div className="w-16 h-16 mx-auto bg-amber-500/20 rounded-full flex items-center justify-center">
               <Icon name="logout" size={32} className="text-amber-400" />
             </div>
-            <h2 className="text-xl font-black text-zinc-100">Room Closed</h2>
+            <h2 className="text-xl font-black text-zinc-100">{t('sync.roomClosed')}</h2>
             <p className="text-zinc-400 text-sm">
-              The host has closed this room. You have been disconnected.
+              {t('sync.roomClosedBody')}
             </p>
             <button 
               onClick={handleDismissRoomDeleted}
               className="w-full py-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold rounded-xl transition-all"
             >
-              OK
+              {t('common.ok')}
             </button>
           </div>
         </div>
@@ -259,7 +261,7 @@ export const SyncModal: React.FC<SyncModalProps> = ({
           <Icon name="close" size={24} />
         </button>
 
-        <h2 className="text-2xl font-black mb-6 text-zinc-100">SYNC SESSIONS</h2>
+        <h2 className="text-2xl font-black mb-6 text-zinc-100">{t('sync.title')}</h2>
 
         <div className="space-y-6">
           {/* Active Session Display - shown for both hosts and joiners when connected */}
@@ -267,12 +269,12 @@ export const SyncModal: React.FC<SyncModalProps> = ({
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">
-                  {isHost ? 'Your Room' : 'Connected Room'}
+                  {isHost ? t('sync.yourRoom') : t('sync.connectedRoom')}
                 </h3>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
                   <span className="text-xs text-green-400 font-semibold">
-                    {connectionCount} {connectionCount === 1 ? 'user' : 'users'}
+                    {connectionCount} {connectionCount === 1 ? t('sync.user') : t('sync.users')}
                   </span>
                 </div>
               </div>
@@ -294,12 +296,12 @@ export const SyncModal: React.FC<SyncModalProps> = ({
                 {copied ? (
                   <span className="flex items-center gap-2 animate-in zoom-in duration-200">
                     <Icon name="check" size={18} />
-                    <span>COPIED!</span>
+                    <span>{t('sync.copied')}</span>
                   </span>
                 ) : (
                   <span className="flex items-center gap-2">
                     <Icon name="share" size={18} />
-                    <span>SHARE LINK</span>
+                    <span>{t('sync.shareLink')}</span>
                   </span>
                 )}
               </button>
@@ -320,13 +322,13 @@ export const SyncModal: React.FC<SyncModalProps> = ({
           {/* Create Room Button - only when idle */}
           {status === 'idle' && (
             <div className="space-y-3">
-              <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">Host a Room</h3>
+              <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">{t('sync.hostARoom')}</h3>
               <button 
                 onClick={handleHost}
                 disabled={status === 'connecting'}
                 className="w-full py-4 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold rounded-2xl transition-all"
               >
-                CREATE ROOM
+                {t('sync.createRoom')}
               </button>
             </div>
           )}
@@ -336,11 +338,11 @@ export const SyncModal: React.FC<SyncModalProps> = ({
             <>
               <div className="relative">
                 <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-zinc-800"></div></div>
-                <div className="relative flex justify-center text-xs uppercase"><span className="bg-zinc-900 px-2 text-zinc-600 font-bold tracking-widest">OR</span></div>
+                <div className="relative flex justify-center text-xs uppercase"><span className="bg-zinc-900 px-2 text-zinc-600 font-bold tracking-widest">{t('common.or')}</span></div>
               </div>
 
               <div className="space-y-3">
-                <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">Join a Room</h3>
+                <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">{t('sync.joinARoom')}</h3>
                 <div className="flex gap-2">
                   <input
                     type="text"
@@ -377,7 +379,7 @@ export const SyncModal: React.FC<SyncModalProps> = ({
                 className="w-full py-3 bg-red-500/20 text-red-400 font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-red-500/30 transition-colors border border-red-500/30"
               >
                 <Icon name="logout" size={18} />
-                <span>DISCONNECT & DELETE ROOM</span>
+                <span>{t('sync.disconnectDelete')}</span>
               </button>
             ) : (
               // Joiner: Simple disconnect button
@@ -386,7 +388,7 @@ export const SyncModal: React.FC<SyncModalProps> = ({
                 className="w-full py-3 bg-zinc-800 text-zinc-400 font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-zinc-700 transition-colors"
               >
                 <Icon name="logout" size={18} />
-                <span>DISCONNECT</span>
+                <span>{t('sync.disconnect')}</span>
               </button>
             )}
           </div>
@@ -411,6 +413,7 @@ function IdentityAssignSection({
   connectedPeerIds: string[];
   onAssignIdentity: (peerId: string, playerId: string) => void;
 }) {
+  const t = useT();
   const namedPlayers = getNamedPlayers(players);
   if (namedPlayers.length === 0) return null;
 
@@ -420,9 +423,9 @@ function IdentityAssignSection({
   if (!isHost) {
     return (
       <div className="space-y-2">
-        <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">Your name</h3>
+        <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">{t('sync.yourName')}</h3>
         <p className="text-zinc-300 text-sm">
-          {myName ? `You are ${myName}` : 'Pick who you are'}
+          {myName ? t('sync.youAre', { name: myName }) : t('sync.pickWho')}
         </p>
         <div className="flex flex-col gap-2">
           {namedPlayers.map(player => {
@@ -447,20 +450,20 @@ function IdentityAssignSection({
   }
 
   const rows: { peerId: string; label: string }[] = [
-    { peerId: myPeerId, label: 'You' },
+    { peerId: myPeerId, label: t('common.you') },
     ...connectedPeerIds.map(peerId => {
       const claimedId = peerIdentities[peerId];
       const claimed = namedPlayers.find(p => p.id === claimedId)?.name;
       return {
         peerId,
-        label: claimed ? `Guest · ${claimed}` : `Guest ${peerId.slice(0, 4).toUpperCase()}`,
+        label: claimed ? t('sync.guestNamed', { name: claimed }) : t('sync.guestId', { id: peerId.slice(0, 4).toUpperCase() }),
       };
     }),
   ];
 
   return (
     <div className="space-y-3">
-      <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">Who is who</h3>
+      <h3 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">{t('sync.whoIsWho')}</h3>
       {rows.map(row => (
         <div key={row.peerId} className="space-y-1">
           <div className="text-xs font-bold uppercase tracking-widest text-zinc-500">{row.label}</div>

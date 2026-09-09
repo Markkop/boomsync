@@ -7,6 +7,7 @@ import { getAllCharacters, getCharacter } from '../services/characterService';
 import { getTeamBannerClasses, getTeamColorClasses, getTeamLabel } from '../utils/teamColors';
 import { getCatalogTeam, getPresentedTeam, resolvePairAllegiance } from '../utils/presentedTeam';
 import { safeModalClose } from '../utils/dismissGuard';
+import { useLocale, useT } from '../i18n/I18nContext';
 
 export type CardRevealRequest =
   | { kind: 'player'; playerId: string; playerName: string; roleName: string }
@@ -34,22 +35,22 @@ const getPowerTypeIcon = (powerType: string): React.ComponentProps<typeof Icon>[
   return null;
 };
 
-function confirmCopy(request: CardRevealRequest): { title: string; body: string } {
+function confirmCopy(request: CardRevealRequest, t: (key: string, params?: Record<string, string | number>) => string): { title: string; body: string } {
   if (request.kind === 'mine') {
     return {
-      title: 'Show your card?',
-      body: `This will reveal the card dealt to ${request.playerName}.`,
+      title: t('cardReveal.showYours'),
+      body: t('cardReveal.showYoursBody', { name: request.playerName }),
     };
   }
   if (request.kind === 'buried') {
     return {
-      title: 'Reveal buried card?',
-      body: `This will show buried card ${request.index + 1}.`,
+      title: t('cardReveal.revealBuried'),
+      body: t('cardReveal.revealBuriedBody', { n: request.index + 1 }),
     };
   }
   return {
-    title: `Reveal ${request.playerName}'s card?`,
-    body: 'Confirm this is the right person before opening.',
+    title: t('cardReveal.revealPlayer', { name: request.playerName }),
+    body: t('cardReveal.revealPlayerBody'),
   };
 }
 
@@ -59,6 +60,8 @@ function slotFromRequest(request: CardRevealRequest): { playerId?: string; burie
 }
 
 export const CardRevealModal: React.FC<CardRevealModalProps> = ({ request, roleDeal, onClose }) => {
+  const t = useT();
+  const locale = useLocale();
   const [confirmed, setConfirmed] = useState(false);
   const [character, setCharacter] = useState<CharacterFull | null>(null);
   const [loading, setLoading] = useState(false);
@@ -81,13 +84,13 @@ export const CardRevealModal: React.FC<CardRevealModalProps> = ({ request, roleD
       .then(char => {
         if (cancelled) return;
         setCharacter(char);
-        if (!char) setLoadError('Character data not found.');
+        if (!char) setLoadError(t('cardReveal.charNotFound'));
       })
       .catch((e) => {
         if (cancelled) return;
         console.error('Failed to load character:', e);
         setCharacter(null);
-        setLoadError('Failed to load character.');
+        setLoadError(t('cardReveal.charLoadFailed'));
       })
       .finally(() => {
         if (cancelled) return;
@@ -96,9 +99,9 @@ export const CardRevealModal: React.FC<CardRevealModalProps> = ({ request, roleD
     return () => {
       cancelled = true;
     };
-  }, [confirmed, request.roleName]);
+  }, [confirmed, request.roleName, t]);
 
-  const { title, body } = confirmCopy(request);
+  const { title, body } = confirmCopy(request, t);
   const handleClose = () => safeModalClose(onClose);
 
   if (!confirmed) {
@@ -112,13 +115,13 @@ export const CardRevealModal: React.FC<CardRevealModalProps> = ({ request, roleD
               onTap={handleClose}
               className="flex-1 py-4 bg-zinc-800 border border-zinc-700 text-zinc-300 font-bold rounded-2xl active:scale-95 transition-transform"
             >
-              Cancel
+              {t('common.cancel')}
             </TapSafeButton>
             <TapSafeButton
               onTap={() => setConfirmed(true)}
               className="flex-1 py-4 bg-cyan-500 text-zinc-950 font-black rounded-2xl active:scale-95 transition-transform"
             >
-              Confirm
+              {t('common.confirm')}
             </TapSafeButton>
           </div>
         </div>
@@ -150,7 +153,7 @@ export const CardRevealModal: React.FC<CardRevealModalProps> = ({ request, roleD
           <div className="flex items-start justify-between gap-3">
             {textVisible ? (
               <div className={`inline-flex px-3 py-1 rounded-lg border ${badge} font-semibold text-sm bg-zinc-950/40`}>
-                {getTeamLabel(catalogTeam)}
+                {getTeamLabel(catalogTeam, locale)}
               </div>
             ) : (
               <div className="w-10" />
@@ -159,7 +162,7 @@ export const CardRevealModal: React.FC<CardRevealModalProps> = ({ request, roleD
               <TapSafeButton
                 onTap={() => setTextVisible(visible => !visible)}
                 className="p-2 rounded-xl bg-zinc-950/40 text-zinc-100 active:scale-95"
-                aria-label={textVisible ? 'Hide role text' : 'Show role text'}
+                aria-label={textVisible ? t('cardReveal.hideRoleText') : t('cardReveal.showRoleText')}
                 aria-pressed={textVisible}
               >
                 <Icon name={textVisible ? 'eye' : 'eyeOff'} size={24} />
@@ -187,7 +190,7 @@ export const CardRevealModal: React.FC<CardRevealModalProps> = ({ request, roleD
         {textVisible && (
           <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
             {loading && (
-              <div className="text-zinc-400">Loading card…</div>
+              <div className="text-zinc-400">{t('common.loadingCard')}</div>
             )}
 
             {!loading && loadError && (
@@ -197,16 +200,16 @@ export const CardRevealModal: React.FC<CardRevealModalProps> = ({ request, roleD
             {!loading && (
               <>
                 <div>
-                  <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-2">Win Condition</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-2">{t('cardReveal.winCondition')}</h3>
                   <p className="text-zinc-200 leading-relaxed text-lg">
                     {winCondition || '—'}
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-3">Powers</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-3">{t('cardReveal.powers')}</h3>
                   {powers.length === 0 ? (
-                    <p className="text-zinc-500">No special powers.</p>
+                    <p className="text-zinc-500">{t('cardReveal.noPowers')}</p>
                   ) : (
                     <div className="space-y-3">
                       {powers.map((power, index) => {

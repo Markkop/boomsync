@@ -4,6 +4,8 @@ import { Icon } from './Icon';
 import { getCharacter, getAllCharacters } from '../services/characterService';
 import { CharacterCard } from './CharacterCard';
 import { KEYWORD_DEFINITIONS } from './KeywordTooltip';
+import { useLocale, useT } from '../i18n/I18nContext';
+import { getTeamLabel } from '../utils/teamColors';
 
 interface CharacterDetailModalProps {
   characterName: string;
@@ -137,6 +139,8 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
   onShowKeyword,
   onAddRoles
 }) => {
+  const t = useT();
+  const locale = useLocale();
   const [character, setCharacter] = useState<CharacterFull | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -318,7 +322,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
     return (
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center">
         <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8">
-          <div className="text-zinc-400">Loading...</div>
+          <div className="text-zinc-400">{t('character.loading')}</div>
         </div>
       </div>
     );
@@ -329,7 +333,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 max-w-md w-full shadow-2xl">
           <div className="flex items-start justify-between mb-3">
-            <h3 className="text-xl font-bold text-zinc-100">Unable to open</h3>
+            <h3 className="text-xl font-bold text-zinc-100">{t('character.unableToOpen')}</h3>
             <button
               onClick={onClose}
               className="p-1 rounded-lg bg-zinc-800 text-zinc-400 hover:text-zinc-100 transition-colors"
@@ -338,14 +342,14 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
             </button>
           </div>
           <p className="text-zinc-300 leading-relaxed">
-            {loadError || 'This character could not be loaded.'}
+            {loadError || t('character.couldNotLoad')}
           </p>
           <div className="mt-4 flex justify-end">
             <button
               onClick={onClose}
               className="px-4 py-2 rounded-xl bg-zinc-800 text-zinc-200 hover:bg-zinc-700 transition-colors font-semibold"
             >
-              Close
+              {t('common.close')}
             </button>
           </div>
         </div>
@@ -363,10 +367,10 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
             <div className="flex items-center gap-3">
               {character.team && (
                 <div className={`px-3 py-1 rounded-lg border ${teamColorClasses} font-semibold text-sm`}>
-                  {character.team.toUpperCase()}
+                  {getTeamLabel(character.team, locale)}
                 </div>
               )}
-              <h2 className="text-2xl font-bold text-zinc-100">{character.name || 'Unknown Character'}</h2>
+              <h2 className="text-2xl font-bold text-zinc-100">{character.name || t('character.unknown')}</h2>
             </div>
           <button
             onClick={onClose}
@@ -391,7 +395,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
               `}
             >
               <Icon name={isSelected ? "minus" : "plus"} size={20} />
-              {isSelected ? 'Remove from Game' : 'Add to Game'}
+              {isSelected ? t('character.removeFromGame') : t('character.addToGame')}
             </button>
             {onToggleLock && (
               <button
@@ -404,7 +408,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                     : 'bg-zinc-800/50 border-2 border-zinc-700 text-zinc-400 hover:bg-zinc-700/50'
                   }
                 `}
-                title={isLocked ? 'Unlock for Generator' : 'Lock for Generator'}
+                title={isLocked ? t('character.unlockForGenerator') : t('character.lockForGenerator')}
               >
                 <Icon name={isLocked ? "lock" : "unlock"} size={20} />
               </button>
@@ -413,7 +417,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
 
           {/* Win Condition */}
           <div>
-            <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-2">Win Condition</h3>
+            <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-2">{t('character.winCondition')}</h3>
             <p className="text-zinc-200 leading-relaxed">
               {renderInteractiveText(character.winCondition)}
             </p>
@@ -422,7 +426,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
           {/* Powers */}
           {character.powers && character.powers.length > 0 && (
             <div>
-              <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-3">Powers</h3>
+              <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-3">{t('character.powers')}</h3>
               <div className="space-y-2">
                 {character.powers.map((power, index) => {
                   if (!power || !power.name) return null;
@@ -455,7 +459,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                             {power.type.toUpperCase()}
                           </PowerTypeBadge>
                         )}
-                        <span className="font-semibold text-zinc-100">{power.name || 'Unnamed Power'}</span>
+                        <span className="font-semibold text-zinc-100">{power.name || t('character.unnamedPower')}</span>
                       </div>
                       {power.description && (
                         <div className="pt-2 border-t border-zinc-700">
@@ -475,7 +479,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
           {/* Tags */}
           {character.tags && character.tags.length > 0 && (
             <div>
-              <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-2">Tags</h3>
+              <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-2">{t('character.tags')}</h3>
               <div className="flex flex-wrap gap-2">
                 {character.tags.map((tag, index) => (
                   <span
@@ -493,13 +497,13 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
           {character.requires && character.requires.length > 0 && (
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500">Requires</h3>
+                <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500">{t('character.requires')}</h3>
                 {onAddRoles && (
                   <button
                     onClick={() => onAddRoles(requiredCharacters.map(c => c.name))}
                     className="text-xs text-cyan-400 hover:text-cyan-300 transition-colors"
                   >
-                    (adds all)
+                    {t('character.addsAll')}
                   </button>
                 )}
               </div>
@@ -517,7 +521,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                       showSelectionIndicator={false}
                       disabled={isCurrent}
                       darkened={isCurrent}
-                      titleSuffix={isCurrent ? '(this)' : undefined}
+                      titleSuffix={isCurrent ? t('character.thisSuffix') : undefined}
                       onTagClick={onShowKeyword}
                       showRequires={false}
                     />
@@ -530,7 +534,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
           {/* Works Well With */}
           {character.worksWellWith && character.worksWellWith.length > 0 && (
             <div>
-              <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-2">Works Well With</h3>
+              <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-2">{t('character.worksWellWith')}</h3>
               <div className="flex flex-wrap gap-2">
                 {character.worksWellWith.map((name, index) => {
                   const isCharacter = validCharacterNames.has(name);
@@ -546,7 +550,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                     <span
                       key={index}
                       className="px-3 py-1 bg-zinc-800/60 border border-zinc-700 rounded-lg text-sm text-zinc-300"
-                      title="Not a character"
+                      title={t('character.notACharacter')}
                     >
                       {name}
                     </span>
@@ -559,7 +563,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
           {/* Doesn't Work Well With */}
           {character.doesntWorkWellWith && character.doesntWorkWellWith.length > 0 && (
             <div>
-              <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-2">Doesn't Work Well With</h3>
+              <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-2">{t('character.doesntWorkWellWith')}</h3>
               <div className="flex flex-wrap gap-2">
                 {character.doesntWorkWellWith.map((name, index) => {
                   const isCharacter = validCharacterNames.has(name);
@@ -575,7 +579,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                     <span
                       key={index}
                       className="px-3 py-1 bg-zinc-800/60 border border-zinc-700 rounded-lg text-sm text-zinc-300"
-                      title="Not a character"
+                      title={t('character.notACharacter')}
                     >
                       {name}
                     </span>
@@ -588,7 +592,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
           {/* Notes */}
           {character.notes && character.notes.length > 0 && (
             <div>
-              <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-2">Notes</h3>
+              <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-2">{t('character.notes')}</h3>
               <div className="space-y-2">
                 {character.notes.map((note, index) => (
                   <p key={index} className="text-zinc-300 text-sm leading-relaxed">

@@ -4,6 +4,7 @@ import { CharacterCard } from './CharacterCard';
 import { Icon } from './Icon';
 import { getAllCharacters } from '../services/characterService';
 import { TapSafeButton } from './TapSafeButton';
+import { useT } from '../i18n/I18nContext';
 
 interface RoleListModalProps {
   selectedRoles: string[];
@@ -24,6 +25,7 @@ export const RoleListModal: React.FC<RoleListModalProps> = ({
   onShowKeyword,
   onShowRequires
 }) => {
+  const t = useT();
   const allCharacters = getAllCharacters();
   const selectedCharacters = useMemo(() => {
     return selectedRoles
@@ -74,12 +76,12 @@ export const RoleListModal: React.FC<RoleListModalProps> = ({
     selectedCharacters.forEach(char => {
       char.requires.forEach(req => {
         if (!selectedRoles.includes(req)) {
-          warnings.push(`${char.name} requires ${req}`);
+          warnings.push(t('roles.requires', { name: char.name, req }));
         }
       });
     });
     return warnings;
-  }, [selectedCharacters, selectedRoles]);
+  }, [selectedCharacters, selectedRoles, t]);
 
   // Group and sort roles for two-column display
   const groupedRoles = useMemo(() => {
@@ -152,7 +154,7 @@ export const RoleListModal: React.FC<RoleListModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between mb-6 px-2">
           <div className="flex items-center gap-3">
-            <h2 className="text-2xl font-black text-zinc-100 tracking-tight">GAME ROLES</h2>
+            <h2 className="text-2xl font-black text-zinc-100 tracking-tight">{t('roleList.title')}</h2>
             {selectedRoles.length > 0 && (
               <span className="px-2 py-1 bg-cyan-500/20 border border-cyan-500 rounded-lg text-sm font-semibold text-cyan-400">
                 {selectedRoles.length}
@@ -174,9 +176,9 @@ export const RoleListModal: React.FC<RoleListModalProps> = ({
           {selectedRoles.length === 0 ? (
             <div className="text-center py-12">
               <Icon name="list" size={48} className="text-zinc-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-zinc-300 mb-2">No Roles Selected</h3>
+              <h3 className="text-lg font-semibold text-zinc-300 mb-2">{t('roleList.emptyTitle')}</h3>
               <p className="text-zinc-500 text-sm">
-                Browse characters and long-press to add them to your game
+                {t('roleList.emptyHint')}
               </p>
             </div>
           ) : (
@@ -209,7 +211,7 @@ export const RoleListModal: React.FC<RoleListModalProps> = ({
                   <div className="flex items-start gap-2">
                     <Icon name="alert" size={20} className="text-amber-400 flex-shrink-0 mt-0.5" />
                     <div className="flex-1">
-                      <h3 className="text-sm font-semibold text-amber-400 mb-1">Missing Requirements</h3>
+                      <h3 className="text-sm font-semibold text-amber-400 mb-1">{t('roleList.missingRequirements')}</h3>
                       <ul className="text-xs text-amber-300 space-y-1">
                         {missingRequirements.map((warning, index) => (
                           <li key={index}>• {warning}</li>

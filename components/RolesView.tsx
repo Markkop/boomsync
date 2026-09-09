@@ -1,1 +1,540 @@
-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
+import React, { useState, useMemo } from 'react';
+import { CharacterIndex } from '../types';
+import { CharacterCard } from './CharacterCard';
+import { Icon } from './Icon';
+import { getAllCharacters, getAllTags, searchCharacters } from '../services/characterService';
+import { PresetPanel } from './PresetPanel';
+import { TapSafeButton } from './TapSafeButton';
+import { useLocale, useT } from '../i18n/I18nContext';
+import { getTeamFilterLabel } from '../utils/teamColors';
+
+interface RolesViewProps {
+  searchQuery: string;
+  teamFilter: string | null;
+  tagFilter: string | null;
+  selectedRoles: string[];
+  onSearchChange: (query: string) => void;
+  onTeamFilterChange: (team: string | null) => void;
+  onTagFilterChange: (tag: string | null) => void;
+  onCharacterTap: (name: string) => void;
+  onCharacterLongPress: (name: string) => void;
+  onOpenRoleList: () => void;
+  onClearAll?: () => void;
+  onApplyPreset?: (roles: string[]) => void;
+  lockedRoles?: string[];
+  onToggleLock?: (roleName: string) => void;
+  onShowKeyword?: (keyword: string, position: { x: number; y: number }) => void;
+  onShowRequires?: (requires: string[], requiresGroup: string | undefined, characterName: string, position: { x: number; y: number }) => void;
+}
+
+const TEAMS = [
+  { id: null as string | null, color: 'zinc' },
+  { id: 'red', color: 'red' },
+  { id: 'blue', color: 'blue' },
+  { id: 'red-blue', color: 'red-blue' },
+  { id: 'grey', color: 'zinc' },
+  { id: 'green', color: 'green' },
+  { id: 'yellow', color: 'yellow' },
+  { id: 'special', color: 'pink' }
+];
+
+type IconName = 'share' | 'palette' | 'eye' | 'megaphone' | 'sparkles' | 'virus' | 'theater' | 'swap' | 'archive' | 'star' | 'clock' | 'hash' | 'alert';
+
+const getTagIcon = (tag: string): IconName | null => {
+  if (tag.includes('card share power')) return 'share';
+  if (tag.includes('color share power')) return 'palette';
+  if (tag.includes('private reveal power')) return 'eye';
+  if (tag.includes('public reveal power')) return 'megaphone';
+  if (tag.includes('condition')) return 'sparkles';
+  if (tag.includes('contagious')) return 'virus';
+  if (tag.includes('acting')) return 'theater';
+  if (tag.includes('card swap')) return 'swap';
+  if (tag.includes('bury')) return 'archive';
+  if (tag.includes('primary character')) return 'star';
+  if (tag.includes('pause game')) return 'clock';
+  if (tag.includes('odd player count')) return 'hash';
+  return null;
+};
+
+const formatTagLabel = (tag: string): string => {
+  // Capitalize first letter of each word
+  return tag
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
+type InnerTab = 'roles' | 'search' | 'presets';
+
+export const RolesView: React.FC<RolesViewProps> = ({
+  searchQuery,
+  teamFilter,
+  tagFilter,
+  selectedRoles,
+  onSearchChange,
+  onTeamFilterChange,
+  onTagFilterChange,
+  onCharacterTap,
+  onCharacterLongPress,
+  onOpenRoleList,
+  onClearAll,
+  onApplyPreset,
+  lockedRoles = [],
+  onToggleLock,
+  onShowKeyword,
+  onShowRequires
+}) => {
+  const t = useT();
+  const locale = useLocale();
+  const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
+  const [activeInnerTab, setActiveInnerTab] = useState<InnerTab>('search');
+  const [isGeneratorActive, setIsGeneratorActive] = useState(false);
+  const allTags = getAllTags();
+  const allCharacters = getAllCharacters();
+
+  // Debounce search query
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  // Filter characters
+  const filteredCharacters = useMemo(() => {
+    let characters: CharacterIndex[] = getAllCharacters();
+
+    // Apply search
+    if (debouncedQuery.trim()) {
+      characters = searchCharacters(debouncedQuery);
+    }
+
+    // Apply team filter
+    if (teamFilter) {
+      characters = characters.filter(c => c.team === teamFilter);
+    }
+
+    // Apply tag filter
+    if (tagFilter) {
+      characters = characters.filter(c => c.tags.includes(tagFilter));
+    }
+
+    return characters;
+  }, [debouncedQuery, teamFilter, tagFilter]);
+
+  const getTeamColorClasses = (teamId: string | null) => {
+    if (!teamId) return 'bg-zinc-800 border-zinc-700 text-zinc-300';
+    const team = TEAMS.find(team => team.id === teamId);
+    if (!team) return 'bg-zinc-800 border-zinc-700 text-zinc-300';
+    switch (team.color) {
+      case 'red': return 'bg-red-500/20 border-red-500 text-red-400';
+      case 'blue': return 'bg-blue-500/20 border-blue-500 text-blue-400';
+      case 'red-blue': return 'bg-gradient-to-r from-red-500/20 to-blue-500/20 border-l-red-500 border-r-blue-500 border-t-red-500 border-b-blue-500 text-red-400';
+      case 'green': return 'bg-green-500/20 border-green-500 text-green-400';
+      case 'yellow': return 'bg-yellow-500/20 border-yellow-500 text-yellow-400';
+      case 'pink': return 'bg-pink-500/20 border-pink-500 text-pink-400';
+      default: return 'bg-zinc-500/20 border-zinc-500 text-zinc-400';
+    }
+  };
+
+  // Helper to get team color classes for role list
+  const getRoleTeamColorClasses = (team: string) => {
+    switch (team) {
+      case 'blue': return 'text-blue-400';
+      case 'red': return 'text-red-400';
+      case 'grey': return 'text-zinc-400';
+      case 'green': return 'text-green-400';
+      case 'yellow': return 'text-yellow-400';
+      case 'both':
+      case 'red-blue': return 'text-purple-400';
+      default: return 'text-zinc-300';
+    }
+  };
+
+  // Get selected characters
+  const selectedCharacters = useMemo(() => {
+    return selectedRoles
+      .map(name => allCharacters.find(c => c.name === name))
+      .filter((c): c is CharacterIndex => c !== undefined);
+  }, [selectedRoles, allCharacters]);
+
+  // Count role occurrences
+  const roleCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    selectedRoles.forEach(role => {
+      counts.set(role, (counts.get(role) || 0) + 1);
+    });
+    return counts;
+  }, [selectedRoles]);
+
+  // Check for missing requirements
+  const missingRequirements = useMemo(() => {
+    const warnings: string[] = [];
+    selectedCharacters.forEach(char => {
+      char.requires.forEach(req => {
+        if (!selectedRoles.includes(req)) {
+          warnings.push(t('roles.requires', { name: char.name, req }));
+        }
+      });
+    });
+    return warnings;
+  }, [selectedCharacters, selectedRoles, t]);
+
+  // Group and sort roles for two-column display
+  const groupedRoles = useMemo(() => {
+    // Get unique roles with their counts
+    const uniqueRoles = Array.from(roleCounts.keys()).map(roleName => {
+      const char = allCharacters.find(c => c.name === roleName);
+      return {
+        name: roleName,
+        character: char,
+        count: roleCounts.get(roleName) || 1,
+        team: char?.team || 'grey'
+      };
+    }).filter(item => item.character !== undefined) as Array<{
+      name: string;
+      character: CharacterIndex;
+      count: number;
+      team: string;
+    }>;
+
+    // Sort function: primary roles first, then team roles, then others
+    const getSortPriority = (name: string, team: string): number => {
+      // Primary roles
+      if (name === 'President' || name === 'Bomber') return 0;
+      // Team roles
+      if (name === 'Blue Team' || name === 'Red Team') return 1;
+      // Other roles
+      return 2;
+    };
+
+    // Sort roles
+    uniqueRoles.sort((a, b) => {
+      const priorityA = getSortPriority(a.name, a.team);
+      const priorityB = getSortPriority(b.name, b.team);
+      if (priorityA !== priorityB) return priorityA - priorityB;
+      
+      // Within same priority, sort by count descending for team roles, alphabetically for others
+      if (priorityA === 1) {
+        return b.count - a.count;
+      }
+      return a.name.localeCompare(b.name);
+    });
+
+    // Separate into blue, red, red-blue (gradient), grey, and others
+    const blueRoles = uniqueRoles.filter(r => r.team === 'blue');
+    const redRoles = uniqueRoles.filter(r => r.team === 'red');
+    const redBlueRoles = uniqueRoles.filter(r => r.team === 'red-blue');
+    const greyRoles = uniqueRoles.filter(r => r.team === 'grey');
+    const otherRoles = uniqueRoles.filter(r => r.team !== 'blue' && r.team !== 'red' && r.team !== 'red-blue' && r.team !== 'grey');
+
+    // Distribute red-blue roles between columns (alternating)
+    const redBlueLeft: typeof redBlueRoles = [];
+    const redBlueRight: typeof redBlueRoles = [];
+    redBlueRoles.forEach((role, index) => {
+      if (index % 2 === 0) {
+        redBlueLeft.push(role);
+      } else {
+        redBlueRight.push(role);
+      }
+    });
+
+    // Distribute grey roles between columns (alternating)
+    const greyLeft: typeof greyRoles = [];
+    const greyRight: typeof greyRoles = [];
+    greyRoles.forEach((role, index) => {
+      if (index % 2 === 0) {
+        greyLeft.push(role);
+      } else {
+        greyRight.push(role);
+      }
+    });
+
+    // Combine: left = blue + red-blue (left half) + grey (left half), right = red + red-blue (right half) + grey (right half) + others
+    const leftColumnRoles = [...blueRoles, ...redBlueLeft, ...greyLeft];
+    const rightColumnRoles = [...redRoles, ...redBlueRight, ...greyRight, ...otherRoles];
+
+    return { blueRoles: leftColumnRoles, redOtherRoles: rightColumnRoles };
+  }, [roleCounts, allCharacters]);
+
+  return (
+    <div className="flex flex-col h-full relative overflow-hidden">
+      {/* Tab Bar */}
+      <div className="flex border-b border-zinc-800 bg-zinc-900 flex-shrink-0">
+        <button
+          onClick={() => setActiveInnerTab('roles')}
+          className={`flex-1 px-4 py-3 text-sm font-semibold transition-colors relative ${
+            activeInnerTab === 'roles'
+              ? 'text-cyan-400'
+              : 'text-zinc-500 hover:text-zinc-300'
+          }`}
+        >
+          <span className="flex items-center justify-center gap-2">
+            {t('roles.tabRoles')}
+            {selectedRoles.length > 0 && (
+              <span className="px-1.5 py-0.5 bg-cyan-500/20 border border-cyan-500 rounded text-xs font-semibold text-cyan-400">
+                {selectedRoles.length}
+              </span>
+            )}
+          </span>
+          {activeInnerTab === 'roles' && (
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-cyan-400" />
+          )}
+        </button>
+        <button
+          onClick={() => setActiveInnerTab('search')}
+          className={`flex-1 px-4 py-3 text-sm font-semibold transition-colors relative ${
+            activeInnerTab === 'search'
+              ? 'text-cyan-400'
+              : 'text-zinc-500 hover:text-zinc-300'
+          }`}
+        >
+          {t('roles.tabSearch')}
+          {activeInnerTab === 'search' && (
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-cyan-400" />
+          )}
+        </button>
+        <button
+          onClick={() => setActiveInnerTab('presets')}
+          className={`flex-1 px-4 py-3 text-sm font-semibold transition-colors relative ${
+            activeInnerTab === 'presets'
+              ? 'text-cyan-400'
+              : 'text-zinc-500 hover:text-zinc-300'
+          }`}
+        >
+          {t('roles.tabPresets')}
+          {activeInnerTab === 'presets' && (
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-cyan-400" />
+          )}
+        </button>
+      </div>
+
+      {/* Tab Content */}
+      <div className="flex-1 overflow-hidden">
+        {/* Roles Tab */}
+        {activeInnerTab === 'roles' && (
+          <div className="h-full overflow-y-auto pb-24 no-scrollbar" style={{ WebkitOverflowScrolling: 'touch' }}>
+            {selectedRoles.length === 0 ? (
+              <div className="text-center py-12 px-4">
+                <Icon name="list" size={48} className="text-zinc-600 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-zinc-300 mb-2">{t('roles.noRolesSelected')}</h3>
+                <p className="text-zinc-500 text-sm">
+                  {t('roles.noRolesHint')}
+                </p>
+              </div>
+            ) : (
+              <div className="p-4 space-y-4">
+                {/* Header with Clear button */}
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-black tracking-tight text-zinc-100">{t('roles.gameRoles')}</h2>
+                  {onClearAll && (
+                    <button
+                      onClick={onClearAll}
+                      className="px-3 py-1.5 bg-rose-500/20 border border-rose-500 rounded-lg text-sm font-semibold text-rose-400 hover:bg-rose-500/30 transition-colors"
+                    >
+                      {t('common.clear')}
+                    </button>
+                  )}
+                </div>
+
+                {/* Role List with Counts */}
+                <div className="bg-zinc-800/50 rounded-xl p-3">
+                  <div className="flex flex-wrap gap-1.5">
+                    {Array.from(roleCounts.entries()).map(([role, count]) => {
+                      const char = allCharacters.find(c => c.name === role);
+                      const team = char?.team || 'grey';
+                      const colorClass = getRoleTeamColorClasses(team);
+                      return (
+                        <TapSafeButton
+                          key={role}
+                          onTap={() => onCharacterTap(role)}
+                          className={`text-xs ${colorClass} font-medium hover:opacity-80 transition-opacity active:scale-95`}
+                        >
+                          {count > 1 ? `${count}x ` : ''}{role}
+                        </TapSafeButton>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Warnings */}
+                {missingRequirements.length > 0 && (
+                  <div className="bg-amber-500/20 border border-amber-500 rounded-xl p-3">
+                    <div className="flex items-start gap-2">
+                      <Icon name="alert" size={20} className="text-amber-400 flex-shrink-0 mt-0.5" />
+                      <div className="flex-1">
+                        <h3 className="text-sm font-semibold text-amber-400 mb-1">{t('roles.missingRequirements')}</h3>
+                        <ul className="text-xs text-amber-300 space-y-1">
+                          {missingRequirements.map((warning, index) => (
+                            <li key={index}>• {warning}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Role Grid - Two Column Layout */}
+                <div className="flex gap-3">
+                  {/* Left Column - Blue Team */}
+                  <div className="flex-1 space-y-3">
+                    {groupedRoles.blueRoles.map(({ name, character, count }) => (
+                      <CharacterCard
+                        key={name}
+                        character={character}
+                        isSelected={true}
+                        onTap={() => onCharacterTap(name)}
+                        onLongPress={() => onCharacterLongPress(name)}
+                        compact={true}
+                        showSelectionIndicator={false}
+                        isLocked={lockedRoles.includes(name)}
+                        onToggleLock={isGeneratorActive && onToggleLock ? () => onToggleLock(name) : undefined}
+                        count={count}
+                        onTagClick={onShowKeyword}
+                        onRequiresClick={onShowRequires}
+                      />
+                    ))}
+                  </div>
+                  {/* Right Column - Red Team and Others */}
+                  <div className="flex-1 space-y-3">
+                    {groupedRoles.redOtherRoles.map(({ name, character, count }) => (
+                      <CharacterCard
+                        key={name}
+                        character={character}
+                        isSelected={true}
+                        onTap={() => onCharacterTap(name)}
+                        onLongPress={() => onCharacterLongPress(name)}
+                        compact={true}
+                        showSelectionIndicator={false}
+                        isLocked={lockedRoles.includes(name)}
+                        onToggleLock={isGeneratorActive && onToggleLock ? () => onToggleLock(name) : undefined}
+                        count={count}
+                        onTagClick={onShowKeyword}
+                        onRequiresClick={onShowRequires}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Search Tab */}
+        {activeInnerTab === 'search' && (
+          <div className="h-full overflow-y-auto pb-24 no-scrollbar" style={{ WebkitOverflowScrolling: 'touch' }}>
+            {/* Search Bar and Filters */}
+            <div className="bg-zinc-950/80 backdrop-blur-md p-4 pb-2">
+              <div className="relative">
+                <Icon name="search" size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => onSearchChange(e.target.value)}
+                  placeholder={t('roles.searchPlaceholder')}
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-2xl pl-12 pr-4 py-3 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all"
+                />
+              </div>
+
+              {/* Team Filter Chips */}
+              <div className="flex gap-2 mt-3 overflow-x-auto pb-2 no-scrollbar">
+                {TEAMS.map(team => (
+                  <button
+                    key={team.id || 'all'}
+                    onClick={() => onTeamFilterChange(team.id)}
+                    className={`
+                      px-4 py-2 rounded-xl font-semibold text-sm whitespace-nowrap
+                      transition-all active:scale-95
+                      ${teamFilter === team.id 
+                        ? getTeamColorClasses(team.id) + ' border-2' 
+                        : 'bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-zinc-700'
+                      }
+                    `}
+                  >
+                    {getTeamFilterLabel(team.id, locale)}
+                  </button>
+                ))}
+              </div>
+
+              {/* Tag Filter Chips */}
+              {allTags.length > 0 && (
+                <div className="flex gap-2 mt-2 pb-2 overflow-x-auto no-scrollbar">
+                  {allTags.map(tag => {
+                    const iconName = getTagIcon(tag);
+                    return (
+                      <button
+                        key={tag}
+                        onClick={() => onTagFilterChange(tagFilter === tag ? null : tag)}
+                        className={`
+                          flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap flex-shrink-0
+                          transition-all active:scale-95
+                          ${tagFilter === tag
+                            ? 'bg-cyan-500/20 border border-cyan-500 text-cyan-400'
+                            : 'bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-zinc-700'
+                          }
+                        `}
+                      >
+                        {iconName && (
+                          <Icon name={iconName} size={14} className="flex-shrink-0" />
+                        )}
+                        <span>{formatTagLabel(tag)}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Character Grid */}
+            {filteredCharacters.length === 0 ? (
+              <div className="text-center py-12">
+                <Icon name="search" size={48} className="text-zinc-600 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-zinc-300 mb-2">{t('roles.noCharactersFound')}</h3>
+                <p className="text-zinc-500 text-sm">{t('roles.noCharactersHint')}</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-3 p-4">
+                {filteredCharacters.map(character => (
+                  <CharacterCard
+                    key={character.name}
+                    character={character}
+                    isSelected={selectedRoles.includes(character.name)}
+                    onTap={() => onCharacterTap(character.name)}
+                    onLongPress={() => onCharacterLongPress(character.name)}
+                    onTagClick={onShowKeyword}
+                    onRequiresClick={onShowRequires}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Presets Tab */}
+        {activeInnerTab === 'presets' && (
+          <div className="h-full overflow-y-auto pb-24 no-scrollbar p-4">
+            {onApplyPreset ? (
+              <PresetPanel
+                selectedRoles={selectedRoles}
+                onApplyPreset={onApplyPreset}
+                lockedRoles={lockedRoles}
+                onToggleLock={onToggleLock}
+                onGeneratorActiveChange={setIsGeneratorActive}
+                onSwitchToRolesTab={() => setActiveInnerTab('roles')}
+                onCharacterTap={onCharacterTap}
+                onShowKeyword={onShowKeyword}
+                onShowRequires={onShowRequires}
+              />
+            ) : (
+              <div className="text-center py-12">
+                <Icon name="list" size={48} className="text-zinc-600 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-zinc-300 mb-2">{t('roles.presetsNotAvailable')}</h3>
+                <p className="text-zinc-500 text-sm">{t('roles.presetsNotEnabled')}</p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};

@@ -4,6 +4,8 @@ import { Icon } from './Icon';
 import { TapSafeButton } from './TapSafeButton';
 import { ConfirmModal } from './ConfirmModal';
 import { getNamedPlayers, resolvePlayerUnique } from '../services/dealService';
+import { useT } from '../i18n/I18nContext';
+import { pluralSuffix } from '../i18n';
 
 interface ShuffleViewProps {
   players: Player[];
@@ -42,6 +44,7 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
   onRevealBuriedCard,
   onOpenIdentity,
 }) => {
+  const t = useT();
   const [showCountMismatch, setShowCountMismatch] = useState(false);
 
   const addPlayer = () => {
@@ -81,14 +84,25 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
     const extraRoles = roleCount - namedPlayerCount;
     if (extraRoles > 0) {
       return {
-        title: "Player count doesn't match roles",
-        body: `This preset has ${roleCount} roles but only ${namedPlayerCount} named player${namedPlayerCount === 1 ? '' : 's'}. ${extraRoles} extra card${extraRoles === 1 ? '' : 's'} will be buried.`,
+        title: t('shuffle.mismatchTitle'),
+        body: t('shuffle.mismatchExtraRoles', {
+          roles: roleCount,
+          players: namedPlayerCount,
+          playersPlural: pluralSuffix(namedPlayerCount),
+          extra: extraRoles,
+          extraPlural: pluralSuffix(extraRoles),
+        }),
       };
     }
     const extraPlayers = namedPlayerCount - roleCount;
     return {
-      title: "Player count doesn't match roles",
-      body: `This preset has ${roleCount} roles but ${namedPlayerCount} named players. ${extraPlayers} player${extraPlayers === 1 ? '' : 's'} will not receive a card.`,
+      title: t('shuffle.mismatchTitle'),
+      body: t('shuffle.mismatchExtraPlayers', {
+        roles: roleCount,
+        players: namedPlayerCount,
+        extra: extraPlayers,
+        extraPlural: pluralSuffix(extraPlayers),
+      }),
     };
   };
 
@@ -96,7 +110,7 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
     <ConfirmModal
       title={mismatchCopy().title}
       body={mismatchCopy().body}
-      confirmLabel="Shuffle"
+      confirmLabel={t('shuffle.confirmShuffle')}
       onConfirm={runShuffle}
       onCancel={() => setShowCountMismatch(false)}
     />
@@ -119,7 +133,7 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
             <TapSafeButton
               onTap={() => onRevealPlayerCard(playerId)}
               className="flex-shrink-0 p-2 rounded-xl bg-zinc-800 text-cyan-400 active:bg-zinc-700 active:scale-95"
-              aria-label={`Reveal ${displayName}'s card`}
+              aria-label={t('shuffle.revealCard', { name: displayName })}
             >
               <Icon name="card" size={18} />
             </TapSafeButton>
@@ -137,14 +151,14 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
           {!isPhonePassMode && myPlayerName && (
             <div className="flex items-center justify-between gap-2 px-1">
               <p className="text-sm text-zinc-400">
-                You are <span className="text-cyan-400 font-semibold">{myPlayerName}</span>
+                {t('shuffle.youAre')} <span className="text-cyan-400 font-semibold">{myPlayerName}</span>
               </p>
               {onOpenIdentity && (
                 <TapSafeButton
                   onTap={onOpenIdentity}
                   className="text-xs font-bold uppercase tracking-widest text-zinc-500"
                 >
-                  Change
+                  {t('common.change')}
                 </TapSafeButton>
               )}
             </div>
@@ -152,13 +166,13 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-3">
-              <h3 className="text-zinc-500 font-bold uppercase tracking-widest text-xs px-2">Room A</h3>
+              <h3 className="text-zinc-500 font-bold uppercase tracking-widest text-xs px-2">{t('shuffle.roomA')}</h3>
               <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-4 space-y-2 min-h-[200px] neon-border-cyan">
                 {renderRoomList(roomA)}
               </div>
             </div>
             <div className="space-y-3">
-              <h3 className="text-zinc-500 font-bold uppercase tracking-widest text-xs px-2">Room B</h3>
+              <h3 className="text-zinc-500 font-bold uppercase tracking-widest text-xs px-2">{t('shuffle.roomB')}</h3>
               <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-4 space-y-2 min-h-[200px]">
                 {renderRoomList(roomB)}
               </div>
@@ -168,7 +182,7 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
           {showRoleCards && buried.length > 0 && (
             <div className="space-y-3">
               <h3 className="text-zinc-500 font-bold uppercase tracking-widest text-xs px-2">
-                Buried ({buried.length})
+                {t('shuffle.buried', { n: buried.length })}
               </h3>
               <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-4 space-y-2">
                 {buried.map((_, i) => (
@@ -177,13 +191,13 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
                     className="flex items-center gap-2 py-1 border-b border-zinc-800 last:border-0"
                   >
                     <div className="text-lg font-semibold text-zinc-400 flex-1">
-                      Card {i + 1}
+                      {t('shuffle.cardN', { n: i + 1 })}
                     </div>
                     {isPhonePassMode && (
                       <TapSafeButton
                         onTap={() => onRevealBuriedCard(i)}
                         className="flex-shrink-0 p-2 rounded-xl bg-zinc-800 text-cyan-400 active:bg-zinc-700 active:scale-95"
-                        aria-label={`Reveal buried card ${i + 1}`}
+                        aria-label={t('shuffle.revealBuried', { n: i + 1 })}
                       >
                         <Icon name="card" size={18} />
                       </TapSafeButton>
@@ -196,20 +210,20 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
 
           {showRoleCards && roleDeal && selectedRoleCount > 0 && (
             <p className="text-xs text-zinc-500 px-1">
-              {Object.keys(roleDeal.assignments).length} cards dealt
-              {buried.length > 0 ? ` · ${buried.length} buried` : ''}
+              {t('shuffle.cardsDealt', { n: Object.keys(roleDeal.assignments).length })}
+              {buried.length > 0 ? ` · ${t('shuffle.buriedCount', { n: buried.length })}` : ''}
             </p>
           )}
 
           {showRoleCards && selectedRoleCount === 0 && (
             <p className="text-xs text-zinc-500 px-1">
-              Apply a preset on Roles to deal character cards with shuffle.
+              {t('shuffle.applyPresetHint')}
             </p>
           )}
 
           {!canShuffle && (
             <p className="text-xs text-zinc-500 px-1">
-              The host deals rooms and roles.
+              {t('shuffle.hostDeals')}
             </p>
           )}
 
@@ -220,7 +234,7 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
               className="flex-1 bg-cyan-500 text-zinc-950 font-black text-xl py-6 rounded-[32px] flex items-center justify-center gap-3 shadow-lg active:scale-95 transition-transform disabled:opacity-40 disabled:scale-100"
             >
               <Icon name="shuffle" size={28} />
-              SHUFFLE
+              {t('shuffle.title')}
             </button>
             <button 
               onClick={() => onSetEditing(true)}
@@ -244,7 +258,7 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
               <input
                 type="text"
                 value={p.name}
-                placeholder={`Player ${idx + 1}`}
+                placeholder={t('shuffle.playerPlaceholder', { n: idx + 1 })}
                 onChange={(e) => updatePlayerName(p.id, e.target.value)}
                 className="flex-1 bg-zinc-900 border border-zinc-800 text-zinc-100 px-5 py-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all font-semibold"
               />
@@ -263,12 +277,12 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
           className="w-full flex items-center justify-center gap-2 py-4 border-2 border-dashed border-zinc-800 rounded-2xl text-zinc-500 font-bold hover:border-zinc-700 hover:text-zinc-400 transition-all active:scale-95"
         >
           <Icon name="plus" size={20} />
-          ADD PLAYER
+          {t('shuffle.addPlayer')}
         </button>
 
         {showRoleCards && selectedRoleCount === 0 && (
           <p className="text-xs text-zinc-500 text-center">
-            Apply a preset on Roles to deal character cards with shuffle.
+            {t('shuffle.applyPresetHint')}
           </p>
         )}
 
@@ -279,7 +293,7 @@ export const ShuffleView: React.FC<ShuffleViewProps> = ({
             className="w-full bg-cyan-500 text-zinc-950 font-black text-xl py-6 rounded-[32px] flex items-center justify-center gap-3 shadow-2xl active:scale-95 transition-transform disabled:opacity-40 disabled:scale-100"
           >
             <Icon name="shuffle" size={28} />
-            SHUFFLE
+            {t('shuffle.title')}
           </button>
         </div>
       </div>

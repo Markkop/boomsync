@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ALARM_SOUNDS } from '../constants';
 import { Icon } from './Icon';
+import { useT } from '../i18n/I18nContext';
 
 interface SoundModalProps {
   selected: string;
@@ -10,6 +11,7 @@ interface SoundModalProps {
 }
 
 export const SoundModal: React.FC<SoundModalProps> = ({ selected, onSelect, onClose }) => {
+  const t = useT();
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -37,7 +39,7 @@ export const SoundModal: React.FC<SoundModalProps> = ({ selected, onSelect, onCl
       audio.onended = () => setPreviewUrl(null);
       audio.onerror = (e) => {
           console.error("Audio playback error", e);
-          alert("Could not play sound. The file might be unavailable.");
+          alert(t('sound.playError'));
           setPreviewUrl(null);
       };
       
@@ -62,7 +64,7 @@ export const SoundModal: React.FC<SoundModalProps> = ({ selected, onSelect, onCl
           <Icon name="close" />
         </button>
 
-        <h2 className="text-2xl font-black mb-6 text-zinc-100">ALARM SOUND</h2>
+        <h2 className="text-2xl font-black mb-6 text-zinc-100">{t('sound.title')}</h2>
 
         <div className="space-y-2">
           {ALARM_SOUNDS.map((sound) => {

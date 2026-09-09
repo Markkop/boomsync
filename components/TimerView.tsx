@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { GameTimer, TimerStatus } from '../types';
 import { TIMER_COLORS } from '../constants';
+import { useT } from '../i18n/I18nContext';
 
 interface TimerViewProps {
   timers: GameTimer[];
@@ -11,6 +12,7 @@ interface TimerViewProps {
 }
 
 export const TimerView: React.FC<TimerViewProps> = ({ timers, onToggle, onReset, onToggleDarken, usedTimerIds = [] }) => {
+  const t = useT();
   // Refs to handle long press logic per timer
   // We use instance-specific handling via closures or careful event management.
   // Using refs here works because the events are synchronous to the user interaction sequence.
@@ -107,7 +109,7 @@ export const TimerView: React.FC<TimerViewProps> = ({ timers, onToggle, onReset,
               ${isUsed ? 'opacity-40' : ''}
             `}
           >
-            {timer.status === TimerStatus.READY_TO_BOOM ? 'Boom!' : formatTime(timer.remainingSeconds)}
+            {timer.status === TimerStatus.READY_TO_BOOM ? t('timer.boom') : formatTime(timer.remainingSeconds)}
           </button>
         );
       })}

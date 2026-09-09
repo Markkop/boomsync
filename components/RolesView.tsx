@@ -2,11 +2,12 @@ import React, { useState, useMemo } from 'react';
 import { CharacterIndex } from '../types';
 import { CharacterCard } from './CharacterCard';
 import { Icon } from './Icon';
-import { getAllCharacters, getAllTags, searchCharacters } from '../services/characterService';
+import { getAllCharacters, getAllTags } from '../services/characterService';
 import { PresetPanel } from './PresetPanel';
 import { TapSafeButton } from './TapSafeButton';
 import { useLocale, useT } from '../i18n/I18nContext';
 import { getTeamFilterLabel } from '../utils/teamColors';
+import { characterMatchesQuery, formatTagLabel, translateRoleName } from '../i18n/display';
 
 interface RolesViewProps {
   searchQuery: string;
@@ -56,14 +57,6 @@ const getTagIcon = (tag: string): IconName | null => {
   return null;
 };
 
-const formatTagLabel = (tag: string): string => {
-  // Capitalize first letter of each word
-  return tag
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-};
-
 type InnerTab = 'roles' | 'search' | 'presets';
 
 export const RolesView: React.FC<RolesViewProps> = ({
@@ -106,7 +99,7 @@ export const RolesView: React.FC<RolesViewProps> = ({
 
     // Apply search
     if (debouncedQuery.trim()) {
-      characters = searchCharacters(debouncedQuery);
+      characters = characters.filter(c => characterMatchesQuery(c, debouncedQuery, locale));
     }
 
     // Apply team filter
@@ -120,7 +113,7 @@ export const RolesView: React.FC<RolesViewProps> = ({
     }
 
     return characters;
-  }, [debouncedQuery, teamFilter, tagFilter]);
+  }, [debouncedQuery, teamFilter, tagFilter, locale]);
 
   const getTeamColorClasses = (teamId: string | null) => {
     if (!teamId) return 'bg-zinc-800 border-zinc-700 text-zinc-300';
@@ -173,12 +166,12 @@ export const RolesView: React.FC<RolesViewProps> = ({
     selectedCharacters.forEach(char => {
       char.requires.forEach(req => {
         if (!selectedRoles.includes(req)) {
-          warnings.push(t('roles.requires', { name: char.name, req }));
+          warnings.push(t('roles.requires', { name: translateRoleName(locale, char.name), req: translateRoleName(locale, req) }));
         }
       });
     });
     return warnings;
-  }, [selectedCharacters, selectedRoles, t]);
+  }, [selectedCharacters, selectedRoles, t, locale]);
 
   // Group and sort roles for two-column display
   const groupedRoles = useMemo(() => {
@@ -350,7 +343,7 @@ export const RolesView: React.FC<RolesViewProps> = ({
                           onTap={() => onCharacterTap(role)}
                           className={`text-xs ${colorClass} font-medium hover:opacity-80 transition-opacity active:scale-95`}
                         >
-                          {count > 1 ? `${count}x ` : ''}{role}
+                          {count > 1 ? `${count}x ` : ''}{translateRoleName(locale, role)}
                         </TapSafeButton>
                       );
                     })}
@@ -477,7 +470,7 @@ export const RolesView: React.FC<RolesViewProps> = ({
                         {iconName && (
                           <Icon name={iconName} size={14} className="flex-shrink-0" />
                         )}
-                        <span>{formatTagLabel(tag)}</span>
+                        <span>{formatTagLabel(locale, tag)}</span>
                       </button>
                     );
                   })}

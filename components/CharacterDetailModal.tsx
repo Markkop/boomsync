@@ -3,9 +3,18 @@ import { CharacterFull, CharacterIndex } from '../types';
 import { Icon } from './Icon';
 import { getCharacter, getAllCharacters } from '../services/characterService';
 import { CharacterCard } from './CharacterCard';
-import { KEYWORD_DEFINITIONS } from './KeywordTooltip';
 import { useLocale, useT } from '../i18n/I18nContext';
 import { getTeamLabel } from '../utils/teamColors';
+import {
+  formatTagLabel,
+  getKeywordMatchTerms,
+  getRoleNameMatchTerms,
+  isWinConditionPhrase,
+  translateCharacter,
+  translatePowerType,
+  translateRelationLabel,
+} from '../i18n/display';
+import { KEYWORD_KEYS } from '../i18n/keywords';
 
 interface CharacterDetailModalProps {
   characterName: string;
@@ -50,30 +59,6 @@ const isWrappedInQuotes = (text: string, start: number, end: number) => {
   const before = text[start - 1];
   const after = text[end];
   return (before === '"' && after === '"') || (before === "'" && after === "'");
-};
-
-const isPartOfWinConditionPhrase = (text: string, termStart: number, termEnd: number) => {
-  // Check if "condition" is part of "win condition" or "win objective" phrases
-  const lowerText = text.toLowerCase();
-  const beforeStart = Math.max(0, termStart - 10); // Look back up to 10 chars to find "win"
-  
-  // Extract text from before the term to the end of the term
-  const contextText = lowerText.slice(beforeStart, termEnd);
-  
-  // Check for "win condition" or "win conditions" patterns
-  // Match "win" followed by whitespace and then "condition" (case insensitive)
-  const winConditionPattern = /\bwin\s+condition/i;
-  if (winConditionPattern.test(contextText)) {
-    return true;
-  }
-  
-  // Also check for "win objective" or "win objectives"
-  const winObjectivePattern = /\bwin\s+objective/i;
-  if (winObjectivePattern.test(contextText)) {
-    return true;
-  }
-  
-  return false;
 };
 
 const getTeamTextClasses = (team: string) => {
@@ -151,30 +136,51 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
     allCharacters.forEach((c) => map.set(c.name, c.team));
     return map;
   }, [allCharacters]);
+  const displayCharacter = useMemo(
+    () => (character ? translateCharacter(locale, character) : null),
+    [character, locale]
+  );
 
-  const keywordSet = useMemo(() => new Set(Object.keys(KEYWORD_DEFINITIONS)), []);
+  const keywordSet = useMemo(() => new Set(KEYWORD_KEYS), []);
   const lowerToCharacterName = useMemo(() => {
     const map = new Map<string, string>();
-    validCharacterNames.forEach((name) => map.set(name.toLowerCase(), name));
+    getRoleNameMatchTerms(locale).forEach(({ term, englishName }) => {
+      map.set(term.toLowerCase(), englishName);
+    });
     return map;
-  }, [validCharacterNames]);
+  }, [locale]);
+  const lowerToKeyword = useMemo(() => {
+    const map = new Map<string, string>();
+    getKeywordMatchTerms(locale).forEach(({ term, englishKey }) => {
+      map.set(term.toLowerCase(), englishKey);
+    });
+    return map;
+  }, [locale]);
 
   const interactiveTextRegex = useMemo(() => {
-    // Prefer character spelling for ambiguous terms (e.g. "Zombie"), but still
-    // allow keyword tooltips when the term is quoted like "zombie".
     const repByLower = new Map<string, string>();
-    validCharacterNames.forEach((name) => repByLower.set(name.toLowerCase(), name));
-    Object.keys(KEYWORD_DEFINITIONS).forEach((kw) => {
-      const lower = kw.toLowerCase();
-      if (!repByLower.has(lower)) repByLower.set(lower, kw);
+    lowerToCharacterName.forEach((english, lower) => {
+      if (!repByLower.has(lower)) {
+        // Prefer the original casing of the matched term from the map key... we need the display term.
+        // Use english name as representative; the regex is case-insensitive.
+        repByLower.set(lower, english);
+      }
+    });
+    getRoleNameMatchTerms(locale).forEach(({ term }) => {
+      const lower = term.toLowerCase();
+      if (!repByLower.has(lower)) repByLower.set(lower, term);
+      else repByLower.set(lower, term);
+    });
+    getKeywordMatchTerms(locale).forEach(({ term, englishKey }) => {
+      const lower = term.toLowerCase();
+      if (!repByLower.has(lower)) repByLower.set(lower, term);
     });
 
-    const reps = Array.from(repByLower.values()).sort((a, b) => b.length - a.length);
+    const reps = Array.from(new Set(Array.from(repByLower.values()))).sort((a, b) => b.length - a.length);
+    if (reps.length === 0) return /(?!)/;
     const alternation = reps.map(escapeRegExp).join('|');
-    // Boundary-safe match without lookbehind (mobile Safari friendly):
-    // capture boundary char (or start), then capture term, ensure boundary after.
-    return new RegExp(`(^|[^A-Za-z0-9])(${alternation})(?=[^A-Za-z0-9]|$)`, 'gi');
-  }, [validCharacterNames]);
+    return new RegExp(`(^|[^A-Za-z0-9À-ÿ])(${alternation})(?=[^A-Za-z0-9À-ÿ]|$)`, 'gi');
+  }, [locale, lowerToCharacterName]);
 
   const renderInteractiveText = (text: string) => {
     if (!onShowKeyword && !onNavigateToCharacter) return text;
@@ -202,18 +208,18 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
 
       const lower = term.toLowerCase();
       const canonicalCharacter = lowerToCharacterName.get(lower);
+      const englishKeyword = lowerToKeyword.get(lower);
       const isCharacter = Boolean(canonicalCharacter);
-      const isKeyword = keywordSet.has(lower);
+      const isKeyword = Boolean(englishKeyword);
       const ambiguous = isCharacter && isKeyword;
       
-      // Don't show "condition" keyword link if it's part of "win condition" phrase
-      const isWinConditionPhrase = lower === 'condition' && isPartOfWinConditionPhrase(text, termStart, termEnd);
+      const isWinConditionContext = (lower === 'condition' || lower === 'condição' || lower === 'condición') && isWinConditionPhrase(text, termStart, termEnd);
 
       const shouldShowKeyword =
         Boolean(onShowKeyword) &&
         isKeyword &&
         (!ambiguous || isWrappedInQuotes(text, termStart, termEnd)) &&
-        !isWinConditionPhrase;
+        !isWinConditionContext;
 
       if (shouldShowKeyword && onShowKeyword) {
         const iconName = getMechanicIcon(lower);
@@ -223,7 +229,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
             type="button"
             onClick={(e) => {
               const rect = e.currentTarget.getBoundingClientRect();
-              onShowKeyword(lower, { x: rect.left + rect.width / 2, y: rect.bottom });
+              onShowKeyword(englishKeyword!, { x: rect.left + rect.width / 2, y: rect.bottom });
             }}
             className="inline-flex items-center gap-1 text-cyan-400 underline underline-offset-2 hover:text-cyan-300"
           >
@@ -370,7 +376,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                   {getTeamLabel(character.team, locale)}
                 </div>
               )}
-              <h2 className="text-2xl font-bold text-zinc-100">{character.name || t('character.unknown')}</h2>
+              <h2 className="text-2xl font-bold text-zinc-100">{displayCharacter?.name || character.name || t('character.unknown')}</h2>
             </div>
           <button
             onClick={onClose}
@@ -384,7 +390,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
           {/* Add/Remove Role Button and Lock Button */}
           <div className="flex gap-3">
             <button
-              onClick={() => onToggleRole(character.name)}
+              onClick={() => onToggleRole(characterName)}
               className={`
                 flex-1 py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2
                 transition-all active:scale-95
@@ -399,7 +405,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
             </button>
             {onToggleLock && (
               <button
-                onClick={() => onToggleLock(character.name)}
+                onClick={() => onToggleLock(characterName)}
                 className={`
                   px-4 py-4 rounded-2xl font-bold text-lg flex items-center justify-center
                   transition-all active:scale-95
@@ -419,7 +425,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
           <div>
             <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-2">{t('character.winCondition')}</h3>
             <p className="text-zinc-200 leading-relaxed">
-              {renderInteractiveText(character.winCondition)}
+              {renderInteractiveText(displayCharacter?.winCondition || character.winCondition)}
             </p>
           </div>
 
@@ -428,11 +434,12 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
             <div>
               <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-3">{t('character.powers')}</h3>
               <div className="space-y-2">
-                {character.powers.map((power, index) => {
+                {(displayCharacter?.powers ?? character.powers).map((power, index) => {
+                  const englishType = character.powers[index]?.type || power.type;
                   if (!power || !power.name) return null;
-                  const powerTypeIcon = power.type ? getPowerTypeIcon(power.type) : null;
-                  const powerTypeLower = power.type ? power.type.toLowerCase() : '';
-                  const isPowerTypeKeyword = power.type && keywordSet.has(powerTypeLower);
+                  const powerTypeIcon = englishType ? getPowerTypeIcon(englishType) : null;
+                  const powerTypeLower = englishType ? englishType.toLowerCase() : '';
+                  const isPowerTypeKeyword = englishType && keywordSet.has(powerTypeLower);
                   const canShowKeyword = isPowerTypeKeyword && Boolean(onShowKeyword);
                   
                   const PowerTypeBadge = canShowKeyword ? 'button' : 'span';
@@ -453,10 +460,10 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                   >
                     <div className="p-3">
                       <div className="flex items-center gap-2 mb-2">
-                        {power.type && (
+                        {englishType && (
                           <PowerTypeBadge {...powerTypeProps}>
                             {powerTypeIcon && <Icon name={powerTypeIcon} size={12} className="flex-shrink-0" />}
-                            {power.type.toUpperCase()}
+                            {translatePowerType(locale, englishType).toUpperCase()}
                           </PowerTypeBadge>
                         )}
                         <span className="font-semibold text-zinc-100">{power.name || t('character.unnamedPower')}</span>
@@ -486,7 +493,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                     key={index}
                     className="px-3 py-1 bg-zinc-800 rounded-lg text-sm text-zinc-300"
                   >
-                    {tag}
+                    {formatTagLabel(locale, tag)}
                   </span>
                 ))}
               </div>
@@ -544,7 +551,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                       onClick={() => onNavigateToCharacter(name)}
                       className="px-3 py-1 bg-green-500/20 border border-green-500 rounded-lg text-sm text-green-400 hover:bg-green-500/30 transition-colors"
                     >
-                      {name}
+                      {translateRelationLabel(locale, name)}
                     </button>
                   ) : (
                     <span
@@ -552,7 +559,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                       className="px-3 py-1 bg-zinc-800/60 border border-zinc-700 rounded-lg text-sm text-zinc-300"
                       title={t('character.notACharacter')}
                     >
-                      {name}
+                      {translateRelationLabel(locale, name)}
                     </span>
                   );
                 })}
@@ -573,7 +580,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                       onClick={() => onNavigateToCharacter(name)}
                       className="px-3 py-1 bg-rose-500/20 border border-rose-500 rounded-lg text-sm text-rose-400 hover:bg-rose-500/30 transition-colors"
                     >
-                      {name}
+                      {translateRelationLabel(locale, name)}
                     </button>
                   ) : (
                     <span
@@ -581,7 +588,7 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
                       className="px-3 py-1 bg-zinc-800/60 border border-zinc-700 rounded-lg text-sm text-zinc-300"
                       title={t('character.notACharacter')}
                     >
-                      {name}
+                      {translateRelationLabel(locale, name)}
                     </span>
                   );
                 })}
@@ -590,11 +597,11 @@ export const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({
           )}
 
           {/* Notes */}
-          {character.notes && character.notes.length > 0 && (
+          {(displayCharacter?.notes ?? character.notes) && (displayCharacter?.notes ?? character.notes).length > 0 && (
             <div>
               <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-2">{t('character.notes')}</h3>
               <div className="space-y-2">
-                {character.notes.map((note, index) => (
+                {(displayCharacter?.notes ?? character.notes).map((note, index) => (
                   <p key={index} className="text-zinc-300 text-sm leading-relaxed">
                     {renderInteractiveText(note)}
                   </p>

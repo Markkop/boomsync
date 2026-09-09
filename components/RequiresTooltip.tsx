@@ -2,7 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import { Icon } from './Icon';
 import { getAllCharacters } from '../services/characterService';
 import { CharacterIndex } from '../types';
-import { useT } from '../i18n/I18nContext';
+import { useLocale, useT } from '../i18n/I18nContext';
+import { translateCharacterIndex, translateIndexDescription, translateRelationLabel, translateRoleName } from '../i18n/display';
+import { getTeamLabel } from '../utils/teamColors';
 
 interface RequiresTooltipProps {
   requires: string[];
@@ -40,6 +42,7 @@ export const RequiresTooltip: React.FC<RequiresTooltipProps> = ({
   onClose 
 }) => {
   const t = useT();
+  const locale = useLocale();
   const popupRef = useRef<HTMLDivElement>(null);
   const allCharacters = getAllCharacters();
   
@@ -51,10 +54,14 @@ export const RequiresTooltip: React.FC<RequiresTooltipProps> = ({
     .map(reqName => allCharacters.find(c => c.name === reqName))
     .filter((c): c is CharacterIndex => c !== undefined);
   
-  // Combine current character and required characters, with current character first
   const allCharactersInGroup = currentCharacter 
     ? [currentCharacter, ...requiredCharacters.filter(c => c.name !== characterName)]
     : requiredCharacters;
+
+  const displayGroup = currentCharacter
+    ? translateCharacterIndex(locale, currentCharacter).requiresGroup
+    : requiresGroup;
+  const displayTitle = displayGroup || t('requires.title', { name: translateRoleName(locale, characterName) });
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -116,7 +123,7 @@ export const RequiresTooltip: React.FC<RequiresTooltipProps> = ({
         <h3 className="text-base font-bold text-zinc-100 flex items-center gap-2 flex-1 min-w-0">
           <Icon name="alert" size={16} className="text-cyan-300 flex-shrink-0" />
           <span className="truncate">
-            {requiresGroup || t('requires.title', { name: characterName })}
+            {displayTitle}
           </span>
         </h3>
         <button
@@ -139,15 +146,15 @@ export const RequiresTooltip: React.FC<RequiresTooltipProps> = ({
               >
                 <div className="flex items-center gap-2 mb-1">
                   <span className={`font-semibold text-sm ${getTeamColorClasses(char.team)}`}>
-                    {char.name}
+                    {translateRoleName(locale, char.name)}
                   </span>
                   <span className="text-xs text-zinc-500 uppercase">
-                    {char.team}
+                    {getTeamLabel(char.team, locale)}
                   </span>
                 </div>
                 {char.description && (
                   <p className="text-xs text-zinc-400 leading-relaxed">
-                    {char.description}
+                    {translateIndexDescription(locale, char.name, char.description)}
                   </p>
                 )}
               </div>
@@ -158,7 +165,7 @@ export const RequiresTooltip: React.FC<RequiresTooltipProps> = ({
         <div className="space-y-2">
           {requiresGroup && (
             <p className="text-sm text-zinc-300">
-              {requiresGroup}
+              {displayGroup}
             </p>
           )}
           {requires.length > 0 && (
@@ -166,7 +173,7 @@ export const RequiresTooltip: React.FC<RequiresTooltipProps> = ({
               <p className="text-sm text-zinc-300 mb-2">{t('common.required')}</p>
               <ul className="list-disc list-inside text-sm text-zinc-400 space-y-1">
                 {requires.map((req, idx) => (
-                  <li key={idx}>{req}</li>
+                  <li key={idx}>{translateRelationLabel(locale, req)}</li>
                 ))}
               </ul>
             </div>

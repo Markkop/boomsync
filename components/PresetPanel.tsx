@@ -6,7 +6,8 @@ import { getPresetsForPlayerCount } from '../data/presets';
 import { getCustomPresets, saveCustomPreset, deleteCustomPreset, createPresetFromRoles } from '../services/presetService';
 import { generatePreset, shufflePreset } from '../services/presetGenerator';
 import { getAllCharacters } from '../services/characterService';
-import { useT } from '../i18n/I18nContext';
+import { useLocale, useT } from '../i18n/I18nContext';
+import { translatePresetMeta, translatePresetName, translateRoleName } from '../i18n/display';
 
 interface PresetPanelProps {
   selectedRoles: string[];
@@ -36,6 +37,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
   onShowRequires,
 }) => {
   const t = useT();
+  const locale = useLocale();
   const [activeSection, setActiveSection] = useState<'presets' | 'custom' | 'generator'>('presets');
   
   // Notify parent when generator section becomes active/inactive
@@ -196,7 +198,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
               key={role}
               className={`text-xs ${colorClass} font-medium`}
             >
-              {count > 1 ? `${count}x ` : ''}{role}
+              {count > 1 ? `${count}x ` : ''}{translateRoleName(locale, role)}
             </span>
           );
         })}
@@ -370,7 +372,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
                     <div>
                       <div className="flex items-center gap-2 mb-1">
                         <h3 className="text-sm font-semibold text-zinc-300">
-                          {preset.name}
+                          {translatePresetName(locale, preset)}
                         </h3>
                         <span className={`px-2 py-0.5 rounded text-xs font-semibold ${
                           preset.difficulty === 1 ? 'bg-green-500/20 text-green-400' :
@@ -380,7 +382,7 @@ export const PresetPanel: React.FC<PresetPanelProps> = ({
                           {difficultyLabel}
                         </span>
                       </div>
-                      <p className="text-xs text-zinc-500 mb-2">{preset.metaAnalysis}</p>
+                      <p className="text-xs text-zinc-500 mb-2">{translatePresetMeta(locale, preset)}</p>
                       <RoleListDisplay roles={preset.roles} />
                     </div>
                     <div className="flex gap-2 pt-2 border-t border-zinc-700">

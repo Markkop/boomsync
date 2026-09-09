@@ -1,3 +1,5 @@
+import { t, type Locale } from '../i18n';
+
 export function getTeamColorClasses(team: string): string {
   switch (team) {
     case 'red':
@@ -44,7 +46,47 @@ export function getTeamBannerClasses(team: string): string {
   }
 }
 
-export function getTeamLabel(team: string): string {
-  if (team === 'red-blue') return 'RED / BLUE';
-  return team.toUpperCase();
+export function getTeamLabel(team: string, locale: Locale = 'en'): string {
+  switch (team) {
+    case 'red':
+      return t(locale, 'team.red').toUpperCase();
+    case 'blue':
+      return t(locale, 'team.blue').toUpperCase();
+    case 'red-blue':
+      return t(locale, 'team.redBlueLabel');
+    case 'grey':
+      return t(locale, 'team.grey').toUpperCase();
+    case 'green':
+      return t(locale, 'team.green').toUpperCase();
+    case 'yellow':
+      return t(locale, 'team.yellow').toUpperCase();
+    case 'special':
+      return t(locale, 'team.special').toUpperCase();
+    case 'black':
+      return t(locale, 'team.black').toUpperCase();
+    default:
+      return team.toUpperCase();
+  }
+}
+
+export function getTeamFilterLabel(teamId: string | null, locale: Locale = 'en'): string {
+  if (!teamId) return t(locale, 'team.all');
+  switch (teamId) {
+    case 'red':
+      return t(locale, 'team.red');
+    case 'blue':
+      return t(locale, 'team.blue');
+    case 'red-blue':
+      return t(locale, 'team.redBlue');
+    case 'grey':
+      return t(locale, 'team.grey');
+    case 'green':
+      return t(locale, 'team.green');
+    case 'yellow':
+      return t(locale, 'team.yellow');
+    case 'special':
+      return t(locale, 'team.special');
+    default:
+      return teamId;
+  }
 }

@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { GameTimer, TimerStatus } from '../types';
 import { TIMER_COLORS } from '../constants';
 import { Icon } from './Icon';
+import { useT } from '../i18n/I18nContext';
 
 interface FullscreenTimerProps {
   timer: GameTimer;
@@ -16,6 +17,7 @@ interface FullscreenTimerProps {
 }
 
 export const FullscreenTimer: React.FC<FullscreenTimerProps> = ({ timer, onToggle, onReset, onToggleDarken, onClose, onShare, isUsed = false, isSoundOn = true, onToggleSound }) => {
+  const t = useT();
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isLongPress = useRef(false);
 
@@ -132,7 +134,7 @@ export const FullscreenTimer: React.FC<FullscreenTimerProps> = ({ timer, onToggl
       {/* Main Content - Rotated 90 degrees for 'table mode' */}
       <div className="transform rotate-90 flex flex-col items-center justify-center w-screen h-screen pointer-events-none text-current">
         <div className={`text-[25vh] font-black tracking-tighter leading-none drop-shadow-lg tabular-nums transition-opacity duration-300 ${isUsed ? 'opacity-40' : ''}`}>
-          {timer.status === TimerStatus.READY_TO_BOOM ? 'Boom!' : formatTime(timer.remainingSeconds)}
+          {timer.status === TimerStatus.READY_TO_BOOM ? t('timer.boom') : formatTime(timer.remainingSeconds)}
         </div>
       </div>
       

@@ -4,6 +4,7 @@ import { Player } from '../types';
 import { Icon } from './Icon';
 import { TapSafeButton } from './TapSafeButton';
 import { getNamedPlayers } from '../services/dealService';
+import { useT } from '../i18n/I18nContext';
 
 interface IdentityModalProps {
   players: Player[];
@@ -29,6 +30,7 @@ export const IdentityModal: React.FC<IdentityModalProps> = ({
   onAssign,
   onClose,
 }) => {
+  const t = useT();
   const namedPlayers = getNamedPlayers(players);
   const myPlayerId = peerIdentities[myPeerId];
   const takenByOther = new Set(
@@ -38,12 +40,12 @@ export const IdentityModal: React.FC<IdentityModalProps> = ({
   );
 
   const hostRows: { peerId: string; label: string }[] = [
-    { peerId: myPeerId, label: 'You' },
+    { peerId: myPeerId, label: t('common.you') },
     ...connectedPeerIds.map(peerId => {
       const claimed = playerNameById(players, peerIdentities[peerId]);
       return {
         peerId,
-        label: claimed ? `Guest · ${claimed}` : `Guest ${peerId.slice(0, 4).toUpperCase()}`,
+        label: claimed ? t('identity.guestNamed', { name: claimed }) : t('identity.guestId', { id: peerId.slice(0, 4).toUpperCase() }),
       };
     }),
   ];
@@ -53,7 +55,7 @@ export const IdentityModal: React.FC<IdentityModalProps> = ({
       <div className="w-full max-w-sm bg-zinc-900 border border-zinc-800 rounded-[40px] p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex items-start justify-between gap-3 mb-4">
           <h2 className="text-2xl font-black text-zinc-100">
-            {isHost ? 'Who is who' : 'Who are you?'}
+            {isHost ? t('identity.whoIsWho') : t('identity.whoAreYou')}
           </h2>
           <TapSafeButton
             onTap={onClose}
@@ -65,12 +67,12 @@ export const IdentityModal: React.FC<IdentityModalProps> = ({
 
         {namedPlayers.length === 0 ? (
           <p className="text-zinc-400 text-sm">
-            Add player names on the Shuffle tab first.
+            {t('identity.addNamesFirst')}
           </p>
         ) : isHost ? (
           <div className="space-y-5">
             <p className="text-zinc-400 text-sm">
-              Assign each connected device to a player. You can change this later.
+              {t('identity.assignHint')}
             </p>
             {hostRows.map(row => (
               <div key={row.peerId} className="space-y-2">
@@ -101,7 +103,7 @@ export const IdentityModal: React.FC<IdentityModalProps> = ({
         ) : (
           <div className="space-y-3">
             <p className="text-zinc-400 text-sm">
-              Pick your name from the player list.
+              {t('identity.pickName')}
             </p>
             {namedPlayers.map(player => {
               const selected = myPlayerId === player.id;
@@ -124,7 +126,7 @@ export const IdentityModal: React.FC<IdentityModalProps> = ({
                   <span className="flex items-center justify-between gap-2">
                     <span>{player.name}</span>
                     {taken && !selected && (
-                      <span className="text-xs font-bold uppercase tracking-widest">Taken</span>
+                      <span className="text-xs font-bold uppercase tracking-widest">{t('common.taken')}</span>
                     )}
                     {selected && <Icon name="check" size={18} />}
                   </span>
@@ -138,7 +140,7 @@ export const IdentityModal: React.FC<IdentityModalProps> = ({
           onTap={onClose}
           className="w-full mt-6 py-3 bg-zinc-800 text-zinc-300 font-bold rounded-2xl"
         >
-          {myPlayerId ? 'Done' : 'Skip for now'}
+          {myPlayerId ? t('common.done') : t('identity.skipForNow')}
         </TapSafeButton>
       </div>
     </div>,
